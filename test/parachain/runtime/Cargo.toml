@@ -29,6 +29,7 @@ pallet-randomness-collective-flip = { git = "https://github.com/paritytech/subst
 pallet-timestamp = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cumulus-branch" }
 pallet-sudo = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cumulus-branch" }
 pallet-transaction-payment = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cumulus-branch" }
+evm = { path = "../../../evm", default-features = false, package = "pallet-evm" }
 
 # Cumulus dependencies
 cumulus-runtime = { path = "../../../runtime", default-features = false }
@@ -73,6 +74,7 @@ std = [
 	"cumulus-upward-message/std",
 	"cumulus-primitives/std",
 	"polkadot-parachain/std",
+	"evm/std",
 ]
 # Will be enabled by the `wasm-builder` when building the runtime for WASM.
 runtime-wasm = [

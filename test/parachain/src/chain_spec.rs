@@ -17,11 +17,14 @@
 use cumulus_primitives::ParaId;
 use parachain_runtime::{
 	AccountId, BalancesConfig, GenesisConfig, Signature, SudoConfig, SystemConfig,
-	TokenDealerConfig, WASM_BINARY,
+	TokenDealerConfig, EVMConfig, WASM_BINARY,
 };
 use sc_service::ChainType;
-use sp_core::{sr25519, Pair, Public};
-use sp_runtime::traits::{IdentifyAccount, Verify};
+use sp_core::{sr25519, Pair, Public, U256};
+use sp_runtime::traits::{BlakeTwo256, IdentifyAccount, Verify};
+
+use std::collections::BTreeMap;
+use evm::{ConvertAccountId, HashTruncateConvertAccountId};
 
 /// Specialized `ChainSpec`. This is a specialization of the general Substrate ChainSpec type.
 pub type ChainSpec = sc_service::GenericChainSpec<GenesisConfig>;
@@ -81,6 +84,20 @@ fn testnet_genesis(
 	endowed_accounts: Vec<AccountId>,
 	id: ParaId,
 ) -> GenesisConfig {
+	let alice_account_id = get_account_id_from_seed::<sr25519::Public>("Alice");
+	let alice_evm_account_id =
+		HashTruncateConvertAccountId::<BlakeTwo256>::convert_account_id(&alice_account_id);
+	let mut evm_accounts = BTreeMap::new();
+	evm_accounts.insert(
+		alice_evm_account_id,
+		evm::GenesisAccount {
+			nonce: 0.into(),
+			balance: U256::MAX,
+			storage: BTreeMap::new(),
+			code: WASM_BINARY.to_vec(),
+		},
+	);
+
 	GenesisConfig {
 		frame_system: Some(SystemConfig {
 			code: WASM_BINARY.to_vec(),
@@ -95,5 +112,8 @@ fn testnet_genesis(
 		}),
 		pallet_sudo: Some(SudoConfig { key: root_key }),
 		message_example: Some(TokenDealerConfig { parachain_id: id }),
+		evm: Some(EVMConfig {
+			accounts: evm_accounts,
+		}),
 	}
 }

@@ -23,7 +23,7 @@
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 use sp_api::impl_runtime_apis;
-use sp_core::OpaqueMetadata;
+use sp_core::{U256, OpaqueMetadata};
 use sp_runtime::{
 	create_runtime_str, generic, impl_opaque_keys,
 	traits::{BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, Saturating, Verify},
@@ -48,7 +48,10 @@ pub use pallet_balances::Call as BalancesCall;
 pub use pallet_timestamp::Call as TimestampCall;
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
-pub use sp_runtime::{Perbill, Permill};
+pub use sp_runtime::{Perbill, Permill, ModuleId};
+
+use evm::{FeeCalculator, HashTruncateConvertAccountId};
+pub use evm::Account as EVMAccount;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -264,6 +267,31 @@ impl message_example::Trait for Runtime {
 	type XCMPMessageSender = MessageBroker;
 }
 
+/// Fixed gas price of `1`.
+pub struct FixedGasPrice;
+
+impl FeeCalculator for FixedGasPrice {
+	fn min_gas_price() -> U256 {
+		// Gas price is always one token per gas.
+		1.into()
+	}
+}
+
+parameter_types! {
+	pub const EVMModuleId: ModuleId = ModuleId(*b"py/evmpa");
+	pub const ChainId: u64 = 42;
+}
+
+impl evm::Trait for Runtime {
+	type ModuleId = EVMModuleId;
+	type FeeCalculator = FixedGasPrice;
+	type ConvertAccountId = HashTruncateConvertAccountId<BlakeTwo256>;
+	type Currency = Balances;
+	type Event = Event;
+	type Precompiles = ();
+	type ChainId = ChainId;
+}
+
 construct_runtime! {
 	pub enum Runtime where
 		Block = Block,
@@ -279,6 +307,7 @@ construct_runtime! {
 		MessageBroker: cumulus_message_broker::{Module, Call, Inherent, Event<T>},
 		TokenDealer: message_example::{Module, Call, Event<T>, Config},
 		TransactionPayment: pallet_transaction_payment::{Module, Storage},
+		EVM: evm::{Module, Config, Call, Storage, Event<T>},
 	}
 }
 
