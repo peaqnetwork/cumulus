@@ -373,6 +373,7 @@ impl<T: Trait> Module<T> {
 					transaction.gas_limit.low_u32(),
 					transaction.gas_price,
 					Some(transaction.nonce),
+					true
 				).unwrap(); // TODO: handle error
 
 				TransactionStatus {
@@ -393,7 +394,8 @@ impl<T: Trait> Module<T> {
 					transaction.gas_limit.low_u32(),
 					transaction.gas_price,
 					Some(transaction.nonce),
-				).unwrap().0; // TODO: handle error
+					true
+				).unwrap().1; // TODO: handle error
 
 				TransactionStatus {
 					transaction_hash,

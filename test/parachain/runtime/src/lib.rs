@@ -309,7 +309,6 @@ impl evm::Trait for Runtime {
 	type Currency = Balances;
 	type Event = Event;
 	type Precompiles = ();
-	type ChainId = ChainId;
 }
 
 pub struct EthereumFindAuthor<F>(PhantomData<F>);
@@ -518,17 +517,16 @@ impl_runtime_apis! {
 			gas_price: U256,
 			nonce: Option<U256>,
 		) -> Option<(Vec<u8>, U256)> {
-			// evm::Module::<Runtime>::execute_call(
-			// 	from,
-			// 	to,
-			// 	data,
-			// 	value,
-			// 	gas_limit.low_u32(),
-			// 	gas_price,
-			// 	nonce,
-			// 	false,
-			// ).ok().map(|(_, ret, gas)| (ret, gas))
-			None
+			evm::Module::<Runtime>::execute_call(
+				from,
+				to,
+				data,
+				value,
+				gas_limit.low_u32(),
+				gas_price,
+				nonce,
+				false,
+			).ok().map(|(_, ret, gas)| (ret, gas))
 		}
 
 		fn block_by_number(number: u32) -> (

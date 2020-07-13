@@ -21,7 +21,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 mod backend;
-mod tests;
 
 pub use crate::backend::{Account, Log, Vicinity, Backend};
 
@@ -30,18 +29,17 @@ use sp_std::{vec::Vec, marker::PhantomData};
 use codec::{Encode, Decode};
 #[cfg(feature = "std")]
 use serde::{Serialize, Deserialize};
-use frame_support::{ensure, decl_module, decl_storage, decl_event, decl_error};
+use frame_support::{debug, ensure, decl_module, decl_storage, decl_event, decl_error};
 use frame_support::weights::Weight;
 use frame_support::traits::{Currency, WithdrawReason, ExistenceRequirement, Get};
-use frame_system::ensure_signed;
+use frame_system::{self as system, ensure_signed};
 use sp_runtime::ModuleId;
 use sp_core::{U256, H256, H160, Hasher};
 use sp_runtime::{
 	DispatchResult, traits::{UniqueSaturatedInto, AccountIdConversion, SaturatedConversion},
 };
 use sha3::{Digest, Keccak256};
-pub use evm::{ExitReason, ExitSucceed, ExitError, ExitRevert, ExitFatal};
-use evm::Config;
+use evm::{ExitReason, ExitSucceed, ExitError, Config};
 use evm::executor::StackExecutor;
 use evm::backend::ApplyBackend;
 
@@ -120,15 +118,6 @@ impl Precompiles for () {
 	}
 }
 
-/// Substrate system chain ID.
-pub struct SystemChainId;
-
-impl Get<u64> for SystemChainId {
-	fn get() -> u64 {
-		sp_io::misc::chain_id()
-	}
-}
-
 static ISTANBUL_CONFIG: Config = Config::istanbul();
 
 /// EVM module trait
@@ -145,8 +134,6 @@ pub trait Trait: frame_system::Trait + pallet_timestamp::Trait {
 	type Event: From<Event<Self>> + Into<<Self as frame_system::Trait>::Event>;
 	/// Precompiles associated with this EVM engine.
 	type Precompiles: Precompiles;
-	/// Chain ID of EVM.
-	type ChainId: Get<u64>;
 
 	/// EVM config used in the module.
 	fn config() -> &'static Config {
@@ -310,11 +297,12 @@ decl_module! {
 				gas_limit,
 				gas_price,
 				nonce,
+				true,
 			)? {
-				ExitReason::Succeed(_) => {
+				(ExitReason::Succeed(_), _, _) => {
 					Module::<T>::deposit_event(Event::<T>::Executed(target));
 				},
-				ExitReason::Error(_) | ExitReason::Revert(_) | ExitReason::Fatal(_) => {
+				(_, _, _) => {
 					Module::<T>::deposit_event(Event::<T>::ExecutedFailed(target));
 				},
 			}
@@ -344,12 +332,13 @@ decl_module! {
 				value,
 				gas_limit,
 				gas_price,
-				nonce
+				nonce,
+				true,
 			)? {
-				(create_address, ExitReason::Succeed(_)) => {
+				(ExitReason::Succeed(_), create_address, _) => {
 					Module::<T>::deposit_event(Event::<T>::Created(create_address));
 				},
-				(create_address, _) => {
+				(_, create_address, _) => {
 					Module::<T>::deposit_event(Event::<T>::CreatedFailed(create_address));
 				},
 			}
@@ -380,12 +369,13 @@ decl_module! {
 				value,
 				gas_limit,
 				gas_price,
-				nonce
+				nonce,
+				true,
 			)? {
-				(create_address, ExitReason::Succeed(_)) => {
+				(ExitReason::Succeed(_), create_address, _) => {
 					Module::<T>::deposit_event(Event::<T>::Created(create_address));
 				},
-				(create_address, _) => {
+				(_, create_address, _) => {
 					Module::<T>::deposit_event(Event::<T>::CreatedFailed(create_address));
 				},
 			}
@@ -435,23 +425,26 @@ impl<T: Trait> Module<T> {
 		value: U256,
 		gas_limit: u32,
 		gas_price: U256,
-		nonce: Option<U256>
-	) -> Result<(H160, ExitReason), Error<T>> {
+		nonce: Option<U256>,
+		apply_state: bool,
+	) -> Result<(ExitReason, H160, U256), Error<T>> {
 		Self::execute_evm(
 			source,
 			value,
 			gas_limit,
 			gas_price,
 			nonce,
+			apply_state,
 			|executor| {
-				(executor.create_address(
+				let address = executor.create_address(
 					evm::CreateScheme::Legacy { caller: source },
-				), executor.transact_create(
+				);
+				(executor.transact_create(
 					source,
 					value,
 					init,
 					gas_limit as usize,
-				))
+				), address)
 			},
 		)
 	}
@@ -464,8 +457,9 @@ impl<T: Trait> Module<T> {
 		value: U256,
 		gas_limit: u32,
 		gas_price: U256,
-		nonce: Option<U256>
-	) -> Result<(H160, ExitReason), Error<T>> {
+		nonce: Option<U256>,
+		apply_state: bool,
+	) -> Result<(ExitReason, H160, U256), Error<T>> {
 		let code_hash = H256::from_slice(Keccak256::digest(&init).as_slice());
 		Self::execute_evm(
 			source,
@@ -473,16 +467,18 @@ impl<T: Trait> Module<T> {
 			gas_limit,
 			gas_price,
 			nonce,
+			apply_state,
 			|executor| {
-				(executor.create_address(
+				let address = executor.create_address(
 					evm::CreateScheme::Create2 { caller: source, code_hash, salt },
-				), executor.transact_create2(
+				);
+				(executor.transact_create2(
 					source,
 					value,
 					init,
 					salt,
 					gas_limit as usize,
-				))
+				), address)
 			},
 		)
 	}
@@ -496,21 +492,23 @@ impl<T: Trait> Module<T> {
 		gas_limit: u32,
 		gas_price: U256,
 		nonce: Option<U256>,
-	) -> Result<ExitReason, Error<T>> {
-		Ok(Self::execute_evm(
+		apply_state: bool,
+	) -> Result<(ExitReason, Vec<u8>, U256), Error<T>> {
+		Self::execute_evm(
 			source,
 			value,
 			gas_limit,
 			gas_price,
 			nonce,
-			|executor| ((), executor.transact_call(
+			apply_state,
+			|executor| executor.transact_call(
 				source,
 				target,
 				value,
 				input,
 				gas_limit as usize,
-			)),
-		)?.1)
+			),
+		)
 	}
 
 	/// Execute an EVM operation.
@@ -520,9 +518,10 @@ impl<T: Trait> Module<T> {
 		gas_limit: u32,
 		gas_price: U256,
 		nonce: Option<U256>,
+		apply_state: bool,
 		f: F,
-	) -> Result<(R, ExitReason), Error<T>> where
-		F: FnOnce(&mut StackExecutor<Backend<T>>) -> (R, ExitReason),
+	) -> Result<(ExitReason, R, U256), Error<T>> where
+		F: FnOnce(&mut StackExecutor<Backend<T>>) -> (ExitReason, R),
 	{
 		let vicinity = Vicinity {
 			gas_price,
@@ -550,12 +549,25 @@ impl<T: Trait> Module<T> {
 
 		let (retv, reason) = f(&mut executor);
 
+		let used_gas = U256::from(executor.used_gas());
 		let actual_fee = executor.fee(gas_price);
+		debug::debug!(
+			target: "evm",
+			"Execution {:?} [source: {:?}, value: {}, gas_limit: {}, used_gas: {}, actual_fee: {}]",
+			retv,
+			source,
+			value,
+			gas_limit,
+			used_gas,
+			actual_fee
+		);
 		executor.deposit(source, total_fee.saturating_sub(actual_fee));
 
-		let (values, logs) = executor.deconstruct();
-		backend.apply(values, logs, true);
+		if apply_state {
+			let (values, logs) = executor.deconstruct();
+			backend.apply(values, logs, true);
+		}
 
-		Ok((retv, reason))
+		Ok((retv, reason, used_gas))
 	}
 }
