@@ -1,0 +1,30 @@
+[package]
+name = "frontier-rpc-primitives"
+version = "0.1.0"
+authors = ["Parity Technologies <admin@parity.io"]
+edition = "2018"
+description = "Runtime primitives for Ethereum RPC (web3) compatibility layer for Substrate."
+license = "GPL-3.0"
+
+[dependencies]
+sp-core = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cumulus-branch" }
+sp-api = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cumulus-branch" }
+pallet-evm = { default-features = false, path = "../../../evm" }
+ethereum = { path = "../../../vendor/ethereum", version = "0.2", default-features = false, features = ["codec"] }
+ethereum-types = { version = "0.9", default-features = false }
+codec = { package = "parity-scale-codec", version = "1.0.0", default-features = false }
+sp-runtime = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cumulus-branch" }
+sp-std = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cumulus-branch" }
+
+[features]
+default = ["std"]
+std = [
+	"sp-core/std",
+	"sp-api/std",
+	"pallet-evm/std",
+	"ethereum/std",
+	"ethereum-types/std",
+	"codec/std",
+	"sp-runtime/std",
+	"sp-std/std",
+]

@@ -23,14 +23,14 @@
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 use sp_api::impl_runtime_apis;
-use sp_core::{U256, OpaqueMetadata};
+use sp_core::{U256, H160, OpaqueMetadata};
 use sp_runtime::{
 	create_runtime_str, generic, impl_opaque_keys,
 	traits::{BlakeTwo256, Block as BlockT, IdentifyAccount, IdentityLookup, Saturating, Verify},
 	transaction_validity::{TransactionSource, TransactionValidity},
 	ApplyExtrinsicResult, MultiSignature,
 };
-use sp_std::prelude::*;
+use sp_std::{prelude::*, marker::PhantomData};
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
@@ -40,9 +40,9 @@ mod message_example;
 // A few exports that help ease life for downstream crates.
 pub use frame_support::{
 	construct_runtime, parameter_types,
-	traits::Randomness,
+	traits::{Randomness, FindAuthor},
 	weights::{constants::WEIGHT_PER_SECOND, IdentityFee, Weight},
-	StorageValue,
+	StorageValue, ConsensusEngineId
 };
 pub use pallet_balances::Call as BalancesCall;
 pub use pallet_timestamp::Call as TimestampCall;
@@ -52,6 +52,8 @@ pub use sp_runtime::{Perbill, Permill, ModuleId};
 
 use evm::{FeeCalculator, HashTruncateConvertAccountId};
 pub use evm::Account as EVMAccount;
+
+use ethereum::{Block as EthereumBlock, Transaction as EthereumTransaction, Receipt as EthereumReceipt};
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -292,6 +294,33 @@ impl evm::Trait for Runtime {
 	type ChainId = ChainId;
 }
 
+pub struct EthereumFindAuthor<F>(PhantomData<F>);
+impl<F: FindAuthor<u32>> FindAuthor<H160> for EthereumFindAuthor<F>
+{
+	fn find_author<'a, I>(digests: I) -> Option<H160> where
+		I: 'a + IntoIterator<Item=(ConsensusEngineId, &'a [u8])>
+	{
+		// Aura/Babe unsupported in cumulus
+		None
+	}
+}
+
+// To remove once Aura/Babe supported in cumulus
+pub struct PhantomAura;
+impl FindAuthor<u32> for PhantomAura {
+	fn find_author<'a, I>(digests: I) -> Option<u32> where
+		I: 'a + IntoIterator<Item=(ConsensusEngineId, &'a [u8])>
+	{
+		Some(0 as u32)
+	}
+}
+
+impl ethereum::Trait for Runtime {
+	type Event = Event;
+	type FindAuthor = EthereumFindAuthor<PhantomAura>;
+	type ChainId = ChainId;
+}
+
 construct_runtime! {
 	pub enum Runtime where
 		Block = Block,
@@ -308,6 +337,7 @@ construct_runtime! {
 		TokenDealer: message_example::{Module, Call, Event<T>, Config},
 		TransactionPayment: pallet_transaction_payment::{Module, Storage},
 		EVM: evm::{Module, Config, Call, Storage, Event<T>},
+		Ethereum: ethereum::{Module, Call, Storage, Event<T>, ValidateUnsigned},
 	}
 }
 

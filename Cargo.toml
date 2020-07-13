@@ -13,5 +13,7 @@ members = [
 	"upward-message",
 ]
 
+exclude = ["vendor"]
+
 [profile.release]
 panic = 'unwind'
