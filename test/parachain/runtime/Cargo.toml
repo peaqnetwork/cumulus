@@ -29,8 +29,12 @@ pallet-randomness-collective-flip = { git = "https://github.com/paritytech/subst
 pallet-timestamp = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cumulus-branch" }
 pallet-sudo = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cumulus-branch" }
 pallet-transaction-payment = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cumulus-branch" }
+pallet-transaction-payment-rpc-runtime-api = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cumulus-branch" }
+frame-system-rpc-runtime-api = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cumulus-branch" }
+
 evm = { path = "../../../evm", default-features = false, package = "pallet-evm" }
 ethereum = { version = "0.1.0", path = "../../../ethereum", default-features = false, package = "pallet-ethereum" }
+frontier-rpc-primitives = { default-features = false, path = "../../../frontier/rpc/primitives" }
 
 # Cumulus dependencies
 cumulus-runtime = { path = "../../../runtime", default-features = false }
@@ -75,8 +79,11 @@ std = [
 	"cumulus-upward-message/std",
 	"cumulus-primitives/std",
 	"polkadot-parachain/std",
+	"frame-system-rpc-runtime-api/std",
+	"pallet-transaction-payment-rpc-runtime-api/std",
 	"evm/std",
 	"ethereum/std",
+	"frontier-rpc-primitives/std",
 ]
 # Will be enabled by the `wasm-builder` when building the runtime for WASM.
 runtime-wasm = [
