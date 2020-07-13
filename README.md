@@ -49,6 +49,7 @@ Below, replace `{ALICE_IDENTITY_ID}` and `{BOB_IDENTITY_ID}` with the Local node
       --base-path ../../tmp/collator-100 \
       --ws-port 9988 \
       --port 30337 \
+      --rpc-port 9999 \
       --parachain-id 100 \
       -- \
       --chain spec.json \
