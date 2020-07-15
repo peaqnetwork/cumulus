@@ -36,7 +36,7 @@ Check that both nodes peer and that the block are being produced and finalized.
 
 ## Parachain setup
 
-- `git clone https://github.com/PureStake/cumulus --branch tgmichel-evm`
+- `git clone https://github.com/PureStake/cumulus --branch tgmichel-evm-frontier`
 - `cargo build --release`
 - Copy the `spec.json` file generated for the relay to `target/release`
 - `cd target/release`
