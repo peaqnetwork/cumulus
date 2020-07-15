@@ -20,8 +20,9 @@ use parachain_runtime::{
 	TokenDealerConfig, EVMConfig, WASM_BINARY,
 };
 use sc_service::ChainType;
-use sp_core::{sr25519, Pair, Public, U256};
+use sp_core::{sr25519, Pair, Public, U256, H160};
 use sp_runtime::traits::{BlakeTwo256, IdentifyAccount, Verify};
+use std::str::FromStr;
 
 use std::collections::BTreeMap;
 use evm::{ConvertAccountId, HashTruncateConvertAccountId};
@@ -84,17 +85,15 @@ fn testnet_genesis(
 	endowed_accounts: Vec<AccountId>,
 	id: ParaId,
 ) -> GenesisConfig {
-	let alice_account_id = get_account_id_from_seed::<sr25519::Public>("Alice");
-	let alice_evm_account_id =
-		HashTruncateConvertAccountId::<BlakeTwo256>::convert_account_id(&alice_account_id);
+	let alice_evm_account_id = H160::from_str("6Be02d1d3665660d22FF9624b7BE0551ee1Ac91b").unwrap();
 	let mut evm_accounts = BTreeMap::new();
 	evm_accounts.insert(
 		alice_evm_account_id,
 		evm::GenesisAccount {
 			nonce: 0.into(),
-			balance: U256::MAX,
+			balance: U256::from(123456_123_000_000_000_000_000u128),
 			storage: BTreeMap::new(),
-			code: WASM_BINARY.to_vec(),
+			code: vec![],
 		},
 	);
 
