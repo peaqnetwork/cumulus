@@ -24,6 +24,7 @@ use sp_runtime::traits::{Block as BlockT, Header as _, UniqueSaturatedInto};
 use sp_runtime::transaction_validity::TransactionSource;
 use sp_api::{ProvideRuntimeApi, BlockId};
 use sp_consensus::SelectChain;
+use sp_blockchain::{Error as BlockChainError, HeaderMetadata, HeaderBackend};
 use sp_transaction_pool::TransactionPool;
 use sc_client_api::backend::{StorageProvider, Backend, StateBackend};
 use sha3::{Keccak256, Digest};
@@ -165,6 +166,7 @@ fn transaction_build(
 
 impl<B, C, SC, P, CT, BE> EthApi<B, C, SC, P, CT, BE> where
 	C: ProvideRuntimeApi<B> + StorageProvider<B,BE>,
+	C: HeaderBackend<B> + HeaderMetadata<B, Error=BlockChainError>,
 	C::Api: EthereumRuntimeApi<B>,
 	BE: Backend<B> + 'static,
 	BE::State: StateBackend<BlakeTwo256>,
@@ -199,7 +201,7 @@ impl<B, C, SC, P, CT, BE> EthApi<B, C, SC, P, CT, BE> where
 				},
 				BlockNumber::Latest => {
 					native_number = Some(
-						header.number().clone().unique_saturated_into() as u32
+						self.client.info().best_number.unique_saturated_into() as u32
 					);
 				},
 				BlockNumber::Earliest => {
@@ -211,7 +213,7 @@ impl<B, C, SC, P, CT, BE> EthApi<B, C, SC, P, CT, BE> where
 			};
 		} else {
 			native_number = Some(
-				header.number().clone().unique_saturated_into() as u32
+				self.client.info().best_number.unique_saturated_into() as u32
 			);
 		}
 		Ok(native_number)
@@ -220,6 +222,7 @@ impl<B, C, SC, P, CT, BE> EthApi<B, C, SC, P, CT, BE> where
 
 impl<B, C, SC, P, CT, BE> EthApiT for EthApi<B, C, SC, P, CT, BE> where
 	C: ProvideRuntimeApi<B> + StorageProvider<B,BE>,
+	C: HeaderBackend<B> + HeaderMetadata<B, Error=BlockChainError>,
 	C::Api: EthereumRuntimeApi<B>,
 	BE: Backend<B> + 'static,
 	BE::State: StateBackend<BlakeTwo256>,

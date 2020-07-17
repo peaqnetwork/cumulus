@@ -1866,6 +1866,7 @@ dependencies = [
  "sc-service",
  "sha3",
  "sp-api",
+ "sp-blockchain",
  "sp-consensus",
  "sp-runtime",
  "sp-storage",
