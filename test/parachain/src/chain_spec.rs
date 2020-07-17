@@ -21,11 +21,10 @@ use parachain_runtime::{
 };
 use sc_service::ChainType;
 use sp_core::{sr25519, Pair, Public, U256, H160};
-use sp_runtime::traits::{BlakeTwo256, IdentifyAccount, Verify};
+use sp_runtime::traits::{IdentifyAccount, Verify};
 use std::str::FromStr;
 
 use std::collections::BTreeMap;
-use evm::{ConvertAccountId, HashTruncateConvertAccountId};
 
 /// Specialized `ChainSpec`. This is a specialization of the general Substrate ChainSpec type.
 pub type ChainSpec = sc_service::GenericChainSpec<GenesisConfig>;
