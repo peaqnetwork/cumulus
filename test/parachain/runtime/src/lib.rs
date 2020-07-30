@@ -51,7 +51,7 @@ pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill, ModuleId};
 
 use codec::{Encode, Decode};
-use evm::{FeeCalculator, HashTruncateConvertAccountId};
+use evm::{FeeCalculator, HashedAddressMapping, EnsureAddressTruncated};
 pub use evm::Account as EVMAccount;
 
 use ethereum::{Block as EthereumBlock, Transaction as EthereumTransaction, Receipt as EthereumReceipt};
@@ -281,6 +281,21 @@ impl FeeCalculator for FixedGasPrice {
 	}
 }
 
+parameter_types! {
+	pub const ChainId: u64 = 42;
+}
+
+impl evm::Trait for Runtime {
+	type FeeCalculator = FixedGasPrice;
+	type CallOrigin = EnsureAddressTruncated;
+	type WithdrawOrigin = EnsureAddressTruncated;
+	type AddressMapping = HashedAddressMapping<BlakeTwo256>;
+	type Currency = Balances;
+	type Event = Event;
+	type Precompiles = ();
+	type ChainId = ChainId;
+}
+
 pub struct TransactionConverter;
 
 impl frontier_rpc_primitives::ConvertTransaction<UncheckedExtrinsic> for TransactionConverter {
@@ -295,20 +310,6 @@ impl frontier_rpc_primitives::ConvertTransaction<opaque::UncheckedExtrinsic> for
 		let encoded = extrinsic.encode();
 		opaque::UncheckedExtrinsic::decode(&mut &encoded[..]).expect("Encoded extrinsic is always valid")
 	}
-}
-
-parameter_types! {
-	pub const EVMModuleId: ModuleId = ModuleId(*b"py/evmpa");
-	pub const ChainId: u64 = 42;
-}
-
-impl evm::Trait for Runtime {
-	type ModuleId = EVMModuleId;
-	type FeeCalculator = FixedGasPrice;
-	type ConvertAccountId = HashTruncateConvertAccountId<BlakeTwo256>;
-	type Currency = Balances;
-	type Event = Event;
-	type Precompiles = ();
 }
 
 pub struct EthereumFindAuthor<F>(PhantomData<F>);
@@ -335,7 +336,6 @@ impl FindAuthor<u32> for PhantomAura {
 impl ethereum::Trait for Runtime {
 	type Event = Event;
 	type FindAuthor = EthereumFindAuthor<PhantomAura>;
-	type ChainId = ChainId;
 }
 
 construct_runtime! {
@@ -354,7 +354,7 @@ construct_runtime! {
 		TokenDealer: message_example::{Module, Call, Event<T>, Config},
 		TransactionPayment: pallet_transaction_payment::{Module, Storage},
 		EVM: evm::{Module, Config, Call, Storage, Event<T>},
-		Ethereum: ethereum::{Module, Call, Storage, Event<T>, ValidateUnsigned},
+		Ethereum: ethereum::{Module, Call, Storage, Event, Config, ValidateUnsigned},
 	}
 }
 
@@ -487,7 +487,7 @@ impl_runtime_apis! {
 		}
 
 		fn account_basic(address: H160) -> EVMAccount {
-			evm::Module::<Runtime>::accounts(address)
+			evm::Module::<Runtime>::account_basic(&address)
 		}
 
 		fn gas_price() -> U256 {
@@ -510,23 +510,36 @@ impl_runtime_apis! {
 
 		fn call(
 			from: H160,
-			to: H160,
 			data: Vec<u8>,
 			value: U256,
 			gas_limit: U256,
 			gas_price: U256,
 			nonce: Option<U256>,
+			action: ethereum::TransactionAction,
 		) -> Option<(Vec<u8>, U256)> {
-			evm::Module::<Runtime>::execute_call(
-				from,
-				to,
-				data,
-				value,
-				gas_limit.low_u32(),
-				gas_price,
-				nonce,
-				false,
-			).ok().map(|(_, ret, gas)| (ret, gas))
+			match action {
+				ethereum::TransactionAction::Call(to) =>
+					evm::Module::<Runtime>::execute_call(
+						from,
+						to,
+						data,
+						value,
+						gas_limit.low_u32(),
+						gas_price,
+						nonce,
+						false,
+					).ok().map(|(_, ret, gas)| (ret, gas)),
+				ethereum::TransactionAction::Create =>
+					evm::Module::<Runtime>::execute_create(
+						from,
+						data,
+						value,
+						gas_limit.low_u32(),
+						gas_price,
+						nonce,
+						false,
+					).ok().map(|(_, _, gas)| (vec![], gas)),
+			}
 		}
 
 		fn block_by_number(number: u32) -> (
@@ -596,6 +609,36 @@ impl_runtime_apis! {
 				number,
 				index
 			)
+		}
+
+		fn logs(
+			from_block: Option<u32>,
+			to_block: Option<u32>,
+			block_hash: Option<H256>,
+			address: Option<H160>,
+			topic: Option<Vec<H256>>
+		) -> Vec<(
+			H160, // address
+			Vec<H256>, // topics
+			Vec<u8>, // data
+			Option<H256>, // block_hash
+			Option<U256>, // block_number
+			Option<H256>, // transaction_hash
+			Option<U256>, // transaction_index
+			Option<U256>, // log index in block
+			Option<U256>, // log index in transaction
+		)> {
+			let output = <ethereum::Module<Runtime>>::filtered_logs(
+				from_block,
+				to_block,
+				block_hash,
+				address,
+				topic
+			);
+			if let Some(output) = output {
+				return output;
+			}
+			return vec![];
 		}
 	}
 }
