@@ -19,7 +19,7 @@
 
 use std::{sync::Arc, fmt};
 
-use parachain_runtime::{Hash, AccountId, Index, opaque::Block, Balance, UncheckedExtrinsic};
+use parachain_runtime::{AccountId, Index, opaque::Block, Balance, UncheckedExtrinsic};
 use sp_api::ProvideRuntimeApi;
 use sp_transaction_pool::TransactionPool;
 use sp_blockchain::{Error as BlockChainError, HeaderMetadata, HeaderBackend};

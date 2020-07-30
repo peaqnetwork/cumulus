@@ -17,7 +17,7 @@
 use cumulus_primitives::ParaId;
 use parachain_runtime::{
 	AccountId, BalancesConfig, GenesisConfig, Signature, SudoConfig, SystemConfig,
-	TokenDealerConfig, EVMConfig, WASM_BINARY,
+	TokenDealerConfig, EVMConfig, EthereumConfig, WASM_BINARY,
 };
 use sc_service::ChainType;
 use sp_core::{sr25519, Pair, Public, U256, H160};
@@ -113,5 +113,6 @@ fn testnet_genesis(
 		evm: Some(EVMConfig {
 			accounts: evm_accounts,
 		}),
+		ethereum: Some(EthereumConfig {}),
 	}
 }
