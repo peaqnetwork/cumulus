@@ -19,7 +19,7 @@
 use sp_core::{H160, H256, U256};
 use ethereum::{
 	Log, Block as EthereumBlock, Transaction as EthereumTransaction,
-	Receipt as EthereumReceipt
+	Receipt as EthereumReceipt, TransactionAction
 };
 use ethereum_types::Bloom;
 use codec::{Encode, Decode};
@@ -53,32 +53,54 @@ impl Default for TransactionStatus {
 sp_api::decl_runtime_apis! {
 	/// API necessary for Ethereum-compatibility layer.
 	pub trait EthereumRuntimeApi {
+		/// Returns runtime defined pallet_evm::ChainId.
 		fn chain_id() -> u64;
+		/// Returns pallet_evm::Accounts by address.
 		fn account_basic(address: H160) -> pallet_evm::Account;
+		/// Returns FixedGasPrice::min_gas_price
 		fn gas_price() -> U256;
+		/// For a given account address, returns pallet_evm::AccountCodes.
 		fn account_code_at(address: H160) -> Vec<u8>;
+		/// Returns the converted FindAuthor::find_author authority id.
 		fn author() -> H160;
+		/// For a given account address and index, returns pallet_evm::AccountStorages.
 		fn storage_at(address: H160, index: U256) -> H256;
+		/// Returns a pallet_evm::execute_call response.
 		fn call(
 			from: H160,
-			to: H160,
 			data: Vec<u8>,
 			value: U256,
 			gas_limit: U256,
 			gas_price: U256,
 			nonce: Option<U256>,
+			action: TransactionAction
 		) -> Option<(Vec<u8>, U256)>;
+		/// For a given block number, returns an ethereum::Block and all its TransactionStatus.
 		fn block_by_number(number: u32) -> (Option<EthereumBlock>, Vec<Option<TransactionStatus>>);
+		/// For a given block number, returns the number of transactions.
 		fn block_transaction_count_by_number(number: u32) -> Option<U256>;
+		/// For a given block hash, returns an ethereum::Block.
 		fn block_by_hash(hash: H256) -> Option<EthereumBlock>;
+		/// For a given block hash, returns an ethereum::Block and all its TransactionStatus.
 		fn block_by_hash_with_statuses(hash: H256) -> (Option<EthereumBlock>, Vec<Option<TransactionStatus>>);
+		/// For a given block hash, returns the number of transactions in a given block hash.
 		fn block_transaction_count_by_hash(hash: H256) -> Option<U256>;
+		/// For a given transaction hash, returns data necessary to build an Transaction rpc type response.
+		/// - EthereumTransaction: transaction as stored in pallet-ethereum.
+		/// - EthereumBlock: block as stored in pallet-ethereum .
+		/// - TransactionStatus: transaction execution metadata.
+		/// - EthereumReceipt: transaction receipt.
 		fn transaction_by_hash(hash: H256) -> Option<(
 			EthereumTransaction,
 			EthereumBlock,
 			TransactionStatus,
 			Vec<EthereumReceipt>
 		)>;
+		/// For a given block hash and transaction index, returns data necessary to build an Transaction rpc
+		/// type response.
+		/// - EthereumTransaction: transaction as stored in pallet-ethereum.
+		/// - EthereumBlock: block as stored in pallet-ethereum .
+		/// - TransactionStatus: transaction execution metadata.
 		fn transaction_by_block_hash_and_index(
 			hash: H256,
 			index: u32
@@ -87,6 +109,11 @@ sp_api::decl_runtime_apis! {
 			EthereumBlock,
 			TransactionStatus
 		)>;
+		/// For a given block number and transaction index, returns data necessary to build an Transaction rpc
+		/// type response.
+		/// - EthereumTransaction: transaction as stored in pallet-ethereum.
+		/// - EthereumBlock: block as stored in pallet-ethereum .
+		/// - TransactionStatus: transaction execution metadata.
 		fn transaction_by_block_number_and_index(
 			number: u32,
 			index: u32
@@ -94,6 +121,24 @@ sp_api::decl_runtime_apis! {
 			EthereumTransaction,
 			EthereumBlock,
 			TransactionStatus
+		)>;
+		/// For given filter arguments, return data necessary to build Logs
+		fn logs(
+			from_block: Option<u32>,
+			to_block: Option<u32>,
+			block_hash: Option<H256>,
+			address: Option<H160>,
+			topic: Option<Vec<H256>>
+		) -> Vec<(
+			H160, // address
+			Vec<H256>, // topics
+			Vec<u8>, // data
+			Option<H256>, // block_hash
+			Option<U256>, // block_number
+			Option<H256>, // transaction_hash
+			Option<U256>, // transaction_index
+			Option<U256>, // log index in block
+			Option<U256>, // log index in transaction
 		)>;
 	}
 }

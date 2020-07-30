@@ -24,7 +24,6 @@ use sp_runtime::traits::{Block as BlockT, Header as _, UniqueSaturatedInto};
 use sp_runtime::transaction_validity::TransactionSource;
 use sp_api::{ProvideRuntimeApi, BlockId};
 use sp_consensus::SelectChain;
-use sp_blockchain::{Error as BlockChainError, HeaderMetadata, HeaderBackend};
 use sp_transaction_pool::TransactionPool;
 use sc_client_api::backend::{StorageProvider, Backend, StateBackend};
 use sha3::{Keccak256, Digest};
@@ -32,7 +31,7 @@ use sp_runtime::traits::BlakeTwo256;
 use frontier_rpc_core::EthApi as EthApiT;
 use frontier_rpc_core::types::{
 	BlockNumber, Bytes, CallRequest, EthAccount, Filter, Index, Log, Receipt, RichBlock,
-	SyncStatus, Transaction, Work, Rich, Block, BlockTransactions
+	SyncStatus, Transaction, Work, Rich, Block, BlockTransactions, VariadicValue
 };
 use frontier_rpc_primitives::{EthereumRuntimeApi, ConvertTransaction, TransactionStatus};
 
@@ -41,6 +40,13 @@ pub use frontier_rpc_core::EthApiServer;
 fn internal_err(message: &str) -> Error {
 	Error {
 		code: ErrorCode::InternalError,
+		message: message.to_string(),
+		data: None
+	}
+}
+fn not_supported_err(message: &str) -> Error {
+	Error {
+		code: ErrorCode::InvalidRequest,
 		message: message.to_string(),
 		data: None
 	}
@@ -166,7 +172,6 @@ fn transaction_build(
 
 impl<B, C, SC, P, CT, BE> EthApi<B, C, SC, P, CT, BE> where
 	C: ProvideRuntimeApi<B> + StorageProvider<B,BE>,
-	C: HeaderBackend<B> + HeaderMetadata<B, Error=BlockChainError>,
 	C::Api: EthereumRuntimeApi<B>,
 	BE: Backend<B> + 'static,
 	BE::State: StateBackend<BlakeTwo256>,
@@ -201,11 +206,11 @@ impl<B, C, SC, P, CT, BE> EthApi<B, C, SC, P, CT, BE> where
 				},
 				BlockNumber::Latest => {
 					native_number = Some(
-						self.client.info().best_number.unique_saturated_into() as u32
+						header.number().clone().unique_saturated_into() as u32
 					);
 				},
 				BlockNumber::Earliest => {
-					native_number = Some(1);
+					native_number = Some(0);
 				},
 				BlockNumber::Pending => {
 					native_number = None;
@@ -213,7 +218,7 @@ impl<B, C, SC, P, CT, BE> EthApi<B, C, SC, P, CT, BE> where
 			};
 		} else {
 			native_number = Some(
-				self.client.info().best_number.unique_saturated_into() as u32
+				header.number().clone().unique_saturated_into() as u32
 			);
 		}
 		Ok(native_number)
@@ -222,7 +227,6 @@ impl<B, C, SC, P, CT, BE> EthApi<B, C, SC, P, CT, BE> where
 
 impl<B, C, SC, P, CT, BE> EthApiT for EthApi<B, C, SC, P, CT, BE> where
 	C: ProvideRuntimeApi<B> + StorageProvider<B,BE>,
-	C: HeaderBackend<B> + HeaderMetadata<B, Error=BlockChainError>,
 	C::Api: EthereumRuntimeApi<B>,
 	BE: Backend<B> + 'static,
 	BE::State: StateBackend<BlakeTwo256>,
@@ -466,12 +470,12 @@ impl<B, C, SC, P, CT, BE> EthApiT for EthApi<B, C, SC, P, CT, BE> where
 			.call(
 				&BlockId::Hash(header.hash()),
 				from,
-				to,
 				data,
 				value,
 				gas_limit,
 				gas_price,
 				nonce,
+				ethereum::TransactionAction::Call(to)
 			)
 			.map_err(|_| internal_err("executing call failed"))?
 			.ok_or(internal_err("inner executing call failed"))?;
@@ -486,7 +490,6 @@ impl<B, C, SC, P, CT, BE> EthApiT for EthApi<B, C, SC, P, CT, BE> where
 			.map_err(|_| internal_err("fetch header failed"))?;
 
 		let from = request.from.unwrap_or_default();
-		let to = request.to.unwrap_or_default();
 		let gas_price = request.gas_price.unwrap_or_default();
 		let gas_limit = request.gas.unwrap_or(U256::max_value());
 		let value = request.value.unwrap_or_default();
@@ -497,12 +500,15 @@ impl<B, C, SC, P, CT, BE> EthApiT for EthApi<B, C, SC, P, CT, BE> where
 			.call(
 				&BlockId::Hash(header.hash()),
 				from,
-				to,
 				data,
 				value,
 				gas_limit,
 				gas_price,
 				nonce,
+				match request.to {
+					Some(to) => ethereum::TransactionAction::Call(to),
+					_ => ethereum::TransactionAction::Create,
+				}
 			)
 			.map_err(|_| internal_err("executing call failed"))?
 			.ok_or(internal_err("inner executing call failed"))?;
@@ -652,23 +658,91 @@ impl<B, C, SC, P, CT, BE> EthApiT for EthApi<B, C, SC, P, CT, BE> where
 	}
 
 	fn compilers(&self) -> Result<Vec<String>> {
-		unimplemented!("compilers");
+		Err(not_supported_err("Method eth_getCompilers not supported."))
 	}
 
 	fn compile_lll(&self, _: String) -> Result<Bytes> {
-		unimplemented!("compile_lll");
+		Err(not_supported_err("Method eth_compileLLL not supported."))
 	}
 
 	fn compile_solidity(&self, _: String) -> Result<Bytes> {
-		unimplemented!("compile_solidity");
+		Err(not_supported_err("Method eth_compileSolidity not supported."))
 	}
 
 	fn compile_serpent(&self, _: String) -> Result<Bytes> {
-		unimplemented!("compile_serpent");
+		Err(not_supported_err("Method eth_compileSerpent not supported."))
 	}
 
-	fn logs(&self, _: Filter) -> BoxFuture<Vec<Log>> {
-		unimplemented!("logs");
+	fn logs(&self, filter: Filter) -> Result<Vec<Log>> {
+		let header = self.select_chain.best_chain()
+			.map_err(|_| internal_err("fetch header failed"))?;
+
+		let mut from_block = None;
+		if let Some(from_block_input) = filter.from_block {
+			if let Ok(Some(block_number)) = self.native_block_number(Some(from_block_input)) {
+				from_block = Some(block_number);
+			}
+		}
+
+		let mut to_block = None;
+		if let Some(to_block_input) = filter.to_block {
+			if let Ok(Some(block_number)) = self.native_block_number(Some(to_block_input)) {
+				to_block = Some(block_number);
+			}
+		}
+
+		let mut address = None;
+		if let Some(address_input) = filter.address {
+			match address_input {
+				VariadicValue::Single(x) => { address = Some(x); },
+				_ => { address = None; }
+			}
+		}
+
+		let mut topics = None;
+		if let Some(topics_input) = filter.topics {
+			match topics_input {
+				VariadicValue::Multiple(x) => { topics = Some(x); },
+				_ => { topics = None; }
+			}
+		}
+
+		if let Ok(logs) = self.client.runtime_api()
+			.logs(
+				&BlockId::Hash(header.hash()),
+				from_block,
+				to_block,
+				filter.block_hash,
+				address,
+				topics
+		) {
+			let mut output = vec![];
+			for log in logs {
+				let address = log.0;
+				let topics = log.1;
+				let data = log.2;
+				let block_hash = log.3;
+				let block_number = log.4;
+				let transaction_hash = log.5;
+				let transaction_index = log.6;
+				let log_index = log.7;
+				let transaction_log_index = log.8;
+				output.push(Log {
+					address,
+					topics,
+					data: Bytes(data),
+					block_hash,
+					block_number,
+					transaction_hash,
+					transaction_index,
+					log_index,
+					transaction_log_index,
+					removed: false
+				});
+			}
+			return Ok(output);
+		}
+		Ok(vec![])
 	}
 
 	fn work(&self) -> Result<Work> {
