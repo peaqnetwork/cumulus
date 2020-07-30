@@ -22,7 +22,7 @@ use ethereum::{TransactionAction, TransactionSignature};
 use frame_support::{
 	impl_outer_origin, parameter_types, weights::Weight, ConsensusEngineId
 };
-use pallet_evm::{FeeCalculator, HashTruncateConvertAccountId};
+use pallet_evm::{FeeCalculator, HashedAddressMapping, EnsureAddressTruncated};
 use rlp::*;
 use sp_core::{H160, H256, U256};
 use sp_runtime::{
@@ -30,6 +30,7 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	ModuleId, Perbill,
 };
+use sp_runtime::AccountId32;
 
 impl_outer_origin! {
 	pub enum Origin for Test where system = frame_system {}
@@ -48,13 +49,14 @@ parameter_types! {
 }
 impl frame_system::Trait for Test {
 	type BaseCallFilter = ();
+	type SystemWeightInfo = ();
 	type Origin = Origin;
 	type Call = ();
 	type Index = u64;
 	type BlockNumber = u64;
 	type Hash = H256;
 	type Hashing = BlakeTwo256;
-	type AccountId = H160;
+	type AccountId = AccountId32;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Header = Header;
 	type Event = ();
@@ -83,6 +85,7 @@ impl pallet_balances::Trait for Test {
 	type DustRemoval = ();
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
+	type WeightInfo = ();
 }
 
 parameter_types! {
@@ -93,6 +96,7 @@ impl pallet_timestamp::Trait for Test {
 	type Moment = u64;
 	type OnTimestampSet = ();
 	type MinimumPeriod = MinimumPeriod;
+	type WeightInfo = ();
 }
 
 pub struct FixedGasPrice;
@@ -118,17 +122,18 @@ parameter_types! {
 }
 
 impl pallet_evm::Trait for Test {
-	type ModuleId = EVMModuleId;
 	type FeeCalculator = FixedGasPrice;
-	type ConvertAccountId = HashTruncateConvertAccountId<BlakeTwo256>;
+	type CallOrigin = EnsureAddressTruncated;
+	type WithdrawOrigin = EnsureAddressTruncated;
+	type AddressMapping = HashedAddressMapping<BlakeTwo256>;
 	type Currency = Balances;
 	type Event = ();
 	type Precompiles = ();
+	type ChainId = ChainId;
 }
 
 impl Trait for Test {
 	type Event = ();
-	type ChainId = ChainId;
 	type FindAuthor = EthereumFindAuthor;
 }
 
