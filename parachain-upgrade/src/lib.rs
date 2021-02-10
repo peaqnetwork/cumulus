@@ -28,7 +28,7 @@
 //! Cumulus. It will not work outside a Cumulus Parachain.
 //!
 //! Users must ensure that they register this pallet as an inherent provider.
-
+use sp_std::if_std;
 use cumulus_primitives::{
 	inherents::{ValidationDataType, VALIDATION_DATA_IDENTIFIER as INHERENT_IDENTIFIER},
 	well_known_keys::{NEW_VALIDATION_CODE, VALIDATION_DATA}, AbridgedHostConfiguration,
@@ -162,6 +162,11 @@ decl_module! {
 					Error::<T>::InvalidRelayChainMerkleProof
 				})?;
 
+			if_std!{
+				prtintln!("about to write validataion data to starage");
+				println!("{:?}", &vfp);
+			}
+
 			storage::unhashed::put(VALIDATION_DATA, &vfp);
 			DidUpdateValidationData::put(true);
 			RelevantMessagingState::put(relevant_messaging_state);
@@ -185,6 +190,10 @@ decl_module! {
 				storage::unhashed::kill(NEW_VALIDATION_CODE);
 			}
 
+			if_std!{
+				prtintln!("Just about to kill validation data");
+			}
+
 			storage::unhashed::kill(VALIDATION_DATA);
 
 			0
@@ -197,7 +206,11 @@ impl<T: Config> Module<T> {
 	///
 	/// Returns `Some(_)` after the inherent set the data for the current block.
 	pub fn validation_data() -> Option<ValidationData> {
-		storage::unhashed::get(VALIDATION_DATA)
+		let result = storage::unhashed::get(VALIDATION_DATA);
+		if_std!{
+			println!("Called helper got this from storage: {:?}", &result);
+		}
+		result
 	}
 
 	/// Put a new validation function into a particular location where polkadot
