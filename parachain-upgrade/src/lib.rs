@@ -191,7 +191,7 @@ decl_module! {
 			}
 
 			if_std!{
-				prtintln!("Just about to kill validation data");
+				println!("Just about to kill validation data");
 			}
 
 			storage::unhashed::kill(VALIDATION_DATA);
