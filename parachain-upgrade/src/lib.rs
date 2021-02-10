@@ -163,7 +163,7 @@ decl_module! {
 				})?;
 
 			if_std!{
-				prtintln!("about to write validataion data to starage");
+				println!("about to write validataion data to starage");
 				println!("{:?}", &vfp);
 			}
 
