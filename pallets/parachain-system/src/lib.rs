@@ -49,6 +49,8 @@ use sp_inherents::{InherentData, InherentIdentifier, ProvideInherent};
 use sp_runtime::traits::{BlakeTwo256, Hash};
 use sp_std::{cmp, collections::btree_map::BTreeMap, vec::Vec};
 
+use sp_std::if_std;
+
 mod relay_state_snapshot;
 #[macro_use]
 pub mod validate_block;
@@ -199,6 +201,11 @@ decl_module! {
 					frame_support::debug::print!("invalid relay chain merkle proof: {:?}", err);
 					Error::<T>::InvalidRelayChainMerkleProof
 				})?;
+
+			if_std!{
+				println!("In system inherent dispatchable. About to write vfp to storage");
+				println!("Data I'm writing {:?}", &vfp);
+			}
 
 			storage::unhashed::put(VALIDATION_DATA, &vfp);
 			DidUpdateValidationData::put(true);
@@ -565,7 +572,11 @@ impl<T: Config> Module<T> {
 	///
 	/// Returns `Some(_)` after the inherent set the data for the current block.
 	pub fn validation_data() -> Option<PersistedValidationData> {
-		storage::unhashed::get(VALIDATION_DATA)
+		let result = storage::unhashed::get(VALIDATION_DATA);
+		if_std!{
+			println!("In system inehrent's getter method. Data in storage is some: {:?}", result.is_some());
+		}
+		result
 	}
 
 	/// Put a new validation function into a particular location where polkadot
