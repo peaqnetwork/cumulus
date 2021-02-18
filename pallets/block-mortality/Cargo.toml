@@ -1,5 +1,5 @@
 [package]
-name = "example-inherent"
+name = "block-mortality"
 version = "0.1.0"
 description = "Inject a u32 via an inherent, and compare it to the relay block number"
 edition = "2018"

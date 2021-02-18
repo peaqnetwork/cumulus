@@ -4,8 +4,6 @@ members = [
 	"client/network",
 	"client/service",
 	"pallets/parachain-system",
-	# Temporary
-	"pallets/block-mortality",
 	"pallets/xcm-handler",
 	"primitives/core",
 	"primitives/parachain-inherent",
