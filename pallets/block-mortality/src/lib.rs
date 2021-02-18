@@ -8,18 +8,17 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use frame_support::{
-	decl_error, decl_module, decl_storage, ensure,
-	weights::{DispatchClass, Weight},
+	decl_error, decl_module, ensure,
+	weights::DispatchClass,
 };
-use frame_system::{ensure_none, Config as System};
+use frame_system::ensure_none;
 use parity_scale_codec::{Decode, Encode};
 #[cfg(feature = "std")]
 use sp_inherents::ProvideInherentData;
 use sp_inherents::{InherentData, InherentIdentifier, IsFatalError, ProvideInherent};
-use sp_runtime::{ConsensusEngineId, DigestItem, RuntimeString};
-use sp_std::vec::Vec;
+use sp_runtime::RuntimeString;
 
-pub trait Config: System {}
+pub trait Config: frame_system::Config + cumulus_pallet_parachain_system::Config {}
 
 decl_error! {
 	pub enum Error for Module<T: Config> {
@@ -45,19 +44,19 @@ decl_module! {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Module<T> {
 	/// The actual implementation of checking the inherent. Compares the max relay parent height
 	/// from this inherent, to the actual relay parent height from the parachain inherent.
-	fn check_max_relay_height(max: u32) -> bool {
+	fn check_relay_height(max: u32) -> bool {
 
-		let maybe_validation_data = cumulus_parachain_system::Module::<T>::validation_data();
+		let maybe_validation_data = cumulus_pallet_parachain_system::Module::<T>::validation_data();
 		let relay_height = maybe_validation_data
 			.expect("Validation data gets set in parachain system inherent. Parachain system \
 					 inherent came before this inherent. Therefore validation data is set. \
 					 qed.")
-			.block_number;
+			.relay_parent_number;
 
-		max_relay_parent <= relay_height
+		max <= relay_height
 	}
 }
 
@@ -124,14 +123,14 @@ impl<T: Config> ProvideInherent for Module<T> {
 			.get_data::<u32>(&INHERENT_IDENTIFIER)
 			.expect("Gets and decodes authorship inherent data")?;
 
-		Some(Call::set_author(max_relay_height))
+		Some(Call::set_max_relay_parent(max_relay_height))
 	}
 
 	fn check_inherent(call: &Self::Call, _data: &InherentData) -> Result<(), Self::Error> {
 		// We only care to check our own inherents
-		if let Self::Call::set_author(max) = call {
+		if let Self::Call::set_max_relay_parent(max) = call {
 			ensure!(
-				Self::check_relay_height(max),
+				Self::check_relay_height(*max),
 				InherentError::Other(sp_runtime::RuntimeString::Borrowed("Relay Parent Too High"))
 			);
 		}
