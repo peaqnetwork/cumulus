@@ -23,9 +23,6 @@ pub trait Config: System {}
 
 decl_error! {
 	pub enum Error for Module<T: Config> {
-		/// The inherent cannot be checked because the required data from the parachain inherent
-		/// is not present.
-		ParachainInherentNotPresent,
 		/// This block is not valid (anymore) because the relay parent height exceeds the maximum
 		RelayParentTooHigh,
 	}
@@ -40,34 +37,27 @@ decl_module! {
 			0,
 			DispatchClass::Mandatory
 		)]
-		fn set_max_relay_parent(origin, max_relay_parent: u32) {
+		fn set_max_relay_parent(origin, max: u32) {
 			ensure_none(origin)?;
-			// ensure!(<Author<T>>::get().is_none(), Error::<T>::AuthorAlreadySet);
 
-			// Here we use the data from the relay chain parent to check this inherent
-			let maybe_validation_data = cumulus_parachain_system::Module::<T>::validation_data();
-
-			if_std!{
-				println!("In pallet example inherent. Got validation data: {:?}", maybe_validation_data.is_some());
-			}
-
-			// Hard code to zero to avoid the panic in all cases.
-			let relay_height = 0;
-			let relay_height = maybe_validation_data.expect("Validation data gets set in parachain system inherent. Parachain system inherent came before this inherent. Therefore validation data is set. qed.").block_number;
-
-			ensure!(max_relay_parent <= relay_height, Error::<T>::RelayParentTooHigh)
+			ensure!(Self::check_relay_height(max), Error::<T>::RelayParentTooHigh)
 		}
 	}
 }
 
-impl<T: Config> FindAuthor<T::AccountId> for Module<T> {
-	fn find_author<'a, I>(_digests: I) -> Option<T::AccountId>
-	where
-		I: 'a + IntoIterator<Item = (ConsensusEngineId, &'a [u8])>,
-	{
-		// We don't use the digests at all.
-		// This will only return the correct author _after_ the authorship inherent is processed.
-		<Author<T>>::get()
+impl<T: Config> Pallet<T> {
+	/// The actual implementation of checking the inherent. Compares the max relay parent height
+	/// from this inherent, to the actual relay parent height from the parachain inherent.
+	fn check_max_relay_height(max: u32) -> bool {
+
+		let maybe_validation_data = cumulus_parachain_system::Module::<T>::validation_data();
+		let relay_height = maybe_validation_data
+			.expect("Validation data gets set in parachain system inherent. Parachain system \
+					 inherent came before this inherent. Therefore validation data is set. \
+					 qed.")
+			.block_number;
+
+		max_relay_parent <= relay_height
 	}
 }
 
@@ -99,7 +89,10 @@ impl InherentError {
 	}
 }
 
-/// The thing that the outer node will use to actually inject the inherent data
+/// The thing that the outer node will use to actually inject the max block number.
+/// This one is dead simple and will just include a single fixed max. A more realistic one,
+/// would look at the current relay parent height and add an offset, but that isn't necessary
+/// to show the idea.
 #[cfg(feature = "std")]
 pub struct InherentDataProvider(pub u32);
 
@@ -127,7 +120,6 @@ impl<T: Config> ProvideInherent for Module<T> {
 	const INHERENT_IDENTIFIER: InherentIdentifier = INHERENT_IDENTIFIER;
 
 	fn create_inherent(data: &InherentData) -> Option<Self::Call> {
-		// Grab the Vec<u8> labelled with "author__" from the map of all inherent data
 		let max_relay_height = data
 			.get_data::<u32>(&INHERENT_IDENTIFIER)
 			.expect("Gets and decodes authorship inherent data")?;
@@ -136,11 +128,11 @@ impl<T: Config> ProvideInherent for Module<T> {
 	}
 
 	fn check_inherent(call: &Self::Call, _data: &InherentData) -> Result<(), Self::Error> {
-		// This if let should always be true. This is the only call that the inherent could make.
-		if let Self::Call::set_author(claimed_author) = call {
+		// We only care to check our own inherents
+		if let Self::Call::set_author(max) = call {
 			ensure!(
-				T::CanAuthor::can_author(&claimed_author),
-				InherentError::Other(sp_runtime::RuntimeString::Borrowed("Cannot Be Author"))
+				Self::check_relay_height(max),
+				InherentError::Other(sp_runtime::RuntimeString::Borrowed("Relay Parent Too High"))
 			);
 		}
 
