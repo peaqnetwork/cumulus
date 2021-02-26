@@ -43,13 +43,14 @@ pub use import_queue::import_queue;
 use parking_lot::Mutex;
 use polkadot_service::ClientHandle;
 use sc_client_api::Backend;
-use sp_api::ProvideRuntimeApi;
+use sp_api::{ProvideRuntimeApi, BlockId};
 use sp_consensus::{
 	BlockImport, BlockImportParams, BlockOrigin, EnableProofRecording, Environment,
 	ForkChoiceStrategy, ProofRecording, Proposal, Proposer,
 };
 use sp_inherents::{InherentData, InherentDataProviders};
 use sp_runtime::traits::{Block as BlockT, HashFor, Header as HeaderT};
+use sp_session::SessionKeys;
 use std::{marker::PhantomData, sync::Arc, time::Duration};
 
 mod import_queue;
@@ -177,7 +178,7 @@ where
 	// huh, I didn't need 'static here?
 	ParaClient: Send + Sync,
 	ParaClient: ProvideRuntimeApi<B>,
-	// ParaClient::API:
+	ParaClient::Api: SessionKeys<B>,
 {
 	async fn produce_candidate(
 		&mut self,
@@ -187,7 +188,16 @@ where
 	) -> Option<ParachainCandidate<B>> {
 
 		// Trying to call a runtime api here
+		// The runtime already has the session keys api and it looks easy to call, so let's try it.
+		// fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
+		// 	SessionKeys::generate(seed)
+		// }
 
+		// https://substrate.dev/recipes/runtime-api.html#calling-the-runtime-api
+		// https://substrate.dev/recipes/custom-rpc.html#rpc-to-call-a-runtime-api
+		let return_bytes = self.parachain_client.runtime_api()
+			.generate_session_keys(&BlockId::Hash(parent.hash()), None);
+		println!("🔥🔥return_bytes are {:?}", return_bytes);
 
 
 		let proposer_future = self.proposer_factory.lock().init(&parent);
@@ -286,6 +296,7 @@ where
 	sc_client_api::StateBackendFor<RBackend, PBlock>: sc_client_api::StateBackend<HashFor<PBlock>>,
 	ParaClient: Send + Sync + 'static,
 	ParaClient: ProvideRuntimeApi<Block>,
+	ParaClient::Api: SessionKeys<Block>,
 {
 	RelayChainConsensusBuilder::new(
 		para_id,
@@ -356,7 +367,11 @@ where
 	}
 
 	/// Build the relay chain consensus.
-	fn build(self) -> Box<dyn ParachainConsensus<Block>> {
+	fn build(self) -> Box<dyn ParachainConsensus<Block>>
+	where
+		// Thanks for the tip on this one, compiler
+		ParaClient::Api: SessionKeys<Block>,
+	{
 		self.relay_chain_client.clone().execute_with(self)
 	}
 }
@@ -379,6 +394,7 @@ where
 	// Adding these trait bounds at the compiler's suggestion. I'm not so sure about 'static
 	ParaClient: Send + Sync + 'static,
 	ParaClient: ProvideRuntimeApi<Block>,
+	ParaClient::Api: SessionKeys<Block>,
 {
 	type Output = Box<dyn ParachainConsensus<Block>>;
 
@@ -389,6 +405,7 @@ where
 		PBackend::State: sp_api::StateBackend<sp_runtime::traits::BlakeTwo256>,
 		Api: polkadot_service::RuntimeApiCollection<StateBackend = PBackend::State>,
 		PClient: polkadot_service::AbstractClient<PBlock, PBackend, Api = Api> + 'static,
+		ParaClient::Api: SessionKeys<Block>,
 	{
 		Box::new(RelayChainConsensus::new(
 			self.para_id,

@@ -17,6 +17,8 @@ sp-api = { git = "https://github.com/paritytech/substrate", branch = "master" }
 sc-client-api = { git = "https://github.com/paritytech/substrate", branch = "master" }
 substrate-prometheus-endpoint = { git = "https://github.com/paritytech/substrate", branch = "master" }
 
+sp-session = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+
 # Polkadot dependencies
 polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "master", features = [ "real-overseer" ] }
 
