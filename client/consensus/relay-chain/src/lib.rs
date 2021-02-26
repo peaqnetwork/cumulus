@@ -229,19 +229,23 @@ where
 }
 
 /// Paramaters of [`build_relay_chain_consensus`].
-pub struct BuildRelayChainConsensusParams<PF, BI, RBackend> {
+/// I'll start hacking here. I'm admitedly a little unsure about the builder and the generics. But
+/// I know I'll need a client to call into a runtime api. I'm deciding to be generic over its type
+/// because that's how aura does it.
+pub struct BuildRelayChainConsensusParams<PF, BI, RBackend, ParaClient> {
 	pub para_id: ParaId,
 	pub proposer_factory: PF,
 	pub inherent_data_providers: InherentDataProviders,
 	pub block_import: BI,
 	pub relay_chain_client: polkadot_service::Client,
 	pub relay_chain_backend: Arc<RBackend>,
+	pub parachain_client: Arc<ParaClient>,
 }
 
 /// Build the [`RelayChainConsensus`].
 ///
 /// Returns a boxed [`ParachainConsensus`].
-pub fn build_relay_chain_consensus<Block, PF, BI, RBackend>(
+pub fn build_relay_chain_consensus<Block, PF, BI, RBackend, ParaClient>(
 	BuildRelayChainConsensusParams {
 		para_id,
 		proposer_factory,
@@ -249,7 +253,8 @@ pub fn build_relay_chain_consensus<Block, PF, BI, RBackend>(
 		block_import,
 		relay_chain_client,
 		relay_chain_backend,
-	}: BuildRelayChainConsensusParams<PF, BI, RBackend>,
+		parachain_client,
+	}: BuildRelayChainConsensusParams<PF, BI, RBackend, ParaClient>,
 ) -> Box<dyn ParachainConsensus<Block>>
 where
 	Block: BlockT,
