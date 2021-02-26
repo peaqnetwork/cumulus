@@ -89,6 +89,7 @@ where
 	RClient: ProvideRuntimeApi<PBlock>,
 	RClient::Api: ParachainHost<PBlock>,
 	RBackend: Backend<PBlock>,
+	// Actually, no, This should go where we impl Parachain Consensus, I think.
 	//TODO ParaClient: ProvideRuntimeApi<B>, and another one
 {
 	/// Create a new instance of relay-chain provided consensus.
@@ -175,6 +176,8 @@ where
 	>,
 	// huh, I didn't need 'static here?
 	ParaClient: Send + Sync,
+	ParaClient: ProvideRuntimeApi<B>,
+	// ParaClient::API:
 {
 	async fn produce_candidate(
 		&mut self,
@@ -182,6 +185,11 @@ where
 		relay_parent: PHash,
 		validation_data: &PersistedValidationData,
 	) -> Option<ParachainCandidate<B>> {
+
+		// Trying to call a runtime api here
+
+
+
 		let proposer_future = self.proposer_factory.lock().init(&parent);
 
 		let proposer = proposer_future
@@ -277,6 +285,7 @@ where
 	// Rust bug: https://github.com/rust-lang/rust/issues/24159
 	sc_client_api::StateBackendFor<RBackend, PBlock>: sc_client_api::StateBackend<HashFor<PBlock>>,
 	ParaClient: Send + Sync + 'static,
+	ParaClient: ProvideRuntimeApi<Block>,
 {
 	RelayChainConsensusBuilder::new(
 		para_id,
@@ -322,6 +331,7 @@ where
 	BI: BlockImport<Block> + Send + Sync + 'static,
 	RBackend: Backend<PBlock> + 'static,
 	ParaClient: Send + Sync + 'static,
+	ParaClient: ProvideRuntimeApi<Block>,
 {
 	/// Create a new instance of the builder.
 	fn new(
@@ -368,6 +378,7 @@ where
 	RBackend: Backend<PBlock> + 'static,
 	// Adding these trait bounds at the compiler's suggestion. I'm not so sure about 'static
 	ParaClient: Send + Sync + 'static,
+	ParaClient: ProvideRuntimeApi<Block>,
 {
 	type Output = Box<dyn ParachainConsensus<Block>>;
 
