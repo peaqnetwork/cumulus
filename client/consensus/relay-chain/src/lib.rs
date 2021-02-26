@@ -277,6 +277,7 @@ where
 		inherent_data_providers,
 		relay_chain_client,
 		relay_chain_backend,
+		parachain_client,
 	)
 	.build()
 }
@@ -287,7 +288,7 @@ where
 /// a concrete relay chain client instance, the builder takes a [`polkadot_service::Client`]
 /// that wraps this concrete instanace. By using [`polkadot_service::ExecuteWithClient`]
 /// the builder gets access to this concrete instance.
-struct RelayChainConsensusBuilder<Block, PF, BI, RBackend> {
+struct RelayChainConsensusBuilder<Block, PF, BI, RBackend, ParaClient> {
 	para_id: ParaId,
 	_phantom: PhantomData<Block>,
 	proposer_factory: PF,
@@ -295,9 +296,10 @@ struct RelayChainConsensusBuilder<Block, PF, BI, RBackend> {
 	block_import: BI,
 	relay_chain_backend: Arc<RBackend>,
 	relay_chain_client: polkadot_service::Client,
+	parachain_client: Arc<ParaClient>,
 }
 
-impl<Block, PF, BI, RBackend> RelayChainConsensusBuilder<Block, PF, BI, RBackend>
+impl<Block, PF, BI, RBackend, ParaClient> RelayChainConsensusBuilder<Block, PF, BI, RBackend, ParaClient>
 where
 	Block: BlockT,
 	// Rust bug: https://github.com/rust-lang/rust/issues/24159
@@ -311,6 +313,8 @@ where
 	>,
 	BI: BlockImport<Block> + Send + Sync + 'static,
 	RBackend: Backend<PBlock> + 'static,
+	//Do I need any trait bounds here?
+	//ParaClient: ???,
 {
 	/// Create a new instance of the builder.
 	fn new(
@@ -320,6 +324,7 @@ where
 		inherent_data_providers: InherentDataProviders,
 		relay_chain_client: polkadot_service::Client,
 		relay_chain_backend: Arc<RBackend>,
+		parachain_client: Arc<ParaClient>,
 	) -> Self {
 		Self {
 			para_id,
@@ -329,6 +334,7 @@ where
 			inherent_data_providers,
 			relay_chain_backend,
 			relay_chain_client,
+			parachain_client,
 		}
 	}
 
@@ -338,8 +344,8 @@ where
 	}
 }
 
-impl<Block, PF, BI, RBackend> polkadot_service::ExecuteWithClient
-	for RelayChainConsensusBuilder<Block, PF, BI, RBackend>
+impl<Block, PF, BI, RBackend, ParaClient> polkadot_service::ExecuteWithClient
+	for RelayChainConsensusBuilder<Block, PF, BI, RBackend, ParaClient>
 where
 	Block: BlockT,
 	// Rust bug: https://github.com/rust-lang/rust/issues/24159
