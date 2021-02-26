@@ -57,7 +57,7 @@ mod import_queue;
 const LOG_TARGET: &str = "cumulus-consensus-relay-chain";
 
 /// The implementation of the relay-chain provided consensus for parachains.
-pub struct RelayChainConsensus<B, PF, BI, RClient, RBackend> {
+pub struct RelayChainConsensus<B, PF, BI, RClient, RBackend, ParaClient> {
 	para_id: ParaId,
 	_phantom: PhantomData<B>,
 	proposer_factory: Arc<Mutex<PF>>,
@@ -65,9 +65,10 @@ pub struct RelayChainConsensus<B, PF, BI, RClient, RBackend> {
 	block_import: Arc<Mutex<BI>>,
 	relay_chain_client: Arc<RClient>,
 	relay_chain_backend: Arc<RBackend>,
+	parachain_client: Arc<ParaClient>,
 }
 
-impl<B, PF, BI, RClient, RBackend> Clone for RelayChainConsensus<B, PF, BI, RClient, RBackend> {
+impl<B, PF, BI, RClient, RBackend, ParaClient> Clone for RelayChainConsensus<B, PF, BI, RClient, RBackend, ParaClient> {
 	fn clone(&self) -> Self {
 		Self {
 			para_id: self.para_id,
@@ -77,16 +78,18 @@ impl<B, PF, BI, RClient, RBackend> Clone for RelayChainConsensus<B, PF, BI, RCli
 			block_import: self.block_import.clone(),
 			relay_chain_backend: self.relay_chain_backend.clone(),
 			relay_chain_client: self.relay_chain_client.clone(),
+			parachain_client: self.parachain_client.clone(),
 		}
 	}
 }
 
-impl<B, PF, BI, RClient, RBackend> RelayChainConsensus<B, PF, BI, RClient, RBackend>
+impl<B, PF, BI, RClient, RBackend, ParaClient> RelayChainConsensus<B, PF, BI, RClient, RBackend, ParaClient>
 where
 	B: BlockT,
 	RClient: ProvideRuntimeApi<PBlock>,
 	RClient::Api: ParachainHost<PBlock>,
 	RBackend: Backend<PBlock>,
+	//TODO ParaClient: ProvideRuntimeApi<B>, and another one
 {
 	/// Create a new instance of relay-chain provided consensus.
 	pub fn new(
@@ -96,6 +99,7 @@ where
 		block_import: BI,
 		polkadot_client: Arc<RClient>,
 		polkadot_backend: Arc<RBackend>,
+		parachain_client: Arc<ParaClient>,
 	) -> Self {
 		Self {
 			para_id,
@@ -104,6 +108,7 @@ where
 			block_import: Arc::new(Mutex::new(block_import)),
 			relay_chain_backend: polkadot_backend,
 			relay_chain_client: polkadot_client,
+			parachain_client,
 			_phantom: PhantomData,
 		}
 	}
@@ -153,8 +158,8 @@ where
 }
 
 #[async_trait::async_trait]
-impl<B, PF, BI, RClient, RBackend> ParachainConsensus<B>
-	for RelayChainConsensus<B, PF, BI, RClient, RBackend>
+impl<B, PF, BI, RClient, RBackend, ParaClient> ParachainConsensus<B>
+	for RelayChainConsensus<B, PF, BI, RClient, RBackend, ParaClient>
 where
 	B: BlockT,
 	RClient: ProvideRuntimeApi<PBlock> + Send + Sync,
@@ -168,6 +173,8 @@ where
 		ProofRecording = EnableProofRecording,
 		Proof = <EnableProofRecording as ProofRecording>::Proof,
 	>,
+	// huh, I didn't need 'static here?
+	ParaClient: Send + Sync,
 {
 	async fn produce_candidate(
 		&mut self,
@@ -269,6 +276,7 @@ where
 	RBackend: Backend<PBlock> + 'static,
 	// Rust bug: https://github.com/rust-lang/rust/issues/24159
 	sc_client_api::StateBackendFor<RBackend, PBlock>: sc_client_api::StateBackend<HashFor<PBlock>>,
+	ParaClient: Send + Sync + 'static,
 {
 	RelayChainConsensusBuilder::new(
 		para_id,
@@ -313,8 +321,7 @@ where
 	>,
 	BI: BlockImport<Block> + Send + Sync + 'static,
 	RBackend: Backend<PBlock> + 'static,
-	//Do I need any trait bounds here?
-	//ParaClient: ???,
+	ParaClient: Send + Sync + 'static,
 {
 	/// Create a new instance of the builder.
 	fn new(
@@ -359,6 +366,8 @@ where
 	>,
 	BI: BlockImport<Block> + Send + Sync + 'static,
 	RBackend: Backend<PBlock> + 'static,
+	// Adding these trait bounds at the compiler's suggestion. I'm not so sure about 'static
+	ParaClient: Send + Sync + 'static,
 {
 	type Output = Box<dyn ParachainConsensus<Block>>;
 
@@ -377,6 +386,7 @@ where
 			self.block_import,
 			client.clone(),
 			self.relay_chain_backend,
+			self.parachain_client,
 		))
 	}
 }
