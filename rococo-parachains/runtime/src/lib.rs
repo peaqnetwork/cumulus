@@ -349,7 +349,7 @@ impl_runtime_apis! {
 		}
 
 		fn execute_block(block: Block) {
-			Executive::execute_block(block)
+			Executive::execute_block(block);
 		}
 
 		fn initialize_block(header: &<Block as BlockT>::Header) {
@@ -414,5 +414,5 @@ impl_runtime_apis! {
 		}
 	}
 }
-
-cumulus_pallet_parachain_system::register_validate_block!(Runtime, Executive);
+mod exec;
+cumulus_pallet_parachain_system::register_validate_block!(Runtime, crate::exec::BlockExecutor<Runtime, Executive>);

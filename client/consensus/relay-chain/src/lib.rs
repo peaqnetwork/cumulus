@@ -81,6 +81,8 @@ impl<B, PF, BI, RClient, RBackend> Clone for RelayChainConsensus<B, PF, BI, RCli
 	}
 }
 
+use tracing::error;
+
 impl<B, PF, BI, RClient, RBackend> RelayChainConsensus<B, PF, BI, RClient, RBackend>
 where
 	B: BlockT,
@@ -118,7 +120,7 @@ where
 			.inherent_data_providers
 			.create_inherent_data()
 			.map_err(|e| {
-				tracing::error!(
+				error!(
 					target: LOG_TARGET,
 					error = ?e,
 					"Failed to create inherent data.",
@@ -140,7 +142,7 @@ where
 				&parachain_inherent_data,
 			)
 			.map_err(|e| {
-				tracing::error!(
+				error!(
 					target: LOG_TARGET,
 					error = ?e,
 					"Failed to put the system inherent into inherent data.",
@@ -180,7 +182,7 @@ where
 		let proposer = proposer_future
 			.await
 			.map_err(
-				|e| tracing::error!(target: LOG_TARGET, error = ?e, "Could not create proposer."),
+				|e| error!(target: LOG_TARGET, error = ?e, "Could not create proposer."),
 			)
 			.ok()?;
 
@@ -198,14 +200,25 @@ where
 				Duration::from_millis(500),
 			)
 			.await
-			.map_err(|e| tracing::error!(target: LOG_TARGET, error = ?e, "Proposing failed."))
+			.map_err(|e| error!(target: LOG_TARGET, error = ?e, "Proposing failed."))
 			.ok()?;
 
 		let (header, extrinsics) = block.clone().deconstruct();
 
+		let pre_hash = header.hash();
+
 		// Add a silly test digest, just to get familiar with how it works
 		let test_digest = sp_runtime::generic::DigestItem::Seal(*b"test", Vec::new());
 
+		// Compute info about the block after the digest is added
+		let mut post_header = header.clone();
+		post_header.digest_mut().logs.push(test_digest.clone());
+		let post_hash = post_header.hash();
+
+		// Import params start from pre-header. This is what aura seems to do.
+		// Other parachain nodes will also have import params without the post digest because their
+		// verifier will strip it. And for the relay chain it doesn't matter because they won't do
+		// the block import pipeline at all.
 		let mut block_import_params = BlockImportParams::new(BlockOrigin::Own, header.clone());
 
 		// Add the test digest to the block import params
@@ -214,6 +227,15 @@ where
 		// Best block is determined by the relay chain.
 		block_import_params.fork_choice = Some(ForkChoiceStrategy::Custom(false));
 		block_import_params.storage_changes = Some(storage_changes);
+
+		// Print the same log line as slots (aura and babe) to see if this is working the same way
+		// It seems to be working the same way now.
+		log::info!(
+			"🔖 Pre-sealed block for proposal at {}. Hash now {:?}, previously {:?}.",
+			*header.number(),
+			block_import_params.post_hash(),
+			pre_hash,
+		);
 
 		if let Err(err) = self
 			.block_import
@@ -230,24 +252,9 @@ where
 			return None;
 		}
 
-		// This DOES print, so our own import is working
-		println!("Debug info: we made it here");
-
-
-		// My question is about this part. If I don't include this, my own node imports the block,
-		// but cannot retrieve the state, because it has the wrong block hash.
-		//
-		// But if I leave this in place, then the relay chain cannot validate the candidate.
-		// It fails with:
-		// 2021-03-03 15:58:54  panicked at 'assertion failed: `(left == right)`
-		// left: `1`,
-		// right: `0`: Number of digest items must match that calculated.', /home/joshy/.cargo/git/checkouts/substrate-7e08433d4c370a21/74d5612/frame/executive/src/lib.rs:421:9
-
-		let mut post_header = header.clone();
-		post_header.digest_mut().logs.push(test_digest.clone());
-
 		let post_block = B::new(post_header, extrinsics);
 
+		// I guess we're returning the block WITH the seal. This is also what Aura seems to do.
 		Some(ParachainCandidate { block: post_block, proof })
 	}
 }
