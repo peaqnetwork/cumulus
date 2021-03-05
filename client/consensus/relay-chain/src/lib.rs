@@ -210,11 +210,6 @@ where
 		// Add a silly test digest, just to get familiar with how it works
 		let test_digest = sp_runtime::generic::DigestItem::Seal(*b"test", Vec::new());
 
-		// Compute info about the block after the digest is added
-		let mut post_header = header.clone();
-		post_header.digest_mut().logs.push(test_digest.clone());
-		let post_hash = post_header.hash();
-
 		// Import params start from pre-header. This is what aura seems to do.
 		// Other parachain nodes will also have import params without the post digest because their
 		// verifier will strip it. And for the relay chain it doesn't matter because they won't do
@@ -231,7 +226,7 @@ where
 		// Print the same log line as slots (aura and babe) to see if this is working the same way
 		// It seems to be working the same way now.
 		log::info!(
-			"🔖 Pre-sealed block for proposal at {}. Hash now {:?}, previously {:?}.",
+			"🔖 Sealed block for proposal at {}. Hash now {:?}, previously {:?}.",
 			*header.number(),
 			block_import_params.post_hash(),
 			pre_hash,
@@ -252,9 +247,12 @@ where
 			return None;
 		}
 
+		// Compute info about the block after the digest is added
+		let mut post_header = header.clone();
+		post_header.digest_mut().logs.push(test_digest.clone());
 		let post_block = B::new(post_header, extrinsics);
 
-		// I guess we're returning the block WITH the seal. This is also what Aura seems to do.
+		// Returning the block WITH the seal for distribution around the network.
 		Some(ParachainCandidate { block: post_block, proof })
 	}
 }
