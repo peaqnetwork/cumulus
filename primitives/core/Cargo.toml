@@ -11,9 +11,9 @@ sp-runtime = { git = "https://github.com/paritytech/substrate", default-features
 sp-trie = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
 
 # Polkadot dependencies
-polkadot-parachain = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "master" }
-polkadot-primitives = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "master" }
-polkadot-core-primitives = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "master" }
+polkadot-parachain = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-v0.7" }
+polkadot-primitives = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-v0.7" }
+polkadot-core-primitives = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-v0.7" }
 
 # Other dependencies
 impl-trait-for-tuples = "0.2.1"
