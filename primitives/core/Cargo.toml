@@ -6,9 +6,9 @@ edition = "2018"
 
 [dependencies]
 # Substrate dependencies
-sp-std = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
-sp-runtime = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
-sp-trie = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+sp-std = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-v0.7" }
+sp-runtime = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-v0.7" }
+sp-trie = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-v0.7" }
 
 # Polkadot dependencies
 polkadot-parachain = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-v0.7" }

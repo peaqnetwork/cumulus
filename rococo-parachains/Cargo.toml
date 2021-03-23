@@ -26,7 +26,7 @@ parachain-runtime = { package = "cumulus-test-parachain-runtime", path = "runtim
 rococo-parachain-primitives = { path = "primitives" }
 
 # Substrate dependencies
-sp-runtime = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+sp-runtime = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-v0.7" }
 sp-io = { git = "https://github.com/purestake/substrate", branch = "moonbeam-v0.7" }
 sp-core = { git = "https://github.com/purestake/substrate", branch = "moonbeam-v0.7" }
 sp-inherents = { git = "https://github.com/purestake/substrate", branch = "moonbeam-v0.7" }
