@@ -167,7 +167,7 @@ Once the executable is built, launch collators for each parachain (repeat once e
 
 ```
 ./target/release/polkadot-collator --chain $CHAIN --validator
->>>>>>> polkadot-v0.9.1
+>>>>>>> polkadot-v0.9.2
 ```
 
 You can see that the validators use the exact same executive that the parachain nodes do. Now that
@@ -245,4 +245,4 @@ I would be happy to support users who want to use nimbus, or want feedback on th
 ```
 ### Register the parachain
 ![image](https://user-images.githubusercontent.com/2915325/99548884-1be13580-2987-11eb-9a8b-20be658d34f9.png)
->>>>>>> polkadot-v0.9.1
+>>>>>>> polkadot-v0.9.2

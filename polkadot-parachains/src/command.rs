@@ -55,9 +55,11 @@ fn load_spec(
 			path.into(),
 		)?;
 
-			//TODO proper suppoort for nimbus-based specs here. For now there is just the plain one above.
 			if use_nimbus_runtime(&chain_spec) {
 				Box::new(chain_spec::NimbusChainSpec::from_json_file(path.into())?)
+			}
+			else if use_shell_runtime(&chain_spec) {
+				Box::new(chain_spec::ShellChainSpec::from_json_file(path.into())?)
 			} else {
 				Box::new(chain_spec)
 			}
