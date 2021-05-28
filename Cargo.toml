@@ -5,6 +5,7 @@ members = [
 	"client/consensus/relay-chain",
 	"client/consensus/nimbus",
 	"client/network",
+	"client/pov-recovery",
 	"client/service",
 	"pallets/author-inherent",
 	"pallets/author-slot-filter",
