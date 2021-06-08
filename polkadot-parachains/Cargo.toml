@@ -74,10 +74,10 @@ nimbus-consensus = { path = "../client/consensus/nimbus"}
 pallet-author-inherent = { path = "../pallets/author-inherent"}
 
 # Polkadot dependencies
-polkadot-primitives = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.3" }
-polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.3" }
-polkadot-cli = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.3" }
-polkadot-parachain = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.3" }
+polkadot-primitives = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.4" }
+polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.4" }
+polkadot-cli = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.4" }
+polkadot-parachain = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.4" }
 
 [build-dependencies]
 substrate-build-script-utils = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.4" }
@@ -90,10 +90,10 @@ tempfile = "3.2.0"
 tokio = { version = "0.2.13", features = ["macros"] }
 
 # Polkadot dependencies
-polkadot-runtime-common = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.3" }
-polkadot-test-runtime = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.3" }
-polkadot-test-client = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.3" }
-polkadot-test-service = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.3" }
+polkadot-runtime-common = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.4" }
+polkadot-test-runtime = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.4" }
+polkadot-test-client = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.4" }
+polkadot-test-service = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.4" }
 
 # Substrate dependencies
 pallet-sudo = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.4" }

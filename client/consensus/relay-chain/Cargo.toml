@@ -18,7 +18,7 @@ sc-client-api = { git = "https://github.com/paritytech/substrate", branch = "pol
 substrate-prometheus-endpoint = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.4" }
 
 # Polkadot dependencies
-polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.3" }
+polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.4" }
 
 # Cumulus dependencies
 cumulus-client-consensus-common = { path = "../common" }
