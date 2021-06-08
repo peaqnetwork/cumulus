@@ -139,8 +139,8 @@ mod tests {
 		type AccountStore = System;
 		type MaxLocks = ();
 		type WeightInfo = ();
-		type MaxReserves = MaxReserves;
-		type ReserveIdentifier = [u8; 8];
+		// type MaxReserves = MaxReserves;
+		// type ReserveIdentifier = [u8; 8];
 	}
 
 	pub struct OneAuthor;
