@@ -236,25 +236,25 @@ fn nimbus_testnet_genesis(
 	id: ParaId,
 ) -> nimbus_runtime::GenesisConfig {
 	nimbus_runtime::GenesisConfig {
-		frame_system: rococo_parachain_runtime::SystemConfig {
+		system: rococo_parachain_runtime::SystemConfig {
 			code: nimbus_runtime::WASM_BINARY
 				.expect("WASM binary was not build, please build it!")
 				.to_vec(),
 			changes_trie_config: Default::default(),
 		},
-		pallet_balances: nimbus_runtime::BalancesConfig {
+		balances: nimbus_runtime::BalancesConfig {
 			balances: endowed_accounts
 				.iter()
 				.cloned()
 				.map(|k| (k, 1 << 60))
 				.collect(),
 		},
-		pallet_sudo: nimbus_runtime::SudoConfig { key: root_key },
+		sudo: nimbus_runtime::SudoConfig { key: root_key },
 		parachain_info: nimbus_runtime::ParachainInfoConfig { parachain_id: id },
-		pallet_author_filter: nimbus_runtime::AuthorFilterConfig {
+		author_filter: nimbus_runtime::AuthorFilterConfig {
 			eligible_ratio: Percent::from_percent(50),
 		},
-		pallet_account_set: nimbus_runtime::PotentialAuthorSetConfig {
+		potential_author_set: nimbus_runtime::PotentialAuthorSetConfig {
 			mapping: vec![
 				(get_from_seed::<NimbusId>("Alice"), get_account_id_from_seed::<sr25519::Public>("Alice")),
 				(get_from_seed::<NimbusId>("Bob"), get_account_id_from_seed::<sr25519::Public>("Bob")),

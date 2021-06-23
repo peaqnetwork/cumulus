@@ -115,7 +115,7 @@ pub fn new_partial(
 		config.transaction_pool.clone(),
 		config.role.is_authority().into(),
 		config.prometheus_registry(),
-		task_manager.spawn_handle(),
+		task_manager.spawn_essential_handle(),
 		client.clone(),
 	);
 
@@ -625,6 +625,7 @@ pub fn node_config(
 		rpc_http_threads: None,
 		rpc_cors: None,
 		rpc_methods: Default::default(),
+		rpc_max_payload: None,
 		prometheus_config: None,
 		telemetry_endpoints: None,
 		telemetry_external_transport: None,
