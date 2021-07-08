@@ -25,7 +25,9 @@ use sp_std::vec::Vec;
 use parity_scale_codec::Codec;
 use sp_application_crypto::KeyTypeId;
 use sp_runtime::ConsensusEngineId;
-use sp_runtime::traits::BlockNumberProvider;
+//TODO: This trait is in a silly place right now, but should be moved after https://github.com/paritytech/substrate/pull/9209
+// But xlc used it where it is anyway, so I will too.
+use sp_runtime::offchain::storage_lock::BlockNumberProvider;
 
 mod digests;
 mod inherents;
