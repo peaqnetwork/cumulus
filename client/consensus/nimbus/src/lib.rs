@@ -187,7 +187,7 @@ where
 			warn!(target: LOG_TARGET, "🔏 No Nimbus keys available. We will not be able to author.");
 			return None;
 		}
-
+		
 		// Iterate keys until we find an eligible one, or run out of candidates.
 		let maybe_key = available_keys.into_iter().find(|type_public_pair| {
 			self.parachain_client.runtime_api()
@@ -196,8 +196,7 @@ where
 					// Have to convert to a typed NimbusId to pass to the runtime API. Maybe this is a clue
 					// That I should be passing Vec<u8> across the wasm boundary?
 					NimbusId::from_slice(&type_public_pair.1),
-					validation_data.relay_parent_number,
-					parent,
+					validation_data.relay_parent_number
 				)
 				.expect("Author API should not return error")
 		});
