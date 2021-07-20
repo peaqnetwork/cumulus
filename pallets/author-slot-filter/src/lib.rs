@@ -90,6 +90,10 @@ pub mod pallet {
 				];
 				let (randomness, _) = T::RandomnessSource::random(&subject);
 				debug!(target: "author-filter", "🎲Randomness sample {} (slot: {}): {:?}", i, *slot, &randomness);
+				let (randomness2, _) = T::RandomnessSource::random(&subject);
+				debug!(target: "author-filter", "🎲Randomness2 sample {} (slot: {}): {:?}", i, *slot, &randomness2);
+				let (randomness3, _) = T::RandomnessSource::random(&subject);
+				debug!(target: "author-filter", "🎲Randomness3 sample {} (slot: {}): {:?}", i, *slot, &randomness3);
 
 				// Cast to u32 first so we get consistent results on 32- and 64-bit platforms.
 				let index = (randomness.to_fixed_bytes()[0] as u32) as usize;
