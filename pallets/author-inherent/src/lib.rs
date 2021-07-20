@@ -40,9 +40,6 @@ pub use pallet::*;
 pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
-	use nimbus_primitives::NimbusId;
-	use sp_core::H256;
-	use sp_core::Public;
 	use super::*;
 
 	/// The Author Inherent pallet. The core of the nimbus consensus framework's runtime presence.
