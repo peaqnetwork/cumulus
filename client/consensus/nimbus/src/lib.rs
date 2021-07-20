@@ -235,7 +235,7 @@ where
 				);
 				return None;
 			}
-		};
+		};		
 
 		let proposer_future = self.proposer_factory.lock().init(&parent);
 
@@ -246,6 +246,11 @@ where
 			)
 			.ok()?;
 
+		info!(
+			target: LOG_TARGET,
+			"🔮 Setting inherent autor to {:?}", 
+			NimbusId::from_slice(&type_public_pair.1)
+		);
 		let inherent_data = self.inherent_data(parent.hash(),&validation_data, relay_parent, NimbusId::from_slice(&type_public_pair.1)).await?;
 
 		let Proposal {
