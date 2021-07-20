@@ -178,6 +178,7 @@ where
 		// If multiple are eligible, we only author with the first one.
 
 		// Get allthe available keys
+		info!(target: LOG_TARGET, "🌼 Producing candidate for {}", parent.hash());
 		let available_keys =
 			SyncCryptoStore::keys(&*self.keystore, NIMBUS_KEY_ID)
 			.expect("keystore should return the keys it has");
@@ -206,6 +207,7 @@ where
 		let maybe_key = available_keys.into_iter().find(|type_public_pair| {
 			// Have to convert to a typed NimbusId to pass to the runtime API. Maybe this is a clue
 			// That I should be passing Vec<u8> across the wasm boundary?
+			debug!(target: LOG_TARGET, "🌼🌼 Testing key {} at {}", NimbusId::from_slice(&type_public_pair.1), at);
 			if api_version >= 2 {
 				api.can_author(
 					&BlockId::Hash(parent.hash()),
