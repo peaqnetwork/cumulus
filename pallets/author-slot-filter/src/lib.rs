@@ -68,7 +68,7 @@ pub mod pallet {
 		fn can_author(author: &T::AccountId, slot: &u32) -> bool {
 			let mut active: Vec<T::AccountId> = T::PotentialAuthors::get();
 			
-			for a in active {
+			for a in active.clone() {
 				debug!(target: "author-filter", "🎲active: {:?}", a);
 			}
 
