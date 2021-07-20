@@ -69,7 +69,7 @@ pub mod pallet {
 			let mut active: Vec<T::AccountId> = T::PotentialAuthors::get();
 			
 			for a in active {
-				debug!(target: "author-filter", "🎲active: {}", a);
+				debug!(target: "author-filter", "🎲active: {:?}", a);
 			}
 
 			let num_eligible = EligibleRatio::<T>::get().mul_ceil(active.len());
@@ -106,7 +106,7 @@ pub mod pallet {
 				// TODO we could short-circuit this check by returning early when the claimed
 				// author is selected. For now I'll leave it like this because:
 				// 1. it is easier to understand what our core filtering logic is
-				
+
 				// 2. we currently show the entire filtered set in the debug event
 				eligible.push(active.remove(index % active.len()));
 			}
