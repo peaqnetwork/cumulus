@@ -67,6 +67,10 @@ pub mod pallet {
 	impl<T: Config> CanAuthor<T::AccountId> for Pallet<T> {
 		fn can_author(author: &T::AccountId, slot: &u32) -> bool {
 			let mut active: Vec<T::AccountId> = T::PotentialAuthors::get();
+			
+			for a in active {
+				debug!(target: "author-filter", "🎲active: {}", a);
+			}
 
 			let num_eligible = EligibleRatio::<T>::get().mul_ceil(active.len());
 			let mut eligible = Vec::with_capacity(num_eligible);
@@ -102,6 +106,7 @@ pub mod pallet {
 				// TODO we could short-circuit this check by returning early when the claimed
 				// author is selected. For now I'll leave it like this because:
 				// 1. it is easier to understand what our core filtering logic is
+				
 				// 2. we currently show the entire filtered set in the debug event
 				eligible.push(active.remove(index % active.len()));
 			}
