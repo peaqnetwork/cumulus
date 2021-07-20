@@ -164,7 +164,7 @@ pub mod pallet {
 			let author = author_raw
 				.expect("Gets and decodes authorship inherent data")?;
 			debug!("In create_inherent (runtime side). data is");
-			debug!("{:?}", NimbusId::from_slice(&author));
+			debug!("{:?}", author);
 
 			Some(Call::set_author(author))
 		}
