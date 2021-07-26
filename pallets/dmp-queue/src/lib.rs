@@ -117,6 +117,11 @@ pub mod pallet {
 		OptionQuery,
 	>;
 
+	/// Relaychain height at which the current/latest XCM message has been emited from.
+	#[pallet::storage]
+	#[pallet::getter(fn relay_chain_height)]
+	pub(super) type RelayChainHeight<T> = StorageValue<_, RelayBlockNumber, ValueQuery>;
+
 	#[pallet::error]
 	pub enum Error<T> {
 		/// The message index given is unknown.
@@ -229,9 +234,11 @@ pub mod pallet {
 		/// the message. This is why it's called message "servicing" rather than "execution".
 		pub(crate) fn try_service_message(
 			limit: Weight,
-			_sent_at: RelayBlockNumber,
+			sent_at: RelayBlockNumber,
 			data: &[u8],
 		) -> Result<Weight, (MessageId, Weight)> {
+			RelayChainHeight::<T>::set(sent_at);
+
 			let id = sp_io::hashing::blake2_256(&data[..]);
 			let maybe_msg = VersionedXcm::<T::Call>::decode(&mut &data[..])
 				.map(Xcm::<T::Call>::try_from);
