@@ -632,6 +632,7 @@ pub async fn start_nimbus_node(
 ) -> sc_service::error::Result<
 	(TaskManager, Arc<TFullClient<Block, nimbus_runtime::RuntimeApi, NimbusRuntimeExecutor>>)
 > {
+	let skip_prediction = parachain_config.force_authoring;
 	start_node_impl::<nimbus_runtime::RuntimeApi, NimbusRuntimeExecutor, _, _, _>(
 		parachain_config,
 		polkadot_config,
@@ -668,6 +669,7 @@ pub async fn start_nimbus_node(
 						relay_chain_backend: relay_chain_node.backend.clone(),
 						parachain_client: client.clone(),
 						keystore,
+						skip_prediction,
 						create_inherent_data_providers:
 							move |_, (relay_parent, validation_data, author_id)| {
 								let parachain_inherent =
