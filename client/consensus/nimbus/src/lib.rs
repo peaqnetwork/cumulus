@@ -267,7 +267,8 @@ where
 				inherent_data,
 				Default::default(),
 				//TODO: Fix this.
-				Duration::from_millis(500),
+				// Moonbeam team hacked this as an experiment
+				Duration::from_millis(1000),
 				// Set the block limit to 50% of the maximum PoV size.
 				//
 				// TODO: If we got benchmarking that includes that encapsulates the proof size,
