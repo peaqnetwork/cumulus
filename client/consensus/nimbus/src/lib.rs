@@ -126,9 +126,15 @@ where
 		relay_parent: PHash,
 		author_id: NimbusId,
 	) -> Option<InherentData> {
+
+		// We hack the colaltor node to insert a false relaychain block number. It will 1000 blocks higher than
+		// the real relay chain block number.
+		let mut hacked_validation_data = validation_data.clone();
+		hacked_validation_data.relay_parent_number += 1000;
+
 		let inherent_data_providers = self
 			.create_inherent_data_providers
-			.create_inherent_data_providers(parent, (relay_parent, validation_data.clone(), author_id))
+			.create_inherent_data_providers(parent, (relay_parent, hacked_validation_data, author_id))
 			.await
 			.map_err(|e| {
 				tracing::error!(
