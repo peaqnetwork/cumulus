@@ -61,8 +61,9 @@ pub mod pallet {
 		type PotentialAuthors: Get<Vec<Self::AccountId>>;
 	}
 
-	// then we call this from runtime APIs for author slot prediction
-	pub fn compute_pseudo_random_subset<T: Config>(set: Vec<T::AccountId>) -> Vec<T::AccountId> {
+	/// Compute a pseudo-random subset of the input accounts by using Pallet's
+	/// source of randomness, `Config::RandomnessSource`
+	pub fn compute_pseudo_random_subset<T: Config>(mut set: Vec<T::AccountId>, slot: &u32) -> Vec<T::AccountId> {
 		let num_eligible = EligibleRatio::<T>::get().mul_ceil(set.len());
 		let mut eligible = Vec::with_capacity(num_eligible);
 
@@ -98,7 +99,7 @@ pub mod pallet {
 			let mut active: Vec<T::AccountId> = T::PotentialAuthors::get();
 
 			// Compute pseudo-random subset of potential set
-			let eligible = compute_pseudo_random_subset::<T>(active);
+			let eligible = compute_pseudo_random_subset::<T>(active, slot);
 
 			// Print some logs for debugging purposes.
 			debug!(target: "author-filter", "Eligible Authors: {:?}", eligible);
