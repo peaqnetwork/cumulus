@@ -32,8 +32,7 @@ pub use pallet::*;
 #[pallet]
 pub mod pallet {
 
-	use frame_support::pallet_prelude::*;
-	use frame_support::traits::Randomness;
+	use frame_support::{pallet_prelude::*, traits::Randomness};
 	use frame_system::pallet_prelude::*;
 	use log::debug;
 	use nimbus_primitives::CanAuthor;
@@ -63,7 +62,10 @@ pub mod pallet {
 
 	/// Compute a pseudo-random subset of the input accounts by using Pallet's
 	/// source of randomness, `Config::RandomnessSource`
-	pub fn compute_pseudo_random_subset<T: Config>(mut set: Vec<T::AccountId>, slot: &u32) -> Vec<T::AccountId> {
+	pub fn compute_pseudo_random_subset<T: Config>(
+		mut set: Vec<T::AccountId>,
+		slot: &u32,
+	) -> (Vec<T::AccountId>, Vec<T::AccountId>) {
 		let num_eligible = EligibleRatio::<T>::get().mul_ceil(set.len());
 		let mut eligible = Vec::with_capacity(num_eligible);
 
@@ -88,7 +90,7 @@ pub mod pallet {
 			// 2. we currently show the entire filtered set in the debug event
 			eligible.push(set.remove(index % set.len()));
 		}
-		eligible
+		(eligible, set)
 	}
 
 	// This code will be called by the author-inherent pallet to check whether the reported author
@@ -96,14 +98,14 @@ pub mod pallet {
 	// record it in storage (although we do emit a debugging event for now).
 	impl<T: Config> CanAuthor<T::AccountId> for Pallet<T> {
 		fn can_author(author: &T::AccountId, slot: &u32) -> bool {
-			let mut active: Vec<T::AccountId> = T::PotentialAuthors::get();
+			let active: Vec<T::AccountId> = T::PotentialAuthors::get();
 
 			// Compute pseudo-random subset of potential set
-			let eligible = compute_pseudo_random_subset::<T>(active, slot);
+			let (eligible, ineligible) = compute_pseudo_random_subset::<T>(active, slot);
 
 			// Print some logs for debugging purposes.
 			debug!(target: "author-filter", "Eligible Authors: {:?}", eligible);
-			debug!(target: "author-filter", "Ineligible Authors: {:?}", &active);
+			debug!(target: "author-filter", "Ineligible Authors: {:?}", &ineligible);
 			debug!(target: "author-filter",
 				"Current author, {:?}, is eligible: {}",
 				author,
