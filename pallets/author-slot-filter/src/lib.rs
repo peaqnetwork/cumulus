@@ -61,11 +61,12 @@ pub mod pallet {
 	}
 
 	/// Compute a pseudo-random subset of the input accounts by using Pallet's
-	/// source of randomness, `Config::RandomnessSource`
-	pub fn compute_pseudo_random_subset_of_potential_authors<T: Config>(
+	/// source of randomness, `Config::RandomnessSource`.
+	/// Returns (Eligible, Ineligible), each is a set of accounts
+	pub fn compute_pseudo_random_subset<T: Config>(
+		mut active: Vec<T::AccountId>,
 		seed: &u32,
 	) -> (Vec<T::AccountId>, Vec<T::AccountId>) {
-		let mut active = T::PotentialAuthors::get();
 		let num_eligible = EligibleRatio::<T>::get().mul_ceil(active.len());
 		let mut eligible = Vec::with_capacity(num_eligible);
 
@@ -100,7 +101,7 @@ pub mod pallet {
 		fn can_author(author: &T::AccountId, slot: &u32) -> bool {
 			// Compute pseudo-random subset of potential authors
 			let (eligible, ineligible) =
-				compute_pseudo_random_subset_of_potential_authors::<T>(slot);
+				compute_pseudo_random_subset::<T>(T::PotentialAuthors::get(), slot);
 
 			// Print some logs for debugging purposes.
 			debug!(target: "author-filter", "Eligible Authors: {:?}", eligible);
