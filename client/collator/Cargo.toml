@@ -14,10 +14,10 @@ sp-api = { git = "https://github.com/purestake/substrate", branch = "crystalin-v
 sc-client-api = { git = "https://github.com/purestake/substrate", branch = "crystalin-v0.9.9-block-response-length" }
 
 # Polkadot dependencies
-polkadot-primitives = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.9" }
-polkadot-node-primitives = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.9" }
-polkadot-overseer = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.9" }
-polkadot-node-subsystem = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.9" }
+polkadot-primitives = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-node-primitives = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-overseer = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-node-subsystem = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
 
 # Cumulus dependencies
 cumulus-client-network = { path = "../network" }
@@ -32,7 +32,7 @@ tracing = "0.1.25"
 
 [dev-dependencies]
 # Polkadot dependencies
-polkadot-node-subsystem-test-helpers = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.9" }
+polkadot-node-subsystem-test-helpers = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
 
 # Cumulus dependencies
 cumulus-test-runtime = { path = "../../test/runtime" }

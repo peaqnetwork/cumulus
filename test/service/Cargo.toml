@@ -41,10 +41,10 @@ sp-trie = { git = "https://github.com/purestake/substrate", branch = "crystalin-
 substrate-test-client = { git = "https://github.com/purestake/substrate", branch = "crystalin-v0.9.9-block-response-length" }
 
 # Polkadot
-polkadot-primitives = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.9" }
-polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.9" }
-polkadot-test-service = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.9" }
-polkadot-overseer = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.9" }
+polkadot-primitives = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-service = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-test-service = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-overseer = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
 
 # Cumulus
 cumulus-client-consensus-relay-chain = { path = "../../client/consensus/relay-chain" }
@@ -64,8 +64,8 @@ futures = "0.3.5"
 tokio = { version = "0.2.21", features = ["macros"] }
 
 # Polkadot dependencies
-polkadot-test-runtime = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.9" }
-polkadot-test-service = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.9" }
+polkadot-test-runtime = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-test-service = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
 
 # Substrate dependencies
 sc-cli = { git = "https://github.com/purestake/substrate", branch = "crystalin-v0.9.9-block-response-length" }
