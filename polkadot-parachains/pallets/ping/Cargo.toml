@@ -13,7 +13,7 @@ sp-runtime = { git = "https://github.com/purestake/substrate", default-features 
 frame-support = { git = "https://github.com/purestake/substrate", default-features = false, branch = "crystalin-v0.9.9-block-response-length" }
 frame-system = { git = "https://github.com/purestake/substrate", default-features = false, branch = "crystalin-v0.9.9-block-response-length" }
 
-xcm = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
 
 cumulus-primitives-core = { path = "../../../primitives/core", default-features = false }
 cumulus-pallet-xcm = { path = "../../../pallets/xcm", default-features = false }

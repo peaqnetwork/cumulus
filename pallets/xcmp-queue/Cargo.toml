@@ -18,8 +18,8 @@ frame-support = { git = "https://github.com/purestake/substrate", default-featur
 frame-system = { git = "https://github.com/purestake/substrate", default-features = false, branch = "crystalin-v0.9.9-block-response-length" }
 
 # Polkadot Dependencies
-xcm = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
-xcm-executor = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
 
 # Cumulus Dependencies
 cumulus-primitives-core = { path = "../../primitives/core", default-features = false }
@@ -28,7 +28,7 @@ cumulus-primitives-core = { path = "../../primitives/core", default-features = f
 sp-core = { git = 'https://github.com/purestake/substrate', branch = "crystalin-v0.9.9-block-response-length" }
 sp-io = { git = 'https://github.com/purestake/substrate', branch = "crystalin-v0.9.9-block-response-length" }
 cumulus-pallet-parachain-system = { path = "../parachain-system" }
-xcm-builder = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
+xcm-builder = { git = "https://github.com/purestake/polkadot", branch = "notlesh-v0.9.9-block-response-length" }
 pallet-balances = { git = 'https://github.com/purestake/substrate', branch = "crystalin-v0.9.9-block-response-length" }
 
 [features]

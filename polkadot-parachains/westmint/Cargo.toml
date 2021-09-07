@@ -65,12 +65,12 @@ pallet-collator-selection = { path = "../../pallets/collator-selection", default
 statemint-common = { path = "../statemint-common", default-features = false }
 
 # Polkadot dependencies
-polkadot-parachain = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
-polkadot-runtime-common = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
-xcm = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
-xcm-builder = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
-xcm-executor = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
-pallet-xcm = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-parachain = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-runtime-common = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+xcm-builder = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+pallet-xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
 
 [dev-dependencies]
 hex-literal = "0.3.1"

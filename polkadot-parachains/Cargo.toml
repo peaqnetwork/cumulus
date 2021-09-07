@@ -81,10 +81,10 @@ nimbus-consensus = { path = "../client/consensus/nimbus"}
 pallet-author-inherent = { path = "../pallets/author-inherent"}
 
 # Polkadot dependencies
-polkadot-primitives = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
-polkadot-service = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
-polkadot-cli = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
-polkadot-parachain = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-primitives = { git = "https://github.com/purestake/polkadot", branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-service = { git = "https://github.com/purestake/polkadot", branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-cli = { git = "https://github.com/purestake/polkadot", branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-parachain = { git = "https://github.com/purestake/polkadot", branch = "notlesh-v0.9.9-block-response-length" }
 
 [build-dependencies]
 substrate-build-script-utils = { git = "https://github.com/purestake/substrate", branch = "crystalin-v0.9.9-block-response-length" }

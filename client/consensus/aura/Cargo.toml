@@ -25,7 +25,7 @@ sc-consensus = { git = "https://github.com/purestake/substrate", branch = "cryst
 substrate-prometheus-endpoint = { git = "https://github.com/purestake/substrate", branch = "crystalin-v0.9.9-block-response-length" }
 
 # Polkadot dependencies
-polkadot-client = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-client = { git = "https://github.com/purestake/polkadot", branch = "notlesh-v0.9.9-block-response-length" }
 
 # Cumulus dependencies
 cumulus-client-consensus-common = { path = "../common" }

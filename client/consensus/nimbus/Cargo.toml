@@ -20,7 +20,7 @@ sp-keystore = { git = "https://github.com/purestake/substrate", branch = "crysta
 sp-application-crypto = { git = "https://github.com/purestake/substrate", branch = "crystalin-v0.9.9-block-response-length" }
 
 # Polkadot dependencies
-polkadot-service = { git = "https://github.com/polkadot/substrate", branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-service = { git = "https://github.com/purestake/polkadot", branch = "notlesh-v0.9.9-block-response-length" }
 
 # Cumulus dependencies
 nimbus-primitives = { path = "../../../primitives/nimbus" }

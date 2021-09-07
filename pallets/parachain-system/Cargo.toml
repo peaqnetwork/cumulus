@@ -12,8 +12,8 @@ cumulus-primitives-parachain-inherent = { path = "../../primitives/parachain-inh
 cumulus-pallet-parachain-system-proc-macro = { path = "proc-macro", default-features = false }
 
 # Polkadot dependencies
-polkadot-parachain = { git = "https://github.com/polkadot/substrate", default-features = false, features = [ "wasm-api" ], branch = "notlesh-v0.9.9-block-response-length" }
-xcm = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-parachain = { git = "https://github.com/purestake/polkadot", default-features = false, features = [ "wasm-api" ], branch = "notlesh-v0.9.9-block-response-length" }
+xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
 
 # Substrate dependencies
 frame-support = { git = "https://github.com/purestake/substrate", default-features = false, branch = "crystalin-v0.9.9-block-response-length" }

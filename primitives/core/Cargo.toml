@@ -13,10 +13,10 @@ sp-trie = { git = "https://github.com/purestake/substrate", default-features = f
 frame-support = { git = "https://github.com/purestake/substrate", default-features = false, branch = "crystalin-v0.9.9-block-response-length" }
 
 # Polkadot dependencies
-polkadot-parachain = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
-polkadot-primitives = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
-polkadot-core-primitives = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
-xcm = { git = "https://github.com/polkadot/substrate", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-parachain = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-primitives = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+polkadot-core-primitives = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
+xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "notlesh-v0.9.9-block-response-length" }
 
 # Other dependencies
 impl-trait-for-tuples = "0.2.1"
