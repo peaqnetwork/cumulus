@@ -5429,12 +5429,10 @@ dependencies = [
 name = "pallet-author-slot-filter"
 version = "0.1.0"
 dependencies = [
- "cumulus-pallet-parachain-system",
  "frame-support",
  "frame-system",
  "log",
  "nimbus-primitives",
- "pallet-author-inherent",
  "parity-scale-codec",
  "serde",
  "sp-core",
