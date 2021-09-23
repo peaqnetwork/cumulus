@@ -5114,6 +5114,7 @@ dependencies = [
  "sp-inherents",
  "sp-keystore",
  "sp-runtime",
+ "sp-std",
  "substrate-prometheus-endpoint",
  "tracing",
 ]
