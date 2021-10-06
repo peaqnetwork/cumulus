@@ -193,12 +193,9 @@ where
 			return None;
 		}
 
-		// Construct runtime API
-		let runtime_api = self.parachain_client.runtime_api();
-
 		let at = BlockId::Hash(parent.hash());
 		// Get `AuthorFilterAPI` version.
-		let api_version = runtime_api
+		let api_version = self.parachain_client.runtime_api()
 			.api_version::<dyn AuthorFilterAPI<B, NimbusId>>(&at)
 			.expect("Runtime api access to not error.");
 
@@ -213,12 +210,12 @@ where
 		// Determine if runtime change
 		let parent_at = BlockId::<B>::Hash(*parent.parent_hash());
 		use sp_api::Core as _;
-		let previous_runtime_version: sp_api::RuntimeVersion = runtime_api
-				.version(&parent_at)
-			.expect("Runtime api access to not error.");
-		let runtime_version: sp_api::RuntimeVersion = runtime_api
-			.version(&at)
-			.expect("Runtime api access to not error.");
+		let previous_runtime_version: sp_api::RuntimeVersion = self.parachain_client.runtime_api()
+		.version(&parent_at)
+		.expect("Runtime api access to not error.");
+		let runtime_version: sp_api::RuntimeVersion = self.parachain_client.runtime_api()
+		.version(&at)
+		.expect("Runtime api access to not error.");
 		let runtime_upgraded = previous_runtime_version != runtime_version;
 
 		// Iterate keys until we find an eligible one, or run out of candidates.
@@ -235,7 +232,7 @@ where
 			// Have to convert to a typed NimbusId to pass to the runtime API. Maybe this is a clue
 			// That I should be passing Vec<u8> across the wasm boundary?
 			if api_version >= 2 {
-				runtime_api.can_author(
+				self.parachain_client.runtime_api().can_author(
 					&at,
 					NimbusId::from_slice(&type_public_pair.1),
 					validation_data.relay_parent_number,
@@ -244,7 +241,7 @@ where
 				.expect("Author API should not return error")
 			} else {
 				#[allow(deprecated)]
-				runtime_api.can_author_before_version_2(
+				self.parachain_client.runtime_api().can_author_before_version_2(
 					&at,
 					NimbusId::from_slice(&type_public_pair.1),
 					validation_data.relay_parent_number,
