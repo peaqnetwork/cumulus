@@ -138,7 +138,7 @@ where
 				)
 			})
 			.ok()?;
-		
+
 		inherent_data_providers
 			.create_inherent_data()
 			.map_err(|e| {
@@ -207,6 +207,23 @@ where
 		}
 		let api_version = api_version.unwrap();
 
+		// Determine if runtime change
+		let runtime_upgraded = if *parent.number() > sp_runtime::traits::Zero::zero() {
+			let parent_at = BlockId::<B>::Hash(*parent.parent_hash());
+
+			use sp_api::Core as _;
+			let previous_runtime_version: sp_api::RuntimeVersion = self.parachain_client.runtime_api()
+				.version(&parent_at)
+				.expect("Runtime api access to not error.");
+			let runtime_version: sp_api::RuntimeVersion = self.parachain_client.runtime_api()
+				.version(&at)
+				.expect("Runtime api access to not error.");
+
+			previous_runtime_version != runtime_version
+		} else {
+			false
+		};
+
 		// Iterate keys until we find an eligible one, or run out of candidates.
 		// If we are skipping prediction, then we author withthe first key we find.
 		// prediction skipping only really amkes sense when there is a single key in the keystore.
@@ -214,6 +231,9 @@ where
 
 			// If we are not predicting, just return the first one we find.
 			self.skip_prediction ||
+
+			// If runtime upgraded, force authoring
+			runtime_upgraded ||
 
 			// Have to convert to a typed NimbusId to pass to the runtime API. Maybe this is a clue
 			// That I should be passing Vec<u8> across the wasm boundary?
@@ -291,7 +311,7 @@ where
 		)
 		.expect("Keystore should be able to sign")
 		.expect("We already checked that the key was present");
-		
+
 		debug!(
 			target: LOG_TARGET,
 			"The signature is \n{:?}", sig
