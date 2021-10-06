@@ -208,15 +208,19 @@ where
 		let api_version = api_version.unwrap();
 
 		// Determine if runtime change
-		let parent_at = BlockId::<B>::Hash(*parent.parent_hash());
-		use sp_api::Core as _;
-		let previous_runtime_version: sp_api::RuntimeVersion = self.parachain_client.runtime_api()
-		.version(&parent_at)
-		.expect("Runtime api access to not error.");
-		let runtime_version: sp_api::RuntimeVersion = self.parachain_client.runtime_api()
-		.version(&at)
-		.expect("Runtime api access to not error.");
-		let runtime_upgraded = previous_runtime_version != runtime_version;
+		let runtime_upgraded = if *parent.number() > sp_runtime::traits::Zero::zero() {
+			let parent_at = BlockId::<B>::Hash(*parent.parent_hash());
+			use sp_api::Core as _;
+			let previous_runtime_version: sp_api::RuntimeVersion = self.parachain_client.runtime_api()
+			.version(&parent_at)
+			.expect("Runtime api access to not error.");
+			let runtime_version: sp_api::RuntimeVersion = self.parachain_client.runtime_api()
+			.version(&at)
+			.expect("Runtime api access to not error.");
+			previous_runtime_version != runtime_version
+		} else {
+			false
+		};
 
 		// Iterate keys until we find an eligible one, or run out of candidates.
 		// If we are skipping prediction, then we author withthe first key we find.
