@@ -221,7 +221,7 @@ where
 
 			previous_runtime_version != runtime_version
 		} else {
-			true
+			false
 		};
 
 		// Iterate keys until we find an eligible one, or run out of candidates.
