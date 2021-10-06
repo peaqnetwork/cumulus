@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["AssetsFrom","Asset filter that allows all assets from a certain location."],["DealWithFees","Merge the fees into one item and pass them on to the staking pot."],["NonZeroIssuance","Allow checking in assets that have issuance > 0."],["ToStakingPot","Logic for the author to get a portion of fees."]],"type":[["NegativeImbalance",""]]});
