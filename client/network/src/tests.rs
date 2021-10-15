@@ -15,15 +15,16 @@
 // along with Polkadot.  If not, see <http://www.gnu.org/licenses/>.
 
 use super::*;
-use cumulus_test_service::runtime::{Block, Header, Hash};
+use cumulus_test_service::runtime::{Block, Hash, Header};
 use futures::{executor::block_on, poll, task::Poll};
+use parking_lot::Mutex;
 use polkadot_node_primitives::{SignedFullStatement, Statement};
 use polkadot_primitives::v1::{
 	Block as PBlock, BlockNumber, CandidateCommitments, CandidateDescriptor, CandidateEvent,
 	CommittedCandidateReceipt, CoreState, GroupRotationInfo, Hash as PHash, HeadData, Id as ParaId,
 	InboundDownwardMessage, InboundHrmpMessage, OccupiedCoreAssumption, ParachainHost,
-	PersistedValidationData, SessionIndex, SessionInfo, SigningContext, ValidationCode, ValidationCodeHash,
-	ValidatorId, ValidatorIndex,
+	PersistedValidationData, SessionIndex, SessionInfo, SigningContext, ValidationCode,
+	ValidationCodeHash, ValidatorId, ValidatorIndex,
 };
 use polkadot_test_client::{
 	Client as PClient, ClientBlockImportExt, DefaultTestClientBuilderExt, FullBackend as PBackend,
@@ -37,7 +38,6 @@ use sp_keyring::Sr25519Keyring;
 use sp_keystore::{testing::KeyStore, SyncCryptoStore, SyncCryptoStorePtr};
 use sp_runtime::RuntimeAppPublic;
 use std::collections::BTreeMap;
-use parking_lot::Mutex;
 
 fn check_error(error: crate::BoxedError, check_error: impl Fn(&BlockAnnounceError) -> bool) {
 	let error = *error

@@ -47,7 +47,7 @@ pub use mock::MockValidationDataInherentDataProvider;
 pub const INHERENT_IDENTIFIER: InherentIdentifier = *b"sysi1337";
 
 /// The inherent data that is passed by the collator to the parachain runtime.
-#[derive(codec::Encode, codec::Decode, sp_core::RuntimeDebug, Clone, PartialEq)]
+#[derive(codec::Encode, codec::Decode, sp_core::RuntimeDebug, Clone, PartialEq, scale_info::TypeInfo)]
 pub struct ParachainInherentData {
 	pub validation_data: PersistedValidationData,
 	/// A storage proof of a predefined set of keys from the relay-chain.

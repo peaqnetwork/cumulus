@@ -28,23 +28,22 @@ use cumulus_primitives_core::{
 	ParaId, PersistedValidationData,
 };
 pub use import_queue::import_queue;
-use log::{info, warn, debug};
+use log::{debug, info, warn};
+use nimbus_primitives::{AuthorFilterAPI, NimbusId, NIMBUS_ENGINE_ID, NIMBUS_KEY_ID};
 use parking_lot::Mutex;
 use polkadot_service::ClientHandle;
 use sc_client_api::Backend;
-use sp_api::{ProvideRuntimeApi, BlockId, ApiExt};
-use sp_consensus::{
-	BlockOrigin, EnableProofRecording, Environment,
-	ProofRecording, Proposal, Proposer,
-};
 use sc_consensus::{BlockImport, BlockImportParams};
+use sp_api::{ApiExt, BlockId, ProvideRuntimeApi};
+use sp_consensus::{
+	BlockOrigin, EnableProofRecording, Environment, ProofRecording, Proposal, Proposer,
+};
+use sp_core::crypto::Public;
 use sp_inherents::{CreateInherentDataProviders, InherentData, InherentDataProvider};
+use sp_keystore::{SyncCryptoStore, SyncCryptoStorePtr};
 use sp_runtime::traits::{Block as BlockT, HashFor, Header as HeaderT};
 use std::{marker::PhantomData, sync::Arc, time::Duration};
 use tracing::error;
-use sp_keystore::{SyncCryptoStorePtr, SyncCryptoStore};
-use sp_core::crypto::Public;
-use nimbus_primitives::{AuthorFilterAPI, NIMBUS_ENGINE_ID, NIMBUS_KEY_ID, NimbusId};
 mod import_queue;
 
 const LOG_TARGET: &str = "filtering-consensus";
@@ -63,7 +62,9 @@ pub struct NimbusConsensus<B, PF, BI, RClient, RBackend, ParaClient, CIDP> {
 	skip_prediction: bool,
 }
 
-impl<B, PF, BI, RClient, RBackend, ParaClient, CIDP> Clone for NimbusConsensus<B, PF, BI, RClient, RBackend, ParaClient, CIDP> {
+impl<B, PF, BI, RClient, RBackend, ParaClient, CIDP> Clone
+	for NimbusConsensus<B, PF, BI, RClient, RBackend, ParaClient, CIDP>
+{
 	fn clone(&self) -> Self {
 		Self {
 			para_id: self.para_id,
@@ -80,7 +81,8 @@ impl<B, PF, BI, RClient, RBackend, ParaClient, CIDP> Clone for NimbusConsensus<B
 	}
 }
 
-impl<B, PF, BI, RClient, RBackend, ParaClient, CIDP> NimbusConsensus<B, PF, BI, RClient, RBackend, ParaClient, CIDP>
+impl<B, PF, BI, RClient, RBackend, ParaClient, CIDP>
+	NimbusConsensus<B, PF, BI, RClient, RBackend, ParaClient, CIDP>
 where
 	B: BlockT,
 	RClient: ProvideRuntimeApi<PBlock>,
@@ -128,7 +130,10 @@ where
 	) -> Option<InherentData> {
 		let inherent_data_providers = self
 			.create_inherent_data_providers
-			.create_inherent_data_providers(parent, (relay_parent, validation_data.clone(), author_id))
+			.create_inherent_data_providers(
+				parent,
+				(relay_parent, validation_data.clone(), author_id),
+			)
 			.await
 			.map_err(|e| {
 				tracing::error!(
@@ -183,25 +188,30 @@ where
 		// If multiple are eligible, we only author with the first one.
 
 		// Get allthe available keys
-		let available_keys =
-			SyncCryptoStore::keys(&*self.keystore, NIMBUS_KEY_ID)
+		let available_keys = SyncCryptoStore::keys(&*self.keystore, NIMBUS_KEY_ID)
 			.expect("keystore should return the keys it has");
 
 		// Print a more helpful message than "not eligible" when there are no keys at all.
 		if available_keys.is_empty() {
-			warn!(target: LOG_TARGET, "🔏 No Nimbus keys available. We will not be able to author.");
+			warn!(
+				target: LOG_TARGET,
+				"🔏 No Nimbus keys available. We will not be able to author."
+			);
 			return None;
 		}
 
 		let at = BlockId::Hash(parent.hash());
 		// Get `AuthorFilterAPI` version.
-		let api_version = self.parachain_client.runtime_api()
+		let api_version = self
+			.parachain_client
+			.runtime_api()
 			.api_version::<dyn AuthorFilterAPI<B, NimbusId>>(&at)
 			.expect("Runtime api access to not error.");
 
 		if api_version.is_none() {
 			tracing::error!(
-				target: LOG_TARGET, "Could not find `AuthorFilterAPI` version.",
+				target: LOG_TARGET,
+				"Could not find `AuthorFilterAPI` version.",
 			);
 			return None;
 		}
@@ -212,10 +222,14 @@ where
 			let parent_at = BlockId::<B>::Hash(*parent.parent_hash());
 
 			use sp_api::Core as _;
-			let previous_runtime_version: sp_api::RuntimeVersion = self.parachain_client.runtime_api()
+			let previous_runtime_version: sp_api::RuntimeVersion = self
+				.parachain_client
+				.runtime_api()
 				.version(&parent_at)
 				.expect("Runtime api access to not error.");
-			let runtime_version: sp_api::RuntimeVersion = self.parachain_client.runtime_api()
+			let runtime_version: sp_api::RuntimeVersion = self
+				.parachain_client
+				.runtime_api()
 				.version(&at)
 				.expect("Runtime api access to not error.");
 
@@ -228,7 +242,6 @@ where
 		// If we are skipping prediction, then we author withthe first key we find.
 		// prediction skipping only really amkes sense when there is a single key in the keystore.
 		let maybe_key = available_keys.into_iter().find(|type_public_pair| {
-
 			// If we are not predicting, just return the first one we find.
 			self.skip_prediction ||
 
@@ -272,12 +285,17 @@ where
 
 		let proposer = proposer_future
 			.await
-			.map_err(
-				|e| error!(target: LOG_TARGET, error = ?e, "Could not create proposer."),
-			)
+			.map_err(|e| error!(target: LOG_TARGET, error = ?e, "Could not create proposer."))
 			.ok()?;
 
-		let inherent_data = self.inherent_data(parent.hash(),&validation_data, relay_parent, NimbusId::from_slice(&type_public_pair.1)).await?;
+		let inherent_data = self
+			.inherent_data(
+				parent.hash(),
+				&validation_data,
+				relay_parent,
+				NimbusId::from_slice(&type_public_pair.1),
+			)
+			.await?;
 
 		let Proposal {
 			block,
@@ -312,10 +330,7 @@ where
 		.expect("Keystore should be able to sign")
 		.expect("We already checked that the key was present");
 
-		debug!(
-			target: LOG_TARGET,
-			"The signature is \n{:?}", sig
-		);
+		debug!(target: LOG_TARGET, "The signature is \n{:?}", sig);
 
 		// TODO Make a proper CompatibleDigest trait https://github.com/paritytech/substrate/blob/master/primitives/consensus/aura/src/digests.rs#L45
 		let sig_digest = sp_runtime::generic::DigestItem::Seal(NIMBUS_ENGINE_ID, sig);
@@ -324,7 +339,7 @@ where
 		block_import_params.post_digests.push(sig_digest.clone());
 		block_import_params.body = Some(extrinsics.clone());
 		block_import_params.state_action = sc_consensus::StateAction::ApplyChanges(
-			sc_consensus::StorageChanges::Changes(storage_changes)
+			sc_consensus::StorageChanges::Changes(storage_changes),
 		);
 
 		// Print the same log line as slots (aura and babe)
@@ -358,7 +373,10 @@ where
 		let post_block = B::new(post_header, extrinsics);
 
 		// Returning the block WITH the seal for distribution around the network.
-		Some(ParachainCandidate { block: post_block, proof })
+		Some(ParachainCandidate {
+			block: post_block,
+			proof,
+		})
 	}
 }
 
@@ -376,7 +394,6 @@ pub struct BuildNimbusConsensusParams<PF, BI, RBackend, ParaClient, CIDP> {
 	pub parachain_client: Arc<ParaClient>,
 	pub keystore: SyncCryptoStorePtr,
 	pub skip_prediction: bool,
-
 }
 
 /// Build the [`NimbusConsensus`].
@@ -432,7 +449,7 @@ where
 /// a concrete relay chain client instance, the builder takes a [`polkadot_service::Client`]
 /// that wraps this concrete instanace. By using [`polkadot_service::ExecuteWithClient`]
 /// the builder gets access to this concrete instance.
-struct NimbusConsensusBuilder<Block, PF, BI, RBackend, ParaClient,CIDP> {
+struct NimbusConsensusBuilder<Block, PF, BI, RBackend, ParaClient, CIDP> {
 	para_id: ParaId,
 	_phantom: PhantomData<Block>,
 	proposer_factory: PF,
@@ -445,7 +462,8 @@ struct NimbusConsensusBuilder<Block, PF, BI, RBackend, ParaClient,CIDP> {
 	skip_prediction: bool,
 }
 
-impl<Block, PF, BI, RBackend, ParaClient, CIDP> NimbusConsensusBuilder<Block, PF, BI, RBackend, ParaClient, CIDP>
+impl<Block, PF, BI, RBackend, ParaClient, CIDP>
+	NimbusConsensusBuilder<Block, PF, BI, RBackend, ParaClient, CIDP>
 where
 	Block: BlockT,
 	// Rust bug: https://github.com/rust-lang/rust/issues/24159

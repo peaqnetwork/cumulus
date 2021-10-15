@@ -21,16 +21,15 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use sp_std::vec::Vec;
 use parity_scale_codec::Codec;
 use sp_application_crypto::KeyTypeId;
-use sp_runtime::ConsensusEngineId;
-use sp_runtime::traits::BlockNumberProvider;
+use sp_runtime::{traits::BlockNumberProvider, ConsensusEngineId};
+use sp_std::vec::Vec;
 
 mod digests;
 mod inherents;
 
-pub use inherents::{INHERENT_IDENTIFIER, InherentDataProvider};
+pub use inherents::{InherentDataProvider, INHERENT_IDENTIFIER};
 
 /// The given account ID is the author of the current block.
 pub trait EventHandler<Author> {
@@ -116,10 +115,7 @@ pub const NIMBUS_KEY_ID: KeyTypeId = KeyTypeId(*b"nmbs");
 
 // The strongly-typed crypto wrappers to be used by Nimbus in the keystore
 mod nimbus_crypto {
-	use sp_application_crypto::{
-		app_crypto,
-		sr25519,
-	};
+	use sp_application_crypto::{app_crypto, sr25519};
 	app_crypto!(sr25519, crate::NIMBUS_KEY_ID);
 }
 
@@ -133,7 +129,6 @@ sp_application_crypto::with_pair! {
 	/// A nimbus keypair
 	pub type NimbusPair = nimbus_crypto::Pair;
 }
-
 
 sp_api::decl_runtime_apis! {
 	/// The runtime api used to predict whether an author will be eligible in the given slot

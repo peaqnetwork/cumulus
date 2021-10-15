@@ -1,5 +1,5 @@
 //! A convenient interface over the digests used in nimbus.
-//! 
+//!
 //! Currently Nimbus has two digests;
 //! 1. A consensus digest that contains the block author identity
 //!    This information is copied from the author inehrent.
@@ -7,9 +7,9 @@
 //! 2. A seal digest that contains a signature over the rest of the
 //!    block including the first digest.
 
-use crate::{NIMBUS_ENGINE_ID, NimbusSignature, NimbusId};
+use crate::{NimbusId, NimbusSignature, NIMBUS_ENGINE_ID};
+use parity_scale_codec::{Codec, Encode};
 use sp_runtime::generic::DigestItem;
-use parity_scale_codec::{Encode, Codec};
 use sp_std::fmt::Debug;
 
 /// A digest item which is usable with aura consensus.
@@ -27,8 +27,9 @@ pub trait CompatibleDigestItem: Sized {
 	fn as_nimbus_consensus_digest(&self) -> Option<NimbusId>;
 }
 
-impl<Hash> CompatibleDigestItem for DigestItem<Hash> where
-	Hash: Debug + Send + Sync + Eq + Clone + Codec + 'static
+impl<Hash> CompatibleDigestItem for DigestItem<Hash>
+where
+	Hash: Debug + Send + Sync + Eq + Clone + Codec + 'static,
 {
 	fn nimbus_seal(signature: NimbusSignature) -> Self {
 		DigestItem::Seal(NIMBUS_ENGINE_ID, signature.encode())

@@ -16,7 +16,7 @@
 
 //! The actual implementation of the validate block functionality.
 
-use frame_support::traits::{ExecuteBlock, ExtrinsicCall, IsSubType, Get};
+use frame_support::traits::{ExecuteBlock, ExtrinsicCall, Get, IsSubType};
 use sp_runtime::traits::{Block as BlockT, Extrinsic, HashFor, Header as HeaderT, NumberFor};
 
 use sp_io::KillStorageResult;
@@ -130,7 +130,7 @@ where
 		.iter()
 		.filter_map(|e| e.call().is_sub_type())
 		.find_map(|c| match c {
-			crate::Call::set_validation_data(validation_data) => Some(validation_data.clone()),
+			crate::Call::set_validation_data { data } => Some(data.clone()),
 			_ => None,
 		})
 		.expect("Could not find `set_validation_data` inherent");
@@ -314,7 +314,11 @@ fn host_default_child_storage_exists(storage_key: &[u8], key: &[u8]) -> bool {
 	with_externalities(|ext| ext.exists_child_storage(&child_info, key))
 }
 
-fn host_default_child_storage_clear_prefix(storage_key: &[u8], prefix: &[u8], limit: Option<u32>) -> KillStorageResult {
+fn host_default_child_storage_clear_prefix(
+	storage_key: &[u8],
+	prefix: &[u8],
+	limit: Option<u32>,
+) -> KillStorageResult {
 	let child_info = ChildInfo::new_default(storage_key);
 	with_externalities(|ext| {
 		let (all_removed, num_removed) = ext.clear_child_prefix(&child_info, prefix, limit);

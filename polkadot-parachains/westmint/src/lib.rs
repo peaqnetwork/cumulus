@@ -233,7 +233,7 @@ impl pallet_sudo::Config for Runtime {
 	type Call = Call;
 }
 
-pub type AssetsForceOrigin =  EnsureRoot<AccountId>;
+pub type AssetsForceOrigin = EnsureRoot<AccountId>;
 
 parameter_types! {
 	pub const AssetDeposit: Balance = 100 * UNITS; // 100 WND deposit to create asset
@@ -326,10 +326,9 @@ impl InstanceFilter<Call> for ProxyType {
 	fn filter(&self, c: &Call) -> bool {
 		match self {
 			ProxyType::Any => true,
-			ProxyType::NonTransfer => !matches!(
-				c,
-				Call::Balances(..) | Call::Assets(..) | Call::Uniques(..)
-			),
+			ProxyType::NonTransfer => {
+				!matches!(c, Call::Balances(..) | Call::Assets(..) | Call::Uniques(..))
+			}
 			ProxyType::CancelProxy => matches!(
 				c,
 				Call::Proxy(pallet_proxy::Call::reject_announcement(..))

@@ -15,12 +15,14 @@
 
 use super::*;
 use crate as xcmp_queue;
-use sp_core::H256;
 use frame_support::parameter_types;
-use sp_runtime::{traits::{BlakeTwo256, IdentityLookup}, testing::Header};
+use sp_core::H256;
+use sp_runtime::{
+	testing::Header,
+	traits::{BlakeTwo256, IdentityLookup},
+};
 use xcm_builder::{
-	FixedWeightBounds, IsConcrete, LocationInverter, NativeAsset, CurrencyAdapter,
-	ParentIsDefault,
+	CurrencyAdapter, FixedWeightBounds, IsConcrete, LocationInverter, NativeAsset, ParentIsDefault,
 };
 
 type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<Test>;
@@ -123,9 +125,7 @@ pub type LocalAssetTransactor = CurrencyAdapter<
 	(),
 >;
 
-pub type LocationToAccountId = (
-	ParentIsDefault<AccountId>,
-);
+pub type LocationToAccountId = (ParentIsDefault<AccountId>,);
 
 pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
@@ -157,6 +157,8 @@ impl Config for Test {
 }
 
 pub fn new_test_ext() -> sp_io::TestExternalities {
-	let t = frame_system::GenesisConfig::default().build_storage::<Test>().unwrap();
+	let t = frame_system::GenesisConfig::default()
+		.build_storage::<Test>()
+		.unwrap();
 	t.into()
 }

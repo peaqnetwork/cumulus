@@ -16,25 +16,23 @@
 
 use std::{marker::PhantomData, sync::Arc};
 
+use log::debug;
+use nimbus_primitives::{NimbusId, NimbusPair, NimbusSignature};
+use sc_consensus::{
+	import_queue::{BasicQueue, Verifier as VerifierT},
+	BlockImport, BlockImportParams,
+};
 use sp_api::ProvideRuntimeApi;
+use sp_application_crypto::{Pair as _, Public as _, TryFrom};
 use sp_block_builder::BlockBuilder as BlockBuilderApi;
 use sp_blockchain::Result as ClientResult;
-use sp_consensus::{
-	error::Error as ConsensusError, CacheKeyId,
-};
-use sc_consensus::{
-	BlockImport, BlockImportParams, 
-	import_queue::{BasicQueue, Verifier as VerifierT},
-};
+use sp_consensus::{error::Error as ConsensusError, CacheKeyId};
 use sp_inherents::{CreateInherentDataProviders, InherentDataProvider};
 use sp_runtime::{
 	generic::BlockId,
 	traits::{Block as BlockT, Header as HeaderT},
 	DigestItem,
 };
-use nimbus_primitives::{NimbusId, NimbusSignature, NimbusPair};
-use sp_application_crypto::{TryFrom, Pair as _, Public as _};
-use log::debug;
 
 /// The Nimbus verifier strips the seal digest, and checks that it is a valid signature by
 /// the same key that was injected into the runtime and noted in the Seal digest.
@@ -53,7 +51,7 @@ where
 	Block: BlockT,
 	Client: ProvideRuntimeApi<Block> + Send + Sync,
 	<Client as ProvideRuntimeApi<Block>>::Api: BlockBuilderApi<Block>,
-	CIDP: CreateInherentDataProviders<Block, ()> ,
+	CIDP: CreateInherentDataProviders<Block, ()>,
 {
 	async fn verify(
 		&mut self,
@@ -65,20 +63,34 @@ where
 		),
 		String,
 	> {
-
-		debug!(target: crate::LOG_TARGET, "🪲 Header hash before popping digest {:?}", block_params.header.hash());
+		debug!(
+			target: crate::LOG_TARGET,
+			"🪲 Header hash before popping digest {:?}",
+			block_params.header.hash()
+		);
 		// Grab the digest from the seal
 		//TODO use CompatibleDigest trait here once I write it. For now assume the seal is last.
-		let seal = block_params.header.digest_mut().pop().expect("Block should have at least one digest on it");
+		let seal = block_params
+			.header
+			.digest_mut()
+			.pop()
+			.expect("Block should have at least one digest on it");
 
 		let sig = match seal {
 			DigestItem::Seal(id, ref sig) if id == *b"nmbs" => sig.clone(),
 			_ => return Err("HeaderUnsealed".into()),
 		};
 
-		debug!(target: crate::LOG_TARGET, "🪲 Header hash after popping digest {:?}", block_params.header.hash());
+		debug!(
+			target: crate::LOG_TARGET,
+			"🪲 Header hash after popping digest {:?}",
+			block_params.header.hash()
+		);
 
-		debug!(target: crate::LOG_TARGET, "🪲 Signature according to verifier is {:?}", sig);
+		debug!(
+			target: crate::LOG_TARGET,
+			"🪲 Signature according to verifier is {:?}", sig
+		);
 
 		// Grab the digest from the runtime
 		//TODO use the trait. Maybe this code should move to the trait.
@@ -93,13 +105,16 @@ where
 				}
 			})
 			.expect("A single consensus digest should be added by the runtime when executing the author inherent.");
-		
+
 		let claimed_author = match *consensus_digest {
 			DigestItem::Consensus(id, ref author_id) if id == *b"nmbs" => author_id.clone(),
 			_ => panic!("Expected consensus digest to contains author id bytes"),
 		};
 
-		debug!(target: crate::LOG_TARGET, "🪲 Claimed Author according to verifier is {:?}", claimed_author);
+		debug!(
+			target: crate::LOG_TARGET,
+			"🪲 Claimed Author according to verifier is {:?}", claimed_author
+		);
 
 		// Verify the signature
 		let valid_signature = NimbusPair::verify(
@@ -108,9 +123,12 @@ where
 			&NimbusId::from_slice(&claimed_author),
 		);
 
-		debug!(target: crate::LOG_TARGET, "🪲 Valid signature? {:?}", valid_signature);
+		debug!(
+			target: crate::LOG_TARGET,
+			"🪲 Valid signature? {:?}", valid_signature
+		);
 
-		if !valid_signature{
+		if !valid_signature {
 			return Err("Block signature invalid".into());
 		}
 
@@ -156,7 +174,11 @@ where
 
 		block_params.post_digests.push(seal);
 
-		debug!(target: crate::LOG_TARGET, "🪲 Just finished verifier. posthash from params is {:?}", &block_params.post_hash());
+		debug!(
+			target: crate::LOG_TARGET,
+			"🪲 Just finished verifier. posthash from params is {:?}",
+			&block_params.post_hash()
+		);
 
 		Ok((block_params, None))
 	}

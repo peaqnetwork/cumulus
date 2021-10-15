@@ -58,7 +58,10 @@ fn purge_chain_works() {
 		let base_path = run_node_and_stop();
 
 		assert!(base_path.path().join("chains/local_testnet/db").exists());
-		assert!(base_path.path().join("polkadot/chains/westend2/db").exists());
+		assert!(base_path
+			.path()
+			.join("polkadot/chains/westend2/db")
+			.exists());
 
 		let status = Command::new(cargo_bin("polkadot-collator"))
 			.args(&["purge-chain", "-d"])
@@ -72,6 +75,9 @@ fn purge_chain_works() {
 		assert!(base_path.path().join("chains/local_testnet").exists());
 		assert!(!base_path.path().join("chains/local_testnet/db").exists());
 		assert!(base_path.path().join("polkadot/chains/westend2").exists());
-		assert!(!base_path.path().join("polkadot/chains/westend2/db").exists());
+		assert!(!base_path
+			.path()
+			.join("polkadot/chains/westend2/db")
+			.exists());
 	}
 }

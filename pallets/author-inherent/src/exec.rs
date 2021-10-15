@@ -21,9 +21,9 @@ use frame_support::traits::ExecuteBlock;
 use sp_api::{BlockT, HeaderT};
 // For some reason I can't get these logs to actually print
 use log::debug;
-use sp_runtime::{RuntimeAppPublic, generic::DigestItem};
-use nimbus_primitives::{NIMBUS_ENGINE_ID, NimbusId, NimbusSignature};
-use sp_application_crypto::{TryFrom, Public as _};
+use nimbus_primitives::{NimbusId, NimbusSignature, NIMBUS_ENGINE_ID};
+use sp_application_crypto::{Public as _, TryFrom};
+use sp_runtime::{generic::DigestItem, RuntimeAppPublic};
 
 /// Block executive to be used by relay chain validators when validating parachain blocks built
 /// with the nimubs consensus family.
@@ -80,7 +80,7 @@ where
 				}
 			})
 			.expect("A single consensus digest should be added by the runtime when executing the author inherent.");
-		
+
 		let claimed_author = match *consensus_digest {
 			DigestItem::Consensus(id, ref author_id) if id == NIMBUS_ENGINE_ID => author_id.clone(),
 			_ => panic!("Expected consensus digest to contains author id bytes"),
@@ -96,10 +96,9 @@ where
 
 		debug!(target: "executive", "🪲 Valid signature? {:?}", valid_signature);
 
-		if !valid_signature{
+		if !valid_signature {
 			panic!("Block signature invalid");
 		}
-		
 
 		// Now that we've verified the signature, hand execution off to the inner executor
 		// which is probably the normal frame executive.

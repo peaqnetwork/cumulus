@@ -34,7 +34,7 @@ mod tests;
 use codec::{Decode, Encode};
 use cumulus_primitives_core::{
 	relay_chain::BlockNumber as RelayBlockNumber, ChannelStatus, GetChannelInfo, MessageSendError,
-	ParaId, XcmpMessageHandler, XcmpMessageSource, XcmpMessageFormat,
+	ParaId, XcmpMessageFormat, XcmpMessageHandler, XcmpMessageSource,
 };
 use frame_support::weights::Weight;
 use rand_chacha::{
@@ -42,8 +42,8 @@ use rand_chacha::{
 	ChaChaRng,
 };
 use sp_runtime::{traits::Hash, RuntimeDebug};
-use sp_std::{prelude::*, convert::TryFrom};
-use xcm::{latest::prelude::*, WrapVersion, VersionedXcm};
+use sp_std::{convert::TryFrom, prelude::*};
+use xcm::{latest::prelude::*, VersionedXcm, WrapVersion};
 
 pub use pallet::*;
 
@@ -96,7 +96,6 @@ pub mod pallet {
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
-	#[pallet::metadata(Option<T::Hash> = "Option<Hash>")]
 	pub enum Event<T: Config> {
 		/// Some XCM was executed ok.
 		Success(Option<T::Hash>),
@@ -172,19 +171,21 @@ pub mod pallet {
 	pub(super) type QueueConfig<T: Config> = StorageValue<_, QueueConfigData, ValueQuery>;
 }
 
-#[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Encode, Decode, RuntimeDebug)]
+#[derive(
+	Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Encode, Decode, RuntimeDebug, scale_info::TypeInfo,
+)]
 pub enum InboundStatus {
 	Ok,
 	Suspended,
 }
 
-#[derive(Copy, Clone, Eq, PartialEq, Encode, Decode, RuntimeDebug)]
+#[derive(Copy, Clone, Eq, PartialEq, Encode, Decode, RuntimeDebug, scale_info::TypeInfo)]
 pub enum OutboundStatus {
 	Ok,
 	Suspended,
 }
 
-#[derive(Copy, Clone, Eq, PartialEq, Encode, Decode, RuntimeDebug)]
+#[derive(Copy, Clone, Eq, PartialEq, Encode, Decode, RuntimeDebug, scale_info::TypeInfo)]
 pub struct QueueConfigData {
 	/// The number of pages of messages which must be in the queue for the other side to be told to
 	/// suspend their sending.
@@ -352,7 +353,7 @@ impl<T: Config> Pallet<T> {
 		let (result, event) = match Xcm::<T::Call>::try_from(xcm) {
 			Ok(xcm) => {
 				let location = (1, Parachain(sender.into()));
-				match T::XcmExecutor::execute_xcm(location.into(), xcm, max_weight) {
+				match T::XcmExecutor::execute_xcm(location, xcm, max_weight) {
 					Outcome::Error(e) => (Err(e.clone()), Event::Fail(Some(hash), e)),
 					Outcome::Complete(w) => (Ok(w), Event::Success(Some(hash))),
 					// As far as the caller is concerned, this was dispatched without error, so
@@ -546,7 +547,8 @@ impl<T: Config> Pallet<T> {
 			// If there are more and we're making progress, we process them after we've given the
 			// other channels a look in. If we've still not unlocked all weight, then we set them
 			// up for processing a second time anyway.
-			if !status[index].2.is_empty() && (weight_processed > 0 || weight_available != max_weight)
+			if !status[index].2.is_empty()
+				&& (weight_processed > 0 || weight_available != max_weight)
 			{
 				if shuffle_index + 1 == shuffled.len() {
 					// Only this queue left. Just run around this loop once more.
@@ -774,24 +776,25 @@ impl<T: Config> XcmpMessageSource for Pallet<T> {
 
 /// Xcm sender for sending to a sibling parachain.
 impl<T: Config> SendXcm for Pallet<T> {
-	fn send_xcm(dest: MultiLocation, msg: Xcm<()>) -> Result<(), XcmError> {
-		match &dest {
-			// An HRMP message for a sibling parachain.
-			MultiLocation { parents: 1, interior: X1(Parachain(id)) } => {
-				let versioned_xcm = T::VersionWrapper::wrap_version(&dest, msg)
-					.map_err(|()| XcmError::DestinationUnsupported)?;
-				let hash = T::Hashing::hash_of(&versioned_xcm);
-				Self::send_fragment(
-					(*id).into(),
-					XcmpMessageFormat::ConcatenatedVersionedXcm,
-					versioned_xcm,
-				)
-				.map_err(|e| XcmError::SendFailed(<&'static str>::from(e)))?;
-				Self::deposit_event(Event::XcmpMessageSent(Some(hash)));
-				Ok(())
-			}
-			// Anything else is unhandled. This includes a message this is meant for us.
-			_ => Err(XcmError::CannotReachDestination(dest, msg)),
-		}
+	fn send_xcm(dest: impl Into<MultiLocation>, msg: Xcm<()>) -> SendResult {
+		todo!("migrate to new XCM")
+		// match &dest {
+		// 	// An HRMP message for a sibling parachain.
+		// 	MultiLocation { parents: 1, interior: X1(Parachain(id)) } => {
+		// 		let versioned_xcm = T::VersionWrapper::wrap_version(&dest, msg)
+		// 			.map_err(|()| XcmError::DestinationUnsupported)?;
+		// 		let hash = T::Hashing::hash_of(&versioned_xcm);
+		// 		Self::send_fragment(
+		// 			(*id).into(),
+		// 			XcmpMessageFormat::ConcatenatedVersionedXcm,
+		// 			versioned_xcm,
+		// 		)
+		// 		.map_err(|e| XcmError::SendFailed(<&'static str>::from(e)))?;
+		// 		Self::deposit_event(Event::XcmpMessageSent(Some(hash)));
+		// 		Ok(())
+		// 	}
+		// 	// Anything else is unhandled. This includes a message this is meant for us.
+		// 	_ => Err(XcmError::CannotReachDestination(dest, msg)),
+		// }
 	}
 }

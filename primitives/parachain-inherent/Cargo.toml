@@ -6,17 +6,17 @@ edition = "2018"
 
 [dependencies]
 # Substrate dependencies
-sp-inherents = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.10" }
-sp-core = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.10" }
-sc-client-api = { git = "https://github.com/purestake/substrate", optional = true , branch = "moonbeam-polkadot-v0.9.10" }
-sp-runtime = { git = "https://github.com/purestake/substrate", optional = true , branch = "moonbeam-polkadot-v0.9.10" }
-sp-std = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.10" }
-sp-state-machine = { git = "https://github.com/purestake/substrate", optional = true , branch = "moonbeam-polkadot-v0.9.10" }
-sp-trie = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.10" }
-sp-api = { git = "https://github.com/purestake/substrate", optional = true , branch = "moonbeam-polkadot-v0.9.10" }
+sp-inherents = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.11" }
+sp-core = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.11" }
+sc-client-api = { git = "https://github.com/purestake/substrate", optional = true , branch = "moonbeam-polkadot-v0.9.11" }
+sp-runtime = { git = "https://github.com/purestake/substrate", optional = true , branch = "moonbeam-polkadot-v0.9.11" }
+sp-std = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.11" }
+sp-state-machine = { git = "https://github.com/purestake/substrate", optional = true , branch = "moonbeam-polkadot-v0.9.11" }
+sp-trie = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.11" }
+sp-api = { git = "https://github.com/purestake/substrate", optional = true , branch = "moonbeam-polkadot-v0.9.11" }
 
 # Polkadot dependencies
-polkadot-client = { git = "https://github.com/purestake/polkadot", optional = true, branch = "moonbeam-polkadot-v0.9.10" }
+polkadot-client = { git = "https://github.com/purestake/polkadot", optional = true, branch = "moonbeam-polkadot-v0.9.11" }
 
 # Cumulus dependencies
 cumulus-primitives-core = { path = "../core", default-features = false }
@@ -26,6 +26,7 @@ cumulus-test-relay-sproof-builder = { path = "../../test/relay-sproof-builder", 
 codec = { package = "parity-scale-codec", version = "2.0.0", default-features = false, features = [ "derive" ] }
 tracing = { version = "0.1.22", optional = true }
 async-trait = { version = "0.1.42", optional = true }
+scale-info = { version = "1.0.0", default-features = false, features = ["derive"] }
 
 [features]
 default = [ "std" ]

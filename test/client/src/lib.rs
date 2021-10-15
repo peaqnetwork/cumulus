@@ -17,7 +17,7 @@
 //! A Cumulus test client.
 
 mod block_builder;
-use codec::{Encode, Decode};
+use codec::{Decode, Encode};
 use runtime::{
 	Balance, Block, BlockHashCount, Call, GenesisConfig, Runtime, Signature, SignedExtra,
 	SignedPayload, UncheckedExtrinsic, VERSION,

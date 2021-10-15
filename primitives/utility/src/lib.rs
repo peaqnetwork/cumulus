@@ -19,10 +19,12 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use sp_std::marker::PhantomData;
+// use std::ops::Mul;
+
 use codec::Encode;
 use cumulus_primitives_core::UpwardMessageSender;
-use xcm::{WrapVersion, latest::prelude::*};
+use sp_std::marker::PhantomData;
+use xcm::{latest::prelude::*, WrapVersion};
 
 /// Xcm router which recognises the `Parent` destination and handles it by sending the message into
 /// the given UMP `UpwardMessageSender` implementation. Thus this essentially adapts an
@@ -33,21 +35,22 @@ use xcm::{WrapVersion, latest::prelude::*};
 /// for the `SendXcm` implementation.
 pub struct ParentAsUmp<T, W>(PhantomData<(T, W)>);
 impl<T: UpwardMessageSender, W: WrapVersion> SendXcm for ParentAsUmp<T, W> {
-	fn send_xcm(dest: MultiLocation, msg: Xcm<()>) -> Result<(), XcmError> {
-		if dest.contains_parents_only(1) {
-			// An upward message for the relay chain.
-			let versioned_xcm = W::wrap_version(&dest, msg)
-				.map_err(|()| XcmError::DestinationUnsupported)?;
-			let data = versioned_xcm.encode();
+	fn send_xcm(dest: impl Into<MultiLocation>, msg: Xcm<()>) -> SendResult {
+		todo!("Update to new XCM")
+		// let dest: MultiLocation = dest.into();
+		// if dest.contains_parents_only(1) {
+		// 	// An upward message for the relay chain.
+		// 	let versioned_xcm = W::wrap_version(&dest, msg)
+		// 		.map_err(|()| XcmError::DestinationUnsupported)?;
+		// 	let data = versioned_xcm.encode();
 
-			T::send_upward_message(data)
-				.map_err(|e| XcmError::SendFailed(e.into()))?;
+		// 	T::send_upward_message(data)
+		// 		.map_err(|e| XcmError::SendFailed(e.into()))?;
 
-			Ok(())
-		} else {
-			// Anything else is unhandled. This includes a message this is meant for us.
-			Err(XcmError::CannotReachDestination(dest, msg))
-		}
+		// 	Ok(())
+		// } else {
+		// 	// Anything else is unhandled. This includes a message this is meant for us.
+		// 	Err(SendError::CannotReachDestination(dest, msg))
+		// }
 	}
 }
-

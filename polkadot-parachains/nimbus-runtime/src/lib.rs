@@ -22,11 +22,12 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
+use cumulus_pallet_parachain_system::RelaychainBlockNumberProvider;
 use sp_api::impl_runtime_apis;
 use sp_core::OpaqueMetadata;
 use sp_runtime::{
 	create_runtime_str, generic, impl_opaque_keys,
-	traits::{BlakeTwo256, Block as BlockT, AccountIdLookup},
+	traits::{AccountIdLookup, BlakeTwo256, Block as BlockT},
 	transaction_validity::{TransactionSource, TransactionValidity},
 	ApplyExtrinsicResult,
 };
@@ -34,20 +35,21 @@ use sp_std::prelude::*;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
-use cumulus_pallet_parachain_system::RelaychainBlockNumberProvider;
 
 // A few exports that help ease life for downstream crates.
 pub use frame_support::{
-	construct_runtime, parameter_types, match_type,
-	traits::{Randomness, IsInVec, OnInitialize, Everything},
+	construct_runtime, match_type, parameter_types,
+	traits::{Everything, IsInVec, OnInitialize, Randomness},
 	weights::{
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
 		DispatchClass, IdentityFee, Weight,
 	},
 	StorageValue,
 };
-use frame_system::limits::{BlockLength, BlockWeights};
-use frame_system::InitKind;
+use frame_system::{
+	limits::{BlockLength, BlockWeights},
+	InitKind,
+};
 // pub use pallet_balances::Call as BalancesCall;
 // pub use pallet_timestamp::Call as TimestampCall;
 #[cfg(any(feature = "std", test))]
@@ -355,9 +357,7 @@ impl Config for XcmConfig {
 }
 
 /// No local origins on this chain are allowed to dispatch XCM sends/executions.
-pub type LocalOriginToLocation = (
-	SignedToAccountId32<Origin, AccountId, RococoNetwork>,
-);
+pub type LocalOriginToLocation = (SignedToAccountId32<Origin, AccountId, RococoNetwork>,);
 
 /// The means for routing XCM messages which are not for local execution into the right message
 /// queues.
@@ -605,7 +605,7 @@ impl_runtime_apis! {
 		fn can_author(author: nimbus_primitives::NimbusId, slot: u32, parent_header: &<Block as BlockT>::Header) -> bool {
 			// This runtime uses an entropy source that is updated during block initialization
 			// Therefore we need to initialize it to match the state it will be in when the
-			// next block is being executed.			
+			// next block is being executed.
 			System::initialize(&(parent_header.number + 1), &parent_header.hash(), &parent_header.digest, InitKind::Inspection);
 			<Self as pallet_author_filter::Config>::RandomnessSource::on_initialize(System::block_number());
 

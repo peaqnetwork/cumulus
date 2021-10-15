@@ -18,18 +18,17 @@ use codec::{Decode, Encode};
 use cumulus_primitives_core::{
 	relay_chain, AbridgedHostConfiguration, AbridgedHrmpChannel, ParaId,
 };
-use sp_trie::{MemoryDB, HashDBT, EMPTY_PREFIX};
 use sp_runtime::traits::HashFor;
 use sp_state_machine::{Backend, TrieBackend};
 use sp_std::vec::Vec;
-use sp_trie::StorageProof;
+use sp_trie::{HashDBT, MemoryDB, StorageProof, EMPTY_PREFIX};
 
 /// A snapshot of some messaging related state of relay chain pertaining to the current parachain.
 ///
 /// This data is essential for making sure that the parachain is aware of current resource use on
 /// the relay chain and that the candidates produced for this parachain do not exceed any of these
 /// limits.
-#[derive(Clone, Encode, Decode)]
+#[derive(Clone, Encode, Decode, scale_info::TypeInfo)]
 pub struct MessagingStateSnapshot {
 	/// The current message queue chain head for downward message queue.
 	///
@@ -215,8 +214,12 @@ impl RelayChainStateProof {
 	///
 	/// Returns an error if anything failed at reading or decoding.
 	pub fn read_abridged_host_configuration(&self) -> Result<AbridgedHostConfiguration, Error> {
-		read_entry(&self.trie_backend, relay_chain::well_known_keys::ACTIVE_CONFIG, None)
-			.map_err(Error::Config)
+		read_entry(
+			&self.trie_backend,
+			relay_chain::well_known_keys::ACTIVE_CONFIG,
+			None,
+		)
+		.map_err(Error::Config)
 	}
 
 	/// Read the [`Slot`](relay_chain::v1::Slot) from the relay chain state proof.
@@ -225,6 +228,11 @@ impl RelayChainStateProof {
 	///
 	/// Returns an error if anything failed at reading or decoding.
 	pub fn read_slot(&self) -> Result<relay_chain::v1::Slot, Error> {
-		read_entry(&self.trie_backend, relay_chain::well_known_keys::CURRENT_SLOT, None).map_err(Error::Slot)
+		read_entry(
+			&self.trie_backend,
+			relay_chain::well_known_keys::CURRENT_SLOT,
+			None,
+		)
+		.map_err(Error::Slot)
 	}
 }
