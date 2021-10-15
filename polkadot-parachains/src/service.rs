@@ -88,12 +88,19 @@ impl sc_executor::NativeExecutionDispatch for ShellRuntimeExecutor {
 	}
 }
 
-native_executor_instance!(
-	pub NimbusRuntimeExecutor,
-	nimbus_runtime::api::dispatch,
-	nimbus_runtime::native_version,
-	//TODO benchmark nimbus
-);
+pub struct NimbusRuntimeExecutor;
+
+impl sc_executor::NativeExecutionDispatch for NimbusRuntimeExecutor {
+	type ExtendHostFunctions = frame_benchmarking::benchmarking::HostFunctions;
+
+	fn dispatch(method: &str, data: &[u8]) -> Option<Vec<u8>> {
+		nimbus_runtime::api::dispatch(method, data)
+	}
+
+	fn native_version() -> sc_executor::NativeVersion {
+		nimbus_runtime::native_version()
+	}
+}
 
 // Native Statemint executor instance.
 pub struct StatemintRuntimeExecutor;
@@ -871,14 +878,14 @@ pub async fn start_shell_node(
 
 /// Build the import queue for the nimbus runtime.
 pub fn nimbus_build_import_queue(
-	client: Arc<TFullClient<Block, nimbus_runtime::RuntimeApi, NimbusRuntimeExecutor>>,
+	client: Arc<TFullClient<Block, nimbus_runtime::RuntimeApi, NativeElseWasmExecutor<NimbusRuntimeExecutor>>>,
 	config: &Configuration,
 	_: Option<TelemetryHandle>,
 	task_manager: &TaskManager,
 ) -> Result<
 	sc_consensus::DefaultImportQueue<
 		Block,
-		TFullClient<Block, nimbus_runtime::RuntimeApi, NimbusRuntimeExecutor>,
+		TFullClient<Block, nimbus_runtime::RuntimeApi, NativeElseWasmExecutor<NimbusRuntimeExecutor>>,
 	>,
 	sc_service::Error,
 > {
@@ -902,7 +909,7 @@ pub async fn start_nimbus_node(
 	polkadot_config: Configuration,
 	id: ParaId,
 ) -> sc_service::error::Result<
-	(TaskManager, Arc<TFullClient<Block, nimbus_runtime::RuntimeApi, NimbusRuntimeExecutor>>)
+	(TaskManager, Arc<TFullClient<Block, nimbus_runtime::RuntimeApi, NativeElseWasmExecutor<NimbusRuntimeExecutor>>>)
 > {
 	let skip_prediction = parachain_config.force_authoring;
 	start_node_impl::<nimbus_runtime::RuntimeApi, NimbusRuntimeExecutor, _, _, _>(
