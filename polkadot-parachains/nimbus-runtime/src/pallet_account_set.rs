@@ -25,8 +25,6 @@
 //! Moonbeam's Parachain Staking - https://github.com/PureStake/moonbeam/tree/master/pallets/parachain-staking
 //! Recipe for AccountSet, VecSet, and MapSet
 
-#![cfg_attr(not(feature = "std"), no_std)]
-
 use frame_support::pallet;
 
 pub use pallet::*;
