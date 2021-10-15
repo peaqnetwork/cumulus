@@ -5171,6 +5171,7 @@ dependencies = [
  "frame-system",
  "nimbus-primitives",
  "parity-scale-codec",
+ "scale-info",
  "serde",
  "sp-core",
  "sp-runtime",
