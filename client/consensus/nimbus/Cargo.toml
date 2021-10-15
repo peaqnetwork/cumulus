@@ -6,22 +6,22 @@ edition = "2018"
 
 [dependencies]
 # Substrate deps
-sp-consensus = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.11" }
-sp-inherents = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.11" }
-sp-runtime = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.11" }
-sp-core = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.11" }
-sp-blockchain = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.11" }
-sp-block-builder = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.11" }
-sp-api = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.11" }
-sc-client-api = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.11" }
-sc-consensus = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.11" }
-substrate-prometheus-endpoint = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.11" }
-sp-keystore = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.11" }
-sp-application-crypto = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.11" }
-sp-std = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.11" }
+sp-consensus = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.11" }
+sp-inherents = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.11" }
+sp-runtime = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.11" }
+sp-core = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.11" }
+sp-blockchain = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.11" }
+sp-block-builder = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.11" }
+sp-api = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.11" }
+sc-client-api = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.11" }
+sc-consensus = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.11" }
+substrate-prometheus-endpoint = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.11" }
+sp-keystore = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.11" }
+sp-application-crypto = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.11" }
+sp-std = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.11" }
 
 # Polkadot dependencies
-polkadot-client = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.11", default-features = false }
+polkadot-client = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.11", default-features = false }
 
 # Cumulus dependencies
 nimbus-primitives = { path = "../../../primitives/nimbus" }
