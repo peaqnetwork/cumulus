@@ -19,6 +19,8 @@ members = [
 	"pallets/session-benchmarking",
 	"pallets/xcm",
 	"pallets/xcmp-queue",
+	"parachain-template/node",
+	"parachain-template/runtime",
 	"primitives/core",
 	"primitives/nimbus",
 	"primitives/parachain-inherent",
@@ -30,16 +32,16 @@ members = [
 	"polkadot-parachains/nimbus-runtime",#TODO change this to match chevdor's scheme
 	"polkadot-parachains/rococo",
 	"polkadot-parachains/shell",
-	"polkadot-parachains/statemint-common",
+	"polkadot-parachains/parachains-common",
 	"polkadot-parachains/statemint",
 	"polkadot-parachains/statemine",
 	"polkadot-parachains/westmint",
-	"test/runtime",
-	"test/runtime-upgrade",
 	"test/client",
-	"test/service",
 	"test/relay-sproof-builder",
 	"test/relay-validation-worker-provider",
+	"test/runtime",
+	"test/runtime-upgrade",
+	"test/service",
 ]
 
 [profile.release]

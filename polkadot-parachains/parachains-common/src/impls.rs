@@ -13,12 +13,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Auxillary struct/enums for Statemint runtime.
-//! Taken from polkadot/runtime/common (at a21cd64) and adapted for Statemint.
+//! Auxillary struct/enums for parachain runtimes.
+//! Taken from polkadot/runtime/common (at a21cd64) and adapted for parachains.
 
-use frame_support::traits::{Currency, Imbalance, OnUnbalanced};
+use frame_support::traits::{fungibles, Contains, Currency, Get, Imbalance, OnUnbalanced};
+use sp_runtime::traits::Zero;
+use sp_std::marker::PhantomData;
+use xcm::latest::{AssetId, Fungibility::Fungible, MultiAsset, MultiLocation};
+use xcm_executor::traits::FilterAssetLocation;
 
-pub type NegativeImbalance<T> = <pallet_balances::Pallet<T> as Currency<<T as frame_system::Config>::AccountId>>::NegativeImbalance;
+pub type NegativeImbalance<T> = <pallet_balances::Pallet<T> as Currency<
+	<T as frame_system::Config>::AccountId,
+>>::NegativeImbalance;
 
 /// Logic for the author to get a portion of fees.
 pub struct ToStakingPot<R>(sp_std::marker::PhantomData<R>);
@@ -32,10 +38,7 @@ where
 	fn on_nonzero_unbalanced(amount: NegativeImbalance<R>) {
 		let numeric_amount = amount.peek();
 		let staking_pot = <pallet_collator_selection::Pallet<R>>::account_id();
-		<pallet_balances::Pallet<R>>::resolve_creating(
-			&staking_pot,
-			amount,
-		);
+		<pallet_balances::Pallet<R>>::resolve_creating(&staking_pot, amount);
 		<frame_system::Pallet<R>>::deposit_event(pallet_balances::Event::Deposit(
 			staking_pot,
 			numeric_amount,
@@ -43,6 +46,7 @@ where
 	}
 }
 
+/// Merge the fees into one item and pass them on to the staking pot.
 pub struct DealWithFees<R>(sp_std::marker::PhantomData<R>);
 impl<R> OnUnbalanced<NegativeImbalance<R>> for DealWithFees<R>
 where
@@ -61,12 +65,39 @@ where
 	}
 }
 
+/// Allow checking in assets that have issuance > 0.
+pub struct NonZeroIssuance<AccountId, Assets>(PhantomData<(AccountId, Assets)>);
+impl<AccountId, Assets> Contains<<Assets as fungibles::Inspect<AccountId>>::AssetId>
+	for NonZeroIssuance<AccountId, Assets>
+where
+	Assets: fungibles::Inspect<AccountId>,
+{
+	fn contains(id: &<Assets as fungibles::Inspect<AccountId>>::AssetId) -> bool {
+		!Assets::total_issuance(*id).is_zero()
+	}
+}
+
+/// Asset filter that allows all assets from a certain location.
+pub struct AssetsFrom<T>(PhantomData<T>);
+impl<T: Get<MultiLocation>> FilterAssetLocation for AssetsFrom<T> {
+	fn filter_asset_location(asset: &MultiAsset, origin: &MultiLocation) -> bool {
+		let loc = T::get();
+		&loc == origin &&
+			matches!(asset, MultiAsset { id: AssetId::Concrete(asset_loc), fun: Fungible(_a) }
+			if asset_loc.match_and_split(&loc).is_some())
+	}
+}
+
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use frame_support::traits::FindAuthor;
-	use frame_support::{parameter_types, PalletId, traits::ValidatorRegistration};
+	use frame_support::{
+		parameter_types,
+		traits::{FindAuthor, ValidatorRegistration},
+		PalletId,
+	};
 	use frame_system::{limits, EnsureRoot};
+	use pallet_collator_selection::IdentityCollator;
 	use polkadot_primitives::v1::AccountId;
 	use sp_core::H256;
 	use sp_runtime::{
@@ -74,7 +105,7 @@ mod tests {
 		traits::{BlakeTwo256, IdentityLookup},
 		Perbill,
 	};
-	use pallet_collator_selection::IdentityCollator;
+	use xcm::prelude::*;
 
 	type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<Test>;
 	type Block = frame_system::mocking::MockBlock<Test>;
@@ -99,7 +130,7 @@ mod tests {
 	}
 
 	impl frame_system::Config for Test {
-		type BaseCallFilter = frame_support::traits::AllowAll;
+		type BaseCallFilter = frame_support::traits::Everything;
 		type Origin = Origin;
 		type Index = u64;
 		type BlockNumber = u64;
@@ -183,9 +214,7 @@ mod tests {
 	}
 
 	pub fn new_test_ext() -> sp_io::TestExternalities {
-		let mut t = frame_system::GenesisConfig::default()
-			.build_storage::<Test>()
-			.unwrap();
+		let mut t = frame_system::GenesisConfig::default().build_storage::<Test>().unwrap();
 		// We use default for brevity, but you can configure as desired if needed.
 		pallet_balances::GenesisConfig::<Test>::default()
 			.assimilate_storage(&mut t)
@@ -206,5 +235,25 @@ mod tests {
 			// Author gets 100% of tip and 100% of fee = 30
 			assert_eq!(Balances::free_balance(CollatorSelection::account_id()), 30);
 		});
+	}
+
+	#[test]
+	fn assets_from_filters_correctly() {
+		parameter_types! {
+			pub SomeSiblingParachain: MultiLocation = MultiLocation::new(1, X1(Parachain(1234)));
+		}
+
+		let asset_location = SomeSiblingParachain::get()
+			.clone()
+			.pushed_with_interior(GeneralIndex(42))
+			.expect("multilocation will only have 2 junctions; qed");
+		let asset = MultiAsset { id: Concrete(asset_location), fun: 1_000_000.into() };
+		assert!(
+			AssetsFrom::<SomeSiblingParachain>::filter_asset_location(
+				&asset,
+				&SomeSiblingParachain::get()
+			),
+			"AssetsFrom should allow assets from any of its interior locations"
+		);
 	}
 }
