@@ -6192,7 +6192,6 @@ dependencies = [
 name = "parachain-template-runtime"
 version = "0.1.0"
 dependencies = [
- "cumulus-pallet-aura-ext",
  "cumulus-pallet-dmp-queue",
  "cumulus-pallet-parachain-system",
  "cumulus-pallet-xcm",
@@ -6207,8 +6206,9 @@ dependencies = [
  "frame-system-benchmarking",
  "frame-system-rpc-runtime-api",
  "log",
- "pallet-aura",
- "pallet-authorship",
+ "nimbus-primitives",
+ "pallet-author-inherent",
+ "pallet-author-slot-filter",
  "pallet-balances",
  "pallet-collator-selection",
  "pallet-randomness-collective-flip",
@@ -6228,7 +6228,6 @@ dependencies = [
  "smallvec 1.7.0",
  "sp-api",
  "sp-block-builder",
- "sp-consensus-aura",
  "sp-core",
  "sp-inherents",
  "sp-io",
