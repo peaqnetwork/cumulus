@@ -13,10 +13,10 @@ sp-api = { git = "https://github.com/purestake/substrate", branch = "moonbeam-po
 sc-client-api = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.12" }
 
 # Polkadot dependencies
-polkadot-primitives = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-node-primitives = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-overseer = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-node-subsystem = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
+polkadot-primitives = { git = "https://github.com/purestake/polkadot", branch = "notlesh-xcm-vm-no-inline" }
+polkadot-node-primitives = { git = "https://github.com/purestake/polkadot", branch = "notlesh-xcm-vm-no-inline" }
+polkadot-overseer = { git = "https://github.com/purestake/polkadot", branch = "notlesh-xcm-vm-no-inline" }
+polkadot-node-subsystem = { git = "https://github.com/purestake/polkadot", branch = "notlesh-xcm-vm-no-inline" }
 
 # Cumulus dependencies
 cumulus-client-network = { path = "../network" }
@@ -31,7 +31,7 @@ tracing = "0.1.25"
 
 [dev-dependencies]
 # Polkadot dependencies
-polkadot-node-subsystem-test-helpers = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
+polkadot-node-subsystem-test-helpers = { git = "https://github.com/purestake/polkadot", branch = "notlesh-xcm-vm-no-inline" }
 
 # Cumulus dependencies
 cumulus-test-runtime = { path = "../../test/runtime" }

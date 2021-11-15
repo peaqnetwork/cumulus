@@ -88,8 +88,8 @@ cumulus-primitives-core = { path = "../../primitives/core" }
 cumulus-primitives-parachain-inherent = { path = "../../primitives/parachain-inherent" }
 
 # Polkadot dependencies
-polkadot-cli = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-parachain = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-primitives = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-service = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-test-service = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
+polkadot-cli = { git = "https://github.com/purestake/polkadot", branch = "notlesh-xcm-vm-no-inline" }
+polkadot-parachain = { git = "https://github.com/purestake/polkadot", branch = "notlesh-xcm-vm-no-inline" }
+polkadot-primitives = { git = "https://github.com/purestake/polkadot", branch = "notlesh-xcm-vm-no-inline" }
+polkadot-service = { git = "https://github.com/purestake/polkadot", branch = "notlesh-xcm-vm-no-inline" }
+polkadot-test-service = { git = "https://github.com/purestake/polkadot", branch = "notlesh-xcm-vm-no-inline" }
