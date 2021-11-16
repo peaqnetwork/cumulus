@@ -6,17 +6,17 @@ edition = "2018"
 
 [dependencies]
 # Substrate dependencies
-sp-inherents = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-sp-core = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-sc-client-api = { git = "https://github.com/purestake/substrate", optional = true , branch = "moonbeam-polkadot-v0.9.12" }
-sp-runtime = { git = "https://github.com/purestake/substrate", optional = true , branch = "moonbeam-polkadot-v0.9.12" }
-sp-std = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-sp-state-machine = { git = "https://github.com/purestake/substrate", optional = true , branch = "moonbeam-polkadot-v0.9.12" }
-sp-trie = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-sp-api = { git = "https://github.com/purestake/substrate", optional = true , branch = "moonbeam-polkadot-v0.9.12" }
+sp-inherents = { git = "https://github.com/purestake/substrate", default-features = false, branch = "elois-jsonrpsee" }
+sp-core = { git = "https://github.com/purestake/substrate", default-features = false, branch = "elois-jsonrpsee" }
+sc-client-api = { git = "https://github.com/purestake/substrate", optional = true , branch = "elois-jsonrpsee" }
+sp-runtime = { git = "https://github.com/purestake/substrate", optional = true , branch = "elois-jsonrpsee" }
+sp-std = { git = "https://github.com/purestake/substrate", default-features = false, branch = "elois-jsonrpsee" }
+sp-state-machine = { git = "https://github.com/purestake/substrate", optional = true , branch = "elois-jsonrpsee" }
+sp-trie = { git = "https://github.com/purestake/substrate", default-features = false, branch = "elois-jsonrpsee" }
+sp-api = { git = "https://github.com/purestake/substrate", optional = true , branch = "elois-jsonrpsee" }
 
 # Polkadot dependencies
-polkadot-client = { git = "https://github.com/purestake/polkadot", optional = true, branch = "moonbeam-polkadot-v0.9.12" }
+polkadot-client = { git = "https://github.com/purestake/polkadot", optional = true, branch = "elois-jsonrpsee" }
 
 # Cumulus dependencies
 cumulus-primitives-core = { path = "../core", default-features = false }

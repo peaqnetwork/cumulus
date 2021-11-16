@@ -7,18 +7,18 @@ description = "Provides timestamp related functionality for parachains."
 
 [dependencies]
 # Substrate dependencies
-sp-timestamp = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-sp-inherents = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-sp-std = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
+sp-timestamp = { git = "https://github.com/purestake/substrate", default-features = false, branch = "elois-jsonrpsee" }
+sp-inherents = { git = "https://github.com/purestake/substrate", default-features = false, branch = "elois-jsonrpsee" }
+sp-std = { git = "https://github.com/purestake/substrate", default-features = false, branch = "elois-jsonrpsee" }
 
 # Cumulus dependencies
 cumulus-primitives-core = { path = "../core", default-features = false }
 
 [dev-dependencies]
 # Substrate dependencies
-sp-tracing = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.12" }
-sp-runtime = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.12" }
-sp-consensus = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.12" }
+sp-tracing = { git = "https://github.com/purestake/substrate", branch = "elois-jsonrpsee" }
+sp-runtime = { git = "https://github.com/purestake/substrate", branch = "elois-jsonrpsee" }
+sp-consensus = { git = "https://github.com/purestake/substrate", branch = "elois-jsonrpsee" }
 
 # Cumulus dependencies
 cumulus-test-client = { path = "../../test/client" }
