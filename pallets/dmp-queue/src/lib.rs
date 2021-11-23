@@ -89,6 +89,9 @@ pub mod pallet {
 
 		/// Origin which is allowed to execute overweight messages.
 		type ExecuteOverweightOrigin: EnsureOrigin<Self::Origin>;
+
+		/// Whether we should process dmp messages on idle
+		type ProcessOnIdle: Get<bool>;
 	}
 
 	/// The configuration.
@@ -120,8 +123,13 @@ pub mod pallet {
 	#[pallet::hooks]
 	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
 		fn on_idle(_now: T::BlockNumber, max_weight: Weight) -> Weight {
-			// on_idle processes additional messages with any remaining block weight.
-			Self::service_queue(max_weight)
+			if T::ProcessOnIdle::get() {
+				// on_idle processes additional messages with any remaining block weight.
+				Self::service_queue(max_weight)
+			}
+			else {
+				0
+			}
 		}
 	}
 
@@ -343,7 +351,7 @@ mod tests {
 		DispatchError::BadOrigin,
 	};
 	use sp_version::RuntimeVersion;
-	use std::cell::RefCell;
+	use std::{cell::RefCell, iter::Product};
 	use xcm::latest::{MultiLocation, OriginKind};
 
 	type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<Test>;
@@ -441,10 +449,15 @@ mod tests {
 		}
 	}
 
+	parameter_types! {
+		pub const ProcessOnIdle: bool = true;
+	}
+
 	impl Config for Test {
 		type Event = Event;
 		type XcmExecutor = MockExec;
 		type ExecuteOverweightOrigin = frame_system::EnsureRoot<AccountId>;
+		type ProcessOnIdle = ProcessOnIdle;
 	}
 
 	pub(crate) fn new_test_ext() -> sp_io::TestExternalities {
