@@ -74,10 +74,10 @@ cumulus-primitives-core = { path = "../primitives/core" }
 cumulus-primitives-parachain-inherent = { path = "../primitives/parachain-inherent" }
 
 # Polkadot dependencies
-polkadot-primitives = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-service = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-cli = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-parachain = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
+polkadot-primitives = { git = "https://github.com/purestake/polkadot", branch = "gorka-try-new-reanchor" }
+polkadot-service = { git = "https://github.com/purestake/polkadot", branch = "gorka-try-new-reanchor" }
+polkadot-cli = { git = "https://github.com/purestake/polkadot", branch = "gorka-try-new-reanchor" }
+polkadot-parachain = { git = "https://github.com/purestake/polkadot", branch = "gorka-try-new-reanchor" }
 
 [build-dependencies]
 substrate-build-script-utils = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.12" }

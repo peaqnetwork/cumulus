@@ -14,7 +14,7 @@ sp-runtime = { git = "https://github.com/purestake/substrate", default-features 
 sp-std = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
 
 # Polkadot dependencies
-polkadot-primitives = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
+polkadot-primitives = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "gorka-try-new-reanchor" }
 
 # Cumulus dependencies
 cumulus-primitives-core = { path = "../../primitives/core", default-features = false }

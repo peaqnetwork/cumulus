@@ -27,10 +27,10 @@ sp-runtime = { git = "https://github.com/purestake/substrate", default-features 
 sp-core = { git = "https://github.com/purestake/substrate", default-features = false , branch = "moonbeam-polkadot-v0.9.12" }
 
 # Polkadot dependencies
-polkadot-runtime-common = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-primitives = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "moonbeam-polkadot-v0.9.12" }
-xcm = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "moonbeam-polkadot-v0.9.12" }
-xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "moonbeam-polkadot-v0.9.12" }
+polkadot-runtime-common = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "gorka-try-new-reanchor" }
+polkadot-primitives = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "gorka-try-new-reanchor" }
+xcm = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "gorka-try-new-reanchor" }
+xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "gorka-try-new-reanchor" }
 
 # Local dependencies
 pallet-asset-tx-payment = { path = '../../pallets/asset-tx-payment', default-features = false }

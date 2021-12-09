@@ -34,9 +34,9 @@ cumulus-primitives-core = { path = "../../primitives/core", default-features = f
 cumulus-primitives-utility = { path = "../../primitives/utility", default-features = false }
 cumulus-pallet-dmp-queue = { path = "../../pallets/dmp-queue", default-features = false }
 cumulus-pallet-xcm = { path = "../../pallets/xcm", default-features = false }
-xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-xcm-builder = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
+xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "gorka-try-new-reanchor" }
+xcm-builder = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "gorka-try-new-reanchor" }
+xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "gorka-try-new-reanchor" }
 
 [build-dependencies]
 substrate-wasm-builder = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.12" }

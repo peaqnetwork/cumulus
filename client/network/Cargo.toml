@@ -15,10 +15,10 @@ sp-core = { git = "https://github.com/purestake/substrate", branch = "moonbeam-p
 sc-client-api = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.12" }
 
 # Polkadot deps
-polkadot-primitives = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-node-primitives = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-client = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-parachain = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
+polkadot-primitives = { git = "https://github.com/purestake/polkadot", branch = "gorka-try-new-reanchor" }
+polkadot-node-primitives = { git = "https://github.com/purestake/polkadot", branch = "gorka-try-new-reanchor" }
+polkadot-client = { git = "https://github.com/purestake/polkadot", branch = "gorka-try-new-reanchor" }
+polkadot-parachain = { git = "https://github.com/purestake/polkadot", branch = "gorka-try-new-reanchor" }
 
 # other deps
 codec = { package = "parity-scale-codec", version = "2.3.0", features = [ "derive" ] }
@@ -36,7 +36,7 @@ cumulus-test-service = { path = "../../test/service" }
 cumulus-primitives-core = { path = "../../primitives/core" }
 
 # Polkadot deps
-polkadot-test-client = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.12" }
+polkadot-test-client = { git = "https://github.com/purestake/polkadot", branch = "gorka-try-new-reanchor" }
 
 # substrate deps
 sc-client-api = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.12" }

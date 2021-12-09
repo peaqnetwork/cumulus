@@ -13,9 +13,9 @@ sp-trie = { git = "https://github.com/purestake/substrate", default-features = f
 frame-support = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
 
 # Polkadot dependencies
-polkadot-parachain = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-primitives = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-core-primitives = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
+polkadot-parachain = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "gorka-try-new-reanchor" }
+polkadot-primitives = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "gorka-try-new-reanchor" }
+polkadot-core-primitives = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "gorka-try-new-reanchor" }
 
 # Other dependencies
 impl-trait-for-tuples = "0.2.1"

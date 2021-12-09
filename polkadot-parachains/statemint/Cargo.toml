@@ -67,12 +67,12 @@ pallet-collator-selection = { path = "../../pallets/collator-selection", default
 parachains-common = { path = "../parachains-common", default-features = false }
 
 # Polkadot dependencies
-polkadot-parachain = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-polkadot-runtime-common = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-xcm-builder = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
-pallet-xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.12" }
+polkadot-parachain = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "gorka-try-new-reanchor" }
+polkadot-runtime-common = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "gorka-try-new-reanchor" }
+xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "gorka-try-new-reanchor" }
+xcm-builder = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "gorka-try-new-reanchor" }
+xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "gorka-try-new-reanchor" }
+pallet-xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "gorka-try-new-reanchor" }
 
 [dev-dependencies]
 hex-literal = "0.3.1"
