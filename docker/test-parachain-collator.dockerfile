@@ -1,4 +1,4 @@
-# This file is sourced from https://github.com/paritytech/polkadot/blob/master/scripts/dockerfiles/polkadot/polkadot_builder.Dockerfile
+# This file is sourced from https://github.com/purestake/polkadot/blob/master/scripts/dockerfiles/polkadot/polkadot_builder.Dockerfile
 FROM docker.io/paritytech/ci-linux:production as builder
 
 WORKDIR /cumulus

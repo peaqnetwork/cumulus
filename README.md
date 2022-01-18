@@ -118,7 +118,7 @@ Launch a local setup including a Relay Chain and a Parachain.
 
 ```bash
 # Compile Polkadot with the real overseer feature
-git clone https://github.com/paritytech/polkadot
+git clone https://github.com/purestake/polkadot
 cargo build --release
 
 # Generate a raw chain spec
