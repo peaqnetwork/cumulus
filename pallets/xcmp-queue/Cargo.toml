@@ -12,24 +12,24 @@ scale-info = { version = "1.0.0", default-features = false, features = ["derive"
 log = { version = "0.4.14", default-features = false }
 
 # Substrate Dependencies
-sp-std = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.16" }
-sp-runtime = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.16" }
-frame-support = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.16" }
-frame-system = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.16" }
+sp-std = { git = "https://github.com/purestake/substrate", default-features = false, branch = "jsonrpsee-moonbeam-polkadot-v0.9.16" }
+sp-runtime = { git = "https://github.com/purestake/substrate", default-features = false, branch = "jsonrpsee-moonbeam-polkadot-v0.9.16" }
+frame-support = { git = "https://github.com/purestake/substrate", default-features = false, branch = "jsonrpsee-moonbeam-polkadot-v0.9.16" }
+frame-system = { git = "https://github.com/purestake/substrate", default-features = false, branch = "jsonrpsee-moonbeam-polkadot-v0.9.16" }
 
 # Polkadot Dependencies
-xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.16" }
-xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.16" }
+xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "jsonrpsee-moonbeam-polkadot-v0.9.16" }
+xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "jsonrpsee-moonbeam-polkadot-v0.9.16" }
 
 # Cumulus Dependencies
 cumulus-primitives-core = { path = "../../primitives/core", default-features = false }
 
 [dev-dependencies]
-sp-core = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.16" }
-sp-io = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.16" }
+sp-core = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.16" }
+sp-io = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.16" }
 cumulus-pallet-parachain-system = { path = "../parachain-system" }
-xcm-builder = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.16" }
-pallet-balances = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.16" }
+xcm-builder = { git = "https://github.com/purestake/polkadot", branch = "jsonrpsee-moonbeam-polkadot-v0.9.16" }
+pallet-balances = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.16" }
 
 [features]
 default = [ "std" ]
