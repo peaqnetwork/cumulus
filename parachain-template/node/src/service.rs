@@ -279,7 +279,7 @@ where
 				deny_unsafe,
 			};
 
-			Ok(crate::rpc::create_full(deps))
+			crate::rpc::create_full(deps).map_err(Into::into)
 		})
 	};
 
