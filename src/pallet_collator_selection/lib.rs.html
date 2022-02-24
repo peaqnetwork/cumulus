@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `pallets&#x2F;collator-selection&#x2F;src&#x2F;lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../pallet_collator_selection/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `pallets&#x2F;collator-selection&#x2F;src&#x2F;lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../pallet_collator_selection/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -492,6 +493,35 @@
 <span id="492">492</span>
 <span id="493">493</span>
 <span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (C) 2021 Parity Technologies (UK) Ltd.</span>
 <span class="comment">// SPDX-License-Identifier: Apache-2.0</span>
 
@@ -525,7 +555,7 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ## Implementation</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! The final [`Collators`] are aggregated from two individual lists:</span>
+<span class="doccomment">//! The final `Collators` are aggregated from two individual lists:</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! 1. [`Invulnerables`]: a set of collators appointed by governance. These accounts will always be</span>
 <span class="doccomment">//!    collators.</span>
@@ -597,7 +627,7 @@
 	<span class="doccomment">/// just identity.</span>
 	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">IdentityCollator</span>;
 	<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">sp_runtime::traits::Convert</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">IdentityCollator</span> {
-		<span class="kw">fn</span> <span class="ident">convert</span>(<span class="ident">t</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+		<span class="kw">fn</span> <span class="ident">convert</span>(<span class="ident">t</span>: <span class="ident">T</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
 			<span class="prelude-val">Some</span>(<span class="ident">t</span>)
 		}
 	}
@@ -662,6 +692,7 @@
 
 	<span class="attribute">#[<span class="ident">pallet::pallet</span>]</span>
 	<span class="attribute">#[<span class="ident">pallet::generate_store</span>(<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">trait</span> <span class="ident">Store</span>)]</span>
+	<span class="attribute">#[<span class="ident">pallet::without_storage_info</span>]</span>
 	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw">_</span>);
 
 	<span class="doccomment">/// The invulnerable, fixed collators.</span>
@@ -688,7 +719,9 @@
 	<span class="attribute">#[<span class="ident">pallet::getter</span>(<span class="kw">fn</span> <span class="ident">desired_candidates</span>)]</span>
 	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">DesiredCandidates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">StorageValue</span><span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">u32</span>, <span class="ident">ValueQuery</span><span class="op">&gt;</span>;
 
-	<span class="doccomment">/// Fixed deposit bond for each candidate.</span>
+	<span class="doccomment">/// Fixed amount to deposit to become a collator.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// When a collator calls `leave_intent` they immediately receive the deposit back.</span>
 	<span class="attribute">#[<span class="ident">pallet::storage</span>]</span>
 	<span class="attribute">#[<span class="ident">pallet::getter</span>(<span class="kw">fn</span> <span class="ident">candidacy_bond</span>)]</span>
 	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">CandidacyBond</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">StorageValue</span><span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">BalanceOf</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">ValueQuery</span><span class="op">&gt;</span>;
@@ -702,7 +735,7 @@
 
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
 	<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">GenesisConfig</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-		<span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+		<span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
 			<span class="self">Self</span> {
 				<span class="ident">invulnerables</span>: <span class="ident">Default::default</span>(),
 				<span class="ident">candidacy_bond</span>: <span class="ident">Default::default</span>(),
@@ -717,7 +750,7 @@
 			<span class="kw">let</span> <span class="ident">duplicate_invulnerables</span> <span class="op">=</span>
 				<span class="self">self</span>.<span class="ident">invulnerables</span>.<span class="ident">iter</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">std::collections::BTreeSet</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
 			<span class="macro">assert!</span>(
-				<span class="ident">duplicate_invulnerables</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">invulnerables</span>.<span class="ident">len</span>(),
+				<span class="ident">duplicate_invulnerables</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="self">self</span>.<span class="ident">invulnerables</span>.<span class="ident">len</span>(),
 				<span class="string">&quot;duplicate invulnerables in genesis.&quot;</span>
 			);
 
@@ -774,11 +807,12 @@
 
 	<span class="attribute">#[<span class="ident">pallet::call</span>]</span>
 	<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+		<span class="doccomment">/// Set the list of invulnerable (fixed) collators.</span>
 		<span class="attribute">#[<span class="ident">pallet::weight</span>(<span class="ident">T::WeightInfo::set_invulnerables</span>(<span class="ident">new</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>))]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_invulnerables</span>(
 			<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 			<span class="ident">new</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T::AccountId</span><span class="op">&gt;</span>,
-		) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatchResultWithPostInfo</span> {
+		) -&gt; <span class="ident">DispatchResultWithPostInfo</span> {
 			<span class="ident">T::UpdateOrigin::ensure_origin</span>(<span class="ident">origin</span>)<span class="question-mark">?</span>;
 			<span class="comment">// we trust origin calls, this is just a for more accurate benchmarking</span>
 			<span class="kw">if</span> (<span class="ident">new</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>) <span class="op">&gt;</span> <span class="ident">T::MaxInvulnerables::get</span>() {
@@ -786,16 +820,30 @@
 					<span class="string">&quot;invulnerables &gt; T::MaxInvulnerables; you might need to run benchmarks again&quot;</span>
 				);
 			}
+
+			<span class="comment">// check if the invulnerables have associated validator keys before they are set</span>
+			<span class="kw">for</span> <span class="ident">account_id</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">new</span> {
+				<span class="kw">let</span> <span class="ident">validator_key</span> <span class="op">=</span> <span class="ident">T::ValidatorIdOf::convert</span>(<span class="ident">account_id</span>.<span class="ident">clone</span>())
+					.<span class="ident">ok_or</span>(<span class="ident">Error</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::NoAssociatedValidatorId</span>)<span class="question-mark">?</span>;
+				<span class="macro">ensure!</span>(
+					<span class="ident">T::ValidatorRegistration::is_registered</span>(<span class="kw-2">&amp;</span><span class="ident">validator_key</span>),
+					<span class="ident">Error</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::ValidatorNotRegistered</span>
+				);
+			}
+
 			<span class="op">&lt;</span><span class="ident">Invulnerables</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="kw-2">&amp;</span><span class="ident">new</span>);
 			<span class="ident"><span class="self">Self</span>::deposit_event</span>(<span class="ident">Event::NewInvulnerables</span>(<span class="ident">new</span>));
 			<span class="prelude-val">Ok</span>(().<span class="ident">into</span>())
 		}
 
+		<span class="doccomment">/// Set the ideal number of collators (not including the invulnerables).</span>
+		<span class="doccomment">/// If lowering this number, then the number of running collators could be higher than this figure.</span>
+		<span class="doccomment">/// Aside from that edge case, there should be no other way to have more collators than the desired number.</span>
 		<span class="attribute">#[<span class="ident">pallet::weight</span>(<span class="ident">T::WeightInfo::set_desired_candidates</span>())]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_desired_candidates</span>(
 			<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 			<span class="ident">max</span>: <span class="ident">u32</span>,
-		) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatchResultWithPostInfo</span> {
+		) -&gt; <span class="ident">DispatchResultWithPostInfo</span> {
 			<span class="ident">T::UpdateOrigin::ensure_origin</span>(<span class="ident">origin</span>)<span class="question-mark">?</span>;
 			<span class="comment">// we trust origin calls, this is just a for more accurate benchmarking</span>
 			<span class="kw">if</span> <span class="ident">max</span> <span class="op">&gt;</span> <span class="ident">T::MaxCandidates::get</span>() {
@@ -806,19 +854,24 @@
 			<span class="prelude-val">Ok</span>(().<span class="ident">into</span>())
 		}
 
+		<span class="doccomment">/// Set the candidacy bond amount.</span>
 		<span class="attribute">#[<span class="ident">pallet::weight</span>(<span class="ident">T::WeightInfo::set_candidacy_bond</span>())]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_candidacy_bond</span>(
 			<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 			<span class="ident">bond</span>: <span class="ident">BalanceOf</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
-		) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatchResultWithPostInfo</span> {
+		) -&gt; <span class="ident">DispatchResultWithPostInfo</span> {
 			<span class="ident">T::UpdateOrigin::ensure_origin</span>(<span class="ident">origin</span>)<span class="question-mark">?</span>;
 			<span class="op">&lt;</span><span class="ident">CandidacyBond</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="kw-2">&amp;</span><span class="ident">bond</span>);
 			<span class="ident"><span class="self">Self</span>::deposit_event</span>(<span class="ident">Event::NewCandidacyBond</span>(<span class="ident">bond</span>));
 			<span class="prelude-val">Ok</span>(().<span class="ident">into</span>())
 		}
 
+		<span class="doccomment">/// Register this account as a collator candidate. The account must (a) already have</span>
+		<span class="doccomment">/// registered session keys and (b) be able to reserve the `CandidacyBond`.</span>
+		<span class="doccomment">///</span>
+		<span class="doccomment">/// This call is not available to `Invulnerable` collators.</span>
 		<span class="attribute">#[<span class="ident">pallet::weight</span>(<span class="ident">T::WeightInfo::register_as_candidate</span>(<span class="ident">T::MaxCandidates::get</span>()))]</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_as_candidate</span>(<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatchResultWithPostInfo</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_as_candidate</span>(<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="ident">DispatchResultWithPostInfo</span> {
 			<span class="kw">let</span> <span class="ident">who</span> <span class="op">=</span> <span class="ident">ensure_signed</span>(<span class="ident">origin</span>)<span class="question-mark">?</span>;
 
 			<span class="comment">// ensure we are below limit.</span>
@@ -838,8 +891,8 @@
 			<span class="kw">let</span> <span class="ident">incoming</span> <span class="op">=</span> <span class="ident">CandidateInfo</span> { <span class="ident">who</span>: <span class="ident">who</span>.<span class="ident">clone</span>(), <span class="ident">deposit</span> };
 
 			<span class="kw">let</span> <span class="ident">current_count</span> <span class="op">=</span>
-				<span class="op">&lt;</span><span class="ident">Candidates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::try_mutate</span>(<span class="op">|</span><span class="ident">candidates</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span> {
-					<span class="kw">if</span> <span class="ident">candidates</span>.<span class="ident">into_iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">candidate</span><span class="op">|</span> <span class="ident">candidate</span>.<span class="ident">who</span> <span class="op">=</span><span class="op">=</span> <span class="ident">who</span>) {
+				<span class="op">&lt;</span><span class="ident">Candidates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::try_mutate</span>(<span class="op">|</span><span class="ident">candidates</span><span class="op">|</span> -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span> {
+					<span class="kw">if</span> <span class="ident">candidates</span>.<span class="ident">into_iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">candidate</span><span class="op">|</span> <span class="ident">candidate</span>.<span class="ident">who</span> <span class="op">==</span> <span class="ident">who</span>) {
 						<span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::AlreadyCandidate</span>)<span class="question-mark">?</span>
 					} <span class="kw">else</span> {
 						<span class="ident">T::Currency::reserve</span>(<span class="kw-2">&amp;</span><span class="ident">who</span>, <span class="ident">deposit</span>)<span class="question-mark">?</span>;
@@ -856,8 +909,14 @@
 			<span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">T::WeightInfo::register_as_candidate</span>(<span class="ident">current_count</span> <span class="kw">as</span> <span class="ident">u32</span>)).<span class="ident">into</span>())
 		}
 
+		<span class="doccomment">/// Deregister `origin` as a collator candidate. Note that the collator can only leave on</span>
+		<span class="doccomment">/// session change. The `CandidacyBond` will be unreserved immediately.</span>
+		<span class="doccomment">///</span>
+		<span class="doccomment">/// This call will fail if the total number of candidates would drop below `MinCandidates`.</span>
+		<span class="doccomment">///</span>
+		<span class="doccomment">/// This call is not available to `Invulnerable` collators.</span>
 		<span class="attribute">#[<span class="ident">pallet::weight</span>(<span class="ident">T::WeightInfo::leave_intent</span>(<span class="ident">T::MaxCandidates::get</span>()))]</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">leave_intent</span>(<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatchResultWithPostInfo</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">leave_intent</span>(<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="ident">DispatchResultWithPostInfo</span> {
 			<span class="kw">let</span> <span class="ident">who</span> <span class="op">=</span> <span class="ident">ensure_signed</span>(<span class="ident">origin</span>)<span class="question-mark">?</span>;
 			<span class="macro">ensure!</span>(
 				<span class="ident"><span class="self">Self</span>::candidates</span>().<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span> <span class="op">&gt;</span> <span class="ident">T::MinCandidates::get</span>(),
@@ -871,16 +930,16 @@
 
 	<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
 		<span class="doccomment">/// Get a unique, inaccessible account id from the `PotId`.</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">account_id</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T::AccountId</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">account_id</span>() -&gt; <span class="ident">T::AccountId</span> {
 			<span class="ident">T::PotId::get</span>().<span class="ident">into_account</span>()
 		}
 		<span class="doccomment">/// Removes a candidate if they exist and sends them back their deposit</span>
-		<span class="kw">fn</span> <span class="ident">try_remove_candidate</span>(<span class="ident">who</span>: <span class="kw-2">&amp;</span><span class="ident">T::AccountId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span> {
+		<span class="kw">fn</span> <span class="ident">try_remove_candidate</span>(<span class="ident">who</span>: <span class="kw-2">&amp;</span><span class="ident">T::AccountId</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span> {
 			<span class="kw">let</span> <span class="ident">current_count</span> <span class="op">=</span>
-				<span class="op">&lt;</span><span class="ident">Candidates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::try_mutate</span>(<span class="op">|</span><span class="ident">candidates</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span> {
+				<span class="op">&lt;</span><span class="ident">Candidates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::try_mutate</span>(<span class="op">|</span><span class="ident">candidates</span><span class="op">|</span> -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span> {
 					<span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="ident">candidates</span>
 						.<span class="ident">iter</span>()
-						.<span class="ident">position</span>(<span class="op">|</span><span class="ident">candidate</span><span class="op">|</span> <span class="ident">candidate</span>.<span class="ident">who</span> <span class="op">=</span><span class="op">=</span> <span class="kw-2">*</span><span class="ident">who</span>)
+						.<span class="ident">position</span>(<span class="op">|</span><span class="ident">candidate</span><span class="op">|</span> <span class="ident">candidate</span>.<span class="ident">who</span> <span class="op">==</span> <span class="kw-2">*</span><span class="ident">who</span>)
 						.<span class="ident">ok_or</span>(<span class="ident">Error</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::NotCandidate</span>)<span class="question-mark">?</span>;
 					<span class="ident">T::Currency::unreserve</span>(<span class="kw-2">&amp;</span><span class="ident">who</span>, <span class="ident">candidates</span>[<span class="ident">index</span>].<span class="ident">deposit</span>);
 					<span class="ident">candidates</span>.<span class="ident">remove</span>(<span class="ident">index</span>);
@@ -894,7 +953,7 @@
 		<span class="doccomment">/// Assemble the current set of candidates and invulnerables into the next collator set.</span>
 		<span class="doccomment">///</span>
 		<span class="doccomment">/// This is done on the fly, as frequent as we are told to do so, as the session manager.</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">assemble_collators</span>(<span class="ident">candidates</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T::AccountId</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T::AccountId</span><span class="op">&gt;</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">assemble_collators</span>(<span class="ident">candidates</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T::AccountId</span><span class="op">&gt;</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T::AccountId</span><span class="op">&gt;</span> {
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">collators</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::invulnerables</span>();
 			<span class="ident">collators</span>.<span class="ident">extend</span>(<span class="ident">candidates</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>());
 			<span class="ident">collators</span>
@@ -902,7 +961,7 @@
 		<span class="doccomment">/// Kicks out and candidates that did not produce a block in the kick threshold.</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kick_stale_candidates</span>(
 			<span class="ident">candidates</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CandidateInfo</span><span class="op">&lt;</span><span class="ident">T::AccountId</span>, <span class="ident">BalanceOf</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-		) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T::AccountId</span><span class="op">&gt;</span> {
+		) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T::AccountId</span><span class="op">&gt;</span> {
 			<span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">frame_system::Pallet</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::block_number</span>();
 			<span class="kw">let</span> <span class="ident">kick_threshold</span> <span class="op">=</span> <span class="ident">T::KickThreshold::get</span>();
 			<span class="kw">let</span> <span class="ident">new_candidates</span> <span class="op">=</span> <span class="ident">candidates</span>
@@ -958,7 +1017,7 @@
 
 	<span class="doccomment">/// Play the role of the session manager.</span>
 	<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">SessionManager</span><span class="op">&lt;</span><span class="ident">T::AccountId</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-		<span class="kw">fn</span> <span class="ident">new_session</span>(<span class="ident">index</span>: <span class="ident">SessionIndex</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T::AccountId</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+		<span class="kw">fn</span> <span class="ident">new_session</span>(<span class="ident">index</span>: <span class="ident">SessionIndex</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T::AccountId</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 			<span class="macro">log::info!</span>(
 				<span class="string">&quot;assembling new collators for new session {} at #{:?}&quot;</span>,
 				<span class="ident">index</span>,
@@ -988,5 +1047,4 @@
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="pallet_collator_selection" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
 </body></html>

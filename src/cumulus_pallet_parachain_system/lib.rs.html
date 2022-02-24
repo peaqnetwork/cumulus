@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `pallets&#x2F;parachain-system&#x2F;src&#x2F;lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../cumulus_pallet_parachain_system/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `pallets&#x2F;parachain-system&#x2F;src&#x2F;lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../cumulus_pallet_parachain_system/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1022,6 +1023,21 @@
 <span id="1022">1022</span>
 <span id="1023">1023</span>
 <span id="1024">1024</span>
+<span id="1025">1025</span>
+<span id="1026">1026</span>
+<span id="1027">1027</span>
+<span id="1028">1028</span>
+<span id="1029">1029</span>
+<span id="1030">1030</span>
+<span id="1031">1031</span>
+<span id="1032">1032</span>
+<span id="1033">1033</span>
+<span id="1034">1034</span>
+<span id="1035">1035</span>
+<span id="1036">1036</span>
+<span id="1037">1037</span>
+<span id="1038">1038</span>
+<span id="1039">1039</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2020 Parity Technologies (UK) Ltd.</span>
 <span class="comment">// This file is part of Cumulus.</span>
 
@@ -1051,13 +1067,14 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Users must ensure that they register this pallet as an inherent provider.</span>
 
+<span class="kw">use</span> <span class="ident">codec::Encode</span>;
 <span class="kw">use</span> <span class="ident">cumulus_primitives_core</span>::{
 	<span class="ident">relay_chain</span>, <span class="ident">AbridgedHostConfiguration</span>, <span class="ident">ChannelStatus</span>, <span class="ident">CollationInfo</span>, <span class="ident">DmpMessageHandler</span>,
-	<span class="ident">GetChannelInfo</span>, <span class="ident">InboundDownwardMessage</span>, <span class="ident">InboundHrmpMessage</span>, <span class="ident">MessageSendError</span>, <span class="ident">OnValidationData</span>,
+	<span class="ident">GetChannelInfo</span>, <span class="ident">InboundDownwardMessage</span>, <span class="ident">InboundHrmpMessage</span>, <span class="ident">MessageSendError</span>,
 	<span class="ident">OutboundHrmpMessage</span>, <span class="ident">ParaId</span>, <span class="ident">PersistedValidationData</span>, <span class="ident">UpwardMessage</span>, <span class="ident">UpwardMessageSender</span>,
 	<span class="ident">XcmpMessageHandler</span>, <span class="ident">XcmpMessageSource</span>,
 };
-<span class="kw">use</span> <span class="ident">cumulus_primitives_parachain_inherent::ParachainInherentData</span>;
+<span class="kw">use</span> <span class="ident">cumulus_primitives_parachain_inherent</span>::{<span class="ident">MessageQueueChain</span>, <span class="ident">ParachainInherentData</span>};
 <span class="kw">use</span> <span class="ident">frame_support</span>::{
 	<span class="ident">dispatch</span>::{<span class="ident">DispatchError</span>, <span class="ident">DispatchResult</span>},
 	<span class="ident">ensure</span>,
@@ -1068,9 +1085,8 @@
 };
 <span class="kw">use</span> <span class="ident">frame_system</span>::{<span class="ident">ensure_none</span>, <span class="ident">ensure_root</span>};
 <span class="kw">use</span> <span class="ident">polkadot_parachain::primitives::RelayChainBlockNumber</span>;
-<span class="kw">use</span> <span class="ident">relay_state_snapshot::MessagingStateSnapshot</span>;
 <span class="kw">use</span> <span class="ident">sp_runtime</span>::{
-	<span class="ident">traits</span>::{<span class="ident">BlakeTwo256</span>, <span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span>, <span class="ident">BlockNumberProvider</span>, <span class="ident">Hash</span>},
+	<span class="ident">traits</span>::{<span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span>, <span class="ident">BlockNumberProvider</span>, <span class="ident">Hash</span>},
 	<span class="ident">transaction_validity</span>::{
 		<span class="ident">InvalidTransaction</span>, <span class="ident">TransactionLongevity</span>, <span class="ident">TransactionSource</span>, <span class="ident">TransactionValidity</span>,
 		<span class="ident">ValidTransaction</span>,
@@ -1108,7 +1124,7 @@
 <span class="doccomment">/// # fn main() {}</span>
 <span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">cumulus_pallet_parachain_system_proc_macro::register_validate_block</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">relay_state_snapshot::RelayChainStateProof</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">relay_state_snapshot</span>::{<span class="ident">MessagingStateSnapshot</span>, <span class="ident">RelayChainStateProof</span>};
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pallet</span>::<span class="kw-2">*</span>;
 
@@ -1120,6 +1136,7 @@
 
 	<span class="attribute">#[<span class="ident">pallet::pallet</span>]</span>
 	<span class="attribute">#[<span class="ident">pallet::storage_version</span>(<span class="ident">migration::STORAGE_VERSION</span>)]</span>
+	<span class="attribute">#[<span class="ident">pallet::without_storage_info</span>]</span>
 	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw">_</span>);
 
 	<span class="attribute">#[<span class="ident">pallet::config</span>]</span>
@@ -1128,7 +1145,7 @@
 		<span class="kw">type</span> <span class="ident">Event</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">IsType</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system::Config</span><span class="op">&gt;</span><span class="ident">::Event</span><span class="op">&gt;</span>;
 
 		<span class="doccomment">/// Something which can be notified when the validation data is set.</span>
-		<span class="kw">type</span> <span class="ident">OnValidationData</span>: <span class="ident">OnValidationData</span>;
+		<span class="kw">type</span> <span class="ident">OnSystemEvent</span>: <span class="ident">OnSystemEvent</span>;
 
 		<span class="doccomment">/// Returns the parachain ID we are running with.</span>
 		<span class="kw">type</span> <span class="ident">SelfParaId</span>: <span class="ident">Get</span><span class="op">&lt;</span><span class="ident">ParaId</span><span class="op">&gt;</span>;
@@ -1155,7 +1172,7 @@
 
 	<span class="attribute">#[<span class="ident">pallet::hooks</span>]</span>
 	<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">Hooks</span><span class="op">&lt;</span><span class="ident">BlockNumberFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-		<span class="kw">fn</span> <span class="ident">on_runtime_upgrade</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Weight</span> {
+		<span class="kw">fn</span> <span class="ident">on_runtime_upgrade</span>() -&gt; <span class="ident">Weight</span> {
 			<span class="ident">migration::on_runtime_upgrade</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>()
 		}
 
@@ -1169,8 +1186,8 @@
 			);
 
 			<span class="kw">let</span> <span class="ident">host_config</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident"><span class="self">Self</span>::host_configuration</span>() {
-				<span class="prelude-val">Some</span>(<span class="ident">ok</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ok</span>,
-				<span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+				<span class="prelude-val">Some</span>(<span class="ident">ok</span>) =&gt; <span class="ident">ok</span>,
+				<span class="prelude-val">None</span> =&gt; {
 					<span class="macro">debug_assert!</span>(
 						<span class="bool-val">false</span>,
 						<span class="string">&quot;host configuration is promised to set until `on_finalize`; qed&quot;</span>,
@@ -1179,8 +1196,8 @@
 				},
 			};
 			<span class="kw">let</span> <span class="ident">relevant_messaging_state</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident"><span class="self">Self</span>::relevant_messaging_state</span>() {
-				<span class="prelude-val">Some</span>(<span class="ident">ok</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ok</span>,
-				<span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+				<span class="prelude-val">Some</span>(<span class="ident">ok</span>) =&gt; <span class="ident">ok</span>,
+				<span class="prelude-val">None</span> =&gt; {
 					<span class="macro">debug_assert!</span>(
 						<span class="bool-val">false</span>,
 						<span class="string">&quot;relevant messaging state is promised to be set until `on_finalize`; \
@@ -1206,11 +1223,11 @@
 					.<span class="ident">scan</span>((<span class="ident">available_capacity</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">available_size</span> <span class="kw">as</span> <span class="ident">usize</span>), <span class="op">|</span><span class="ident">state</span>, <span class="ident">msg</span><span class="op">|</span> {
 						<span class="kw">let</span> (<span class="ident">cap_left</span>, <span class="ident">size_left</span>) <span class="op">=</span> <span class="kw-2">*</span><span class="ident">state</span>;
 						<span class="kw">match</span> (<span class="ident">cap_left</span>.<span class="ident">checked_sub</span>(<span class="number">1</span>), <span class="ident">size_left</span>.<span class="ident">checked_sub</span>(<span class="ident">msg</span>.<span class="ident">len</span>())) {
-							(<span class="prelude-val">Some</span>(<span class="ident">new_cap</span>), <span class="prelude-val">Some</span>(<span class="ident">new_size</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+							(<span class="prelude-val">Some</span>(<span class="ident">new_cap</span>), <span class="prelude-val">Some</span>(<span class="ident">new_size</span>)) =&gt; {
 								<span class="kw-2">*</span><span class="ident">state</span> <span class="op">=</span> (<span class="ident">new_cap</span>, <span class="ident">new_size</span>);
 								<span class="prelude-val">Some</span>(())
 							},
-							<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+							<span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
 						}
 					})
 					.<span class="ident">count</span>();
@@ -1243,7 +1260,7 @@
 			<span class="ident">HrmpOutboundMessages</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="ident">outbound_messages</span>);
 		}
 
-		<span class="kw">fn</span> <span class="ident">on_initialize</span>(<span class="ident">_n</span>: <span class="ident">T::BlockNumber</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Weight</span> {
+		<span class="kw">fn</span> <span class="ident">on_initialize</span>(<span class="ident">_n</span>: <span class="ident">T::BlockNumber</span>) -&gt; <span class="ident">Weight</span> {
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">weight</span> <span class="op">=</span> <span class="number">0</span>;
 
 			<span class="comment">// To prevent removing `NewValidationCode` that was set by another `on_initialize`</span>
@@ -1260,8 +1277,9 @@
 			<span class="ident">HrmpWatermark</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::kill</span>();
 			<span class="ident">UpwardMessages</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::kill</span>();
 			<span class="ident">HrmpOutboundMessages</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::kill</span>();
+			<span class="ident">CustomValidationHeadData</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::kill</span>();
 
-			<span class="ident">weight</span> <span class="op">+</span><span class="op">=</span> <span class="ident">T::DbWeight::get</span>().<span class="ident">writes</span>(<span class="number">5</span>);
+			<span class="ident">weight</span> <span class="op">+</span><span class="op">=</span> <span class="ident">T::DbWeight::get</span>().<span class="ident">writes</span>(<span class="number">6</span>);
 
 			<span class="comment">// Here, in `on_initialize` we must report the weight for both `on_initialize` and</span>
 			<span class="comment">// `on_finalize`.</span>
@@ -1313,7 +1331,7 @@
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_validation_data</span>(
 			<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 			<span class="ident">data</span>: <span class="ident">ParachainInherentData</span>,
-		) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatchResultWithPostInfo</span> {
+		) -&gt; <span class="ident">DispatchResultWithPostInfo</span> {
 			<span class="ident">ensure_none</span>(<span class="ident">origin</span>)<span class="question-mark">?</span>;
 			<span class="macro">assert!</span>(
 				<span class="op">!</span><span class="op">&lt;</span><span class="ident">ValidationData</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::exists</span>(),
@@ -1343,7 +1361,7 @@
 				.<span class="ident">read_upgrade_go_ahead_signal</span>()
 				.<span class="ident">expect</span>(<span class="string">&quot;Invalid upgrade go ahead signal&quot;</span>);
 			<span class="kw">match</span> <span class="ident">upgrade_go_ahead_signal</span> {
-				<span class="prelude-val">Some</span>(<span class="ident">relay_chain::v1::UpgradeGoAhead::GoAhead</span>) <span class="op">=</span><span class="op">&gt;</span> {
+				<span class="prelude-val">Some</span>(<span class="ident">relay_chain::v1::UpgradeGoAhead::GoAhead</span>) =&gt; {
 					<span class="macro">assert!</span>(
 						<span class="op">&lt;</span><span class="ident">PendingValidationCode</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::exists</span>(),
 						<span class="string">&quot;No new validation function found in storage, GoAhead signal is not expected&quot;</span>,
@@ -1351,13 +1369,14 @@
 					<span class="kw">let</span> <span class="ident">validation_code</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">PendingValidationCode</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::take</span>();
 
 					<span class="ident"><span class="self">Self</span>::put_parachain_code</span>(<span class="kw-2">&amp;</span><span class="ident">validation_code</span>);
+					<span class="op">&lt;</span><span class="ident">T::OnSystemEvent</span> <span class="kw">as</span> <span class="ident">OnSystemEvent</span><span class="op">&gt;</span><span class="ident">::on_validation_code_applied</span>();
 					<span class="ident"><span class="self">Self</span>::deposit_event</span>(<span class="ident">Event::ValidationFunctionApplied</span>(<span class="ident">vfp</span>.<span class="ident">relay_parent_number</span>));
 				},
-				<span class="prelude-val">Some</span>(<span class="ident">relay_chain::v1::UpgradeGoAhead::Abort</span>) <span class="op">=</span><span class="op">&gt;</span> {
+				<span class="prelude-val">Some</span>(<span class="ident">relay_chain::v1::UpgradeGoAhead::Abort</span>) =&gt; {
 					<span class="op">&lt;</span><span class="ident">PendingValidationCode</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::kill</span>();
 					<span class="ident"><span class="self">Self</span>::deposit_event</span>(<span class="ident">Event::ValidationFunctionDiscarded</span>);
 				},
-				<span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {},
+				<span class="prelude-val">None</span> =&gt; {},
 			}
 			<span class="op">&lt;</span><span class="ident">UpgradeRestrictionSignal</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::put</span>(
 				<span class="ident">relay_state_proof</span>
@@ -1376,7 +1395,7 @@
 			<span class="op">&lt;</span><span class="ident">RelevantMessagingState</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="ident">relevant_messaging_state</span>.<span class="ident">clone</span>());
 			<span class="op">&lt;</span><span class="ident">HostConfiguration</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="ident">host_config</span>);
 
-			<span class="op">&lt;</span><span class="ident">T::OnValidationData</span> <span class="kw">as</span> <span class="ident">OnValidationData</span><span class="op">&gt;</span><span class="ident">::on_validation_data</span>(<span class="kw-2">&amp;</span><span class="ident">vfp</span>);
+			<span class="op">&lt;</span><span class="ident">T::OnSystemEvent</span> <span class="kw">as</span> <span class="ident">OnSystemEvent</span><span class="op">&gt;</span><span class="ident">::on_validation_data</span>(<span class="kw-2">&amp;</span><span class="ident">vfp</span>);
 
 			<span class="comment">// TODO: This is more than zero, but will need benchmarking to figure out what.</span>
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">total_weight</span> <span class="op">=</span> <span class="number">0</span>;
@@ -1397,14 +1416,14 @@
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sudo_send_upward_message</span>(
 			<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 			<span class="ident">message</span>: <span class="ident">UpwardMessage</span>,
-		) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatchResult</span> {
+		) -&gt; <span class="ident">DispatchResult</span> {
 			<span class="ident">ensure_root</span>(<span class="ident">origin</span>)<span class="question-mark">?</span>;
 			<span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::send_upward_message</span>(<span class="ident">message</span>);
 			<span class="prelude-val">Ok</span>(())
 		}
 
 		<span class="attribute">#[<span class="ident">pallet::weight</span>((<span class="number">1_000_000</span>, <span class="ident">DispatchClass::Operational</span>))]</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">authorize_upgrade</span>(<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">code_hash</span>: <span class="ident">T::Hash</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatchResult</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">authorize_upgrade</span>(<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">code_hash</span>: <span class="ident">T::Hash</span>) -&gt; <span class="ident">DispatchResult</span> {
 			<span class="ident">ensure_root</span>(<span class="ident">origin</span>)<span class="question-mark">?</span>;
 
 			<span class="ident">AuthorizedUpgrade</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="kw-2">&amp;</span><span class="ident">code_hash</span>);
@@ -1417,9 +1436,9 @@
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enact_authorized_upgrade</span>(
 			<span class="kw">_</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 			<span class="ident">code</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-		) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatchResultWithPostInfo</span> {
+		) -&gt; <span class="ident">DispatchResultWithPostInfo</span> {
 			<span class="ident"><span class="self">Self</span>::validate_authorized_upgrade</span>(<span class="kw-2">&amp;</span><span class="ident">code</span>[..])<span class="question-mark">?</span>;
-			<span class="ident"><span class="self">Self</span>::set_code_impl</span>(<span class="ident">code</span>)<span class="question-mark">?</span>;
+			<span class="ident"><span class="self">Self</span>::schedule_code_upgrade</span>(<span class="ident">code</span>)<span class="question-mark">?</span>;
 			<span class="ident">AuthorizedUpgrade</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::kill</span>();
 			<span class="prelude-val">Ok</span>(<span class="ident">Pays::No</span>.<span class="ident">into</span>())
 		}
@@ -1591,6 +1610,12 @@
 	<span class="attribute">#[<span class="ident">pallet::storage</span>]</span>
 	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">type</span> <span class="ident">AuthorizedUpgrade</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">StorageValue</span><span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">T::Hash</span><span class="op">&gt;</span>;
 
+	<span class="doccomment">/// A custom head data that should be returned as result of `validate_block`.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// See [`Pallet::set_custom_validation_head_data`] for more information.</span>
+	<span class="attribute">#[<span class="ident">pallet::storage</span>]</span>
+	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">type</span> <span class="ident">CustomValidationHeadData</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">StorageValue</span><span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">OptionQuery</span><span class="op">&gt;</span>;
+
 	<span class="attribute">#[<span class="ident">pallet::inherent</span>]</span>
 	<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">ProvideInherent</span> <span class="kw">for</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
 		<span class="kw">type</span> <span class="ident">Call</span> <span class="op">=</span> <span class="ident">Call</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
@@ -1598,7 +1623,7 @@
 		<span class="kw">const</span> <span class="ident">INHERENT_IDENTIFIER</span>: <span class="ident">InherentIdentifier</span> <span class="op">=</span>
 			<span class="ident">cumulus_primitives_parachain_inherent::INHERENT_IDENTIFIER</span>;
 
-		<span class="kw">fn</span> <span class="ident">create_inherent</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="ident">InherentData</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Call</span><span class="op">&gt;</span> {
+		<span class="kw">fn</span> <span class="ident">create_inherent</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="ident">InherentData</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Call</span><span class="op">&gt;</span> {
 			<span class="kw">let</span> <span class="ident">data</span>: <span class="ident">ParachainInherentData</span> <span class="op">=</span>
 				<span class="ident">data</span>.<span class="ident">get_data</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::INHERENT_IDENTIFIER</span>).<span class="ident">ok</span>().<span class="ident">flatten</span>().<span class="ident">expect</span>(
 					<span class="string">&quot;validation function params are always injected into inherent data; qed&quot;</span>,
@@ -1607,7 +1632,7 @@
 			<span class="prelude-val">Some</span>(<span class="ident">Call::set_validation_data</span> { <span class="ident">data</span> })
 		}
 
-		<span class="kw">fn</span> <span class="ident">is_inherent</span>(<span class="ident">call</span>: <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Call</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+		<span class="kw">fn</span> <span class="ident">is_inherent</span>(<span class="ident">call</span>: <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Call</span>) -&gt; <span class="ident">bool</span> {
 			<span class="macro">matches!</span>(<span class="ident">call</span>, <span class="ident">Call::set_validation_data</span> { .. })
 		}
 	}
@@ -1619,7 +1644,7 @@
 	<span class="attribute">#[<span class="ident">pallet::genesis_build</span>]</span>
 	<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">GenesisBuild</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">GenesisConfig</span> {
 		<span class="kw">fn</span> <span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-			<span class="comment">//TODO: Remove after https://github.com/paritytech/cumulus/issues/479</span>
+			<span class="comment">// TODO: Remove after https://github.com/paritytech/cumulus/issues/479</span>
 			<span class="ident">sp_io::storage::set</span>(<span class="string">b&quot;:c&quot;</span>, <span class="kw-2">&amp;</span>[]);
 		}
 	}
@@ -1628,7 +1653,7 @@
 	<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">sp_runtime::traits::ValidateUnsigned</span> <span class="kw">for</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
 		<span class="kw">type</span> <span class="ident">Call</span> <span class="op">=</span> <span class="ident">Call</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
 
-		<span class="kw">fn</span> <span class="ident">validate_unsigned</span>(<span class="ident">_source</span>: <span class="ident">TransactionSource</span>, <span class="ident">call</span>: <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Call</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TransactionValidity</span> {
+		<span class="kw">fn</span> <span class="ident">validate_unsigned</span>(<span class="ident">_source</span>: <span class="ident">TransactionSource</span>, <span class="ident">call</span>: <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Call</span>) -&gt; <span class="ident">TransactionValidity</span> {
 			<span class="kw">if</span> <span class="kw">let</span> <span class="ident">Call::enact_authorized_upgrade</span> { <span class="kw-2">ref</span> <span class="ident">code</span> } <span class="op">=</span> <span class="ident">call</span> {
 				<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">hash</span>) <span class="op">=</span> <span class="ident"><span class="self">Self</span>::validate_authorized_upgrade</span>(<span class="ident">code</span>) {
 					<span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">ValidTransaction</span> {
@@ -1649,16 +1674,16 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-	<span class="kw">fn</span> <span class="ident">validate_authorized_upgrade</span>(<span class="ident">code</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T::Hash</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span> {
+	<span class="kw">fn</span> <span class="ident">validate_authorized_upgrade</span>(<span class="ident">code</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T::Hash</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">required_hash</span> <span class="op">=</span> <span class="ident">AuthorizedUpgrade</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::get</span>().<span class="ident">ok_or</span>(<span class="ident">Error</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::NothingAuthorized</span>)<span class="question-mark">?</span>;
 		<span class="kw">let</span> <span class="ident">actual_hash</span> <span class="op">=</span> <span class="ident">T::Hashing::hash</span>(<span class="kw-2">&amp;</span><span class="ident">code</span>[..]);
-		<span class="macro">ensure!</span>(<span class="ident">actual_hash</span> <span class="op">=</span><span class="op">=</span> <span class="ident">required_hash</span>, <span class="ident">Error</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::Unauthorized</span>);
+		<span class="macro">ensure!</span>(<span class="ident">actual_hash</span> <span class="op">==</span> <span class="ident">required_hash</span>, <span class="ident">Error</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::Unauthorized</span>);
 		<span class="prelude-val">Ok</span>(<span class="ident">actual_hash</span>)
 	}
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">GetChannelInfo</span> <span class="kw">for</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-	<span class="kw">fn</span> <span class="ident">get_channel_status</span>(<span class="ident">id</span>: <span class="ident">ParaId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ChannelStatus</span> {
+	<span class="kw">fn</span> <span class="ident">get_channel_status</span>(<span class="ident">id</span>: <span class="ident">ParaId</span>) -&gt; <span class="ident">ChannelStatus</span> {
 		<span class="comment">// Note, that we are using `relevant_messaging_state` which may be from the previous</span>
 		<span class="comment">// block, in case this is called from `on_initialize`, i.e. before the inherent with</span>
 		<span class="comment">// fresh data is submitted.</span>
@@ -1674,11 +1699,11 @@
 		<span class="comment">// Here it a similar case, with the difference that the realization that the channel is</span>
 		<span class="comment">// closed came the same block.</span>
 		<span class="kw">let</span> <span class="ident">channels</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident"><span class="self">Self</span>::relevant_messaging_state</span>() {
-			<span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+			<span class="prelude-val">None</span> =&gt; {
 				<span class="macro">log::warn!</span>(<span class="string">&quot;calling `get_channel_status` with no RelevantMessagingState?!&quot;</span>);
 				<span class="kw">return</span> <span class="ident">ChannelStatus::Closed</span>
 			},
-			<span class="prelude-val">Some</span>(<span class="ident">d</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">d</span>.<span class="ident">egress_channels</span>,
+			<span class="prelude-val">Some</span>(<span class="ident">d</span>) =&gt; <span class="ident">d</span>.<span class="ident">egress_channels</span>,
 		};
 		<span class="comment">// ^^^ NOTE: This storage field should carry over from the previous block. So if it&#39;s</span>
 		<span class="comment">// None then it must be that this is an edge-case where a message is attempted to be</span>
@@ -1687,8 +1712,8 @@
 		<span class="comment">// tradeoff, compared to introducing an error variant that the clients should be</span>
 		<span class="comment">// prepared to handle.</span>
 		<span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">channels</span>.<span class="ident">binary_search_by_key</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>, <span class="op">|</span><span class="ident">item</span><span class="op">|</span> <span class="ident">item</span>.<span class="number">0</span>) {
-			<span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">ChannelStatus::Closed</span>,
-			<span class="prelude-val">Ok</span>(<span class="ident">i</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">i</span>,
+			<span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="ident">ChannelStatus::Closed</span>,
+			<span class="prelude-val">Ok</span>(<span class="ident">i</span>) =&gt; <span class="ident">i</span>,
 		};
 		<span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">channels</span>[<span class="ident">index</span>].<span class="number">1</span>;
 		<span class="kw">if</span> <span class="ident">meta</span>.<span class="ident">msg_count</span> <span class="op">+</span> <span class="number">1</span> <span class="op">&gt;</span> <span class="ident">meta</span>.<span class="ident">max_capacity</span> {
@@ -1700,7 +1725,7 @@
 		<span class="ident">ChannelStatus::Ready</span>(<span class="ident">max_size_now</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">max_size_ever</span> <span class="kw">as</span> <span class="ident">usize</span>)
 	}
 
-	<span class="kw">fn</span> <span class="ident">get_channel_max</span>(<span class="ident">id</span>: <span class="ident">ParaId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+	<span class="kw">fn</span> <span class="ident">get_channel_max</span>(<span class="ident">id</span>: <span class="ident">ParaId</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">channels</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::relevant_messaging_state</span>()<span class="question-mark">?</span>.<span class="ident">egress_channels</span>;
 		<span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="ident">channels</span>.<span class="ident">binary_search_by_key</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>, <span class="op">|</span><span class="ident">item</span><span class="op">|</span> <span class="ident">item</span>.<span class="number">0</span>).<span class="ident">ok</span>()<span class="question-mark">?</span>;
 		<span class="prelude-val">Some</span>(<span class="ident">channels</span>[<span class="ident">index</span>].<span class="number">1</span>.<span class="ident">max_message_size</span> <span class="kw">as</span> <span class="ident">usize</span>)
@@ -1716,6 +1741,9 @@
 	<span class="doccomment">/// import, this is a no-op.</span>
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// # Panics</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// Panics while validating the `PoV` on the relay chain if the [`PersistedValidationData`]</span>
+	<span class="doccomment">/// passed by the block author was incorrect.</span>
 	<span class="kw">fn</span> <span class="ident">validate_validation_data</span>(<span class="ident">validation_data</span>: <span class="kw-2">&amp;</span><span class="ident">PersistedValidationData</span>) {
 		<span class="ident">validate_block::with_validation_params</span>(<span class="op">|</span><span class="ident">params</span><span class="op">|</span> {
 			<span class="macro">assert_eq!</span>(
@@ -1738,12 +1766,14 @@
 	<span class="doccomment">/// Checks if the sequence of the messages is valid, dispatches them and communicates the</span>
 	<span class="doccomment">/// number of processed messages to the collator via a storage update.</span>
 	<span class="doccomment">///</span>
-	<span class="doccomment">/// **Panics** if it turns out that after processing all messages the Message Queue Chain</span>
-	<span class="doccomment">///            hash doesn&#39;t match the expected.</span>
+	<span class="doccomment">/// # Panics</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// If it turns out that after processing all messages the Message Queue Chain</span>
+	<span class="doccomment">/// hash doesn&#39;t match the expected.</span>
 	<span class="kw">fn</span> <span class="ident">process_inbound_downward_messages</span>(
 		<span class="ident">expected_dmq_mqc_head</span>: <span class="ident">relay_chain::Hash</span>,
 		<span class="ident">downward_messages</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">InboundDownwardMessage</span><span class="op">&gt;</span>,
-	) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Weight</span> {
+	) -&gt; <span class="ident">Weight</span> {
 		<span class="kw">let</span> <span class="ident">dm_count</span> <span class="op">=</span> <span class="ident">downward_messages</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>;
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dmq_head</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">LastDmqMqcHead</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::get</span>();
 
@@ -1762,7 +1792,7 @@
 			<span class="ident">weight_used</span> <span class="op">+</span><span class="op">=</span> <span class="ident">T::DmpMessageHandler::handle_dmp_messages</span>(<span class="ident">message_iter</span>, <span class="ident">max_weight</span>);
 			<span class="op">&lt;</span><span class="ident">LastDmqMqcHead</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="kw-2">&amp;</span><span class="ident">dmq_head</span>);
 
-			<span class="ident"><span class="self">Self</span>::deposit_event</span>(<span class="ident">Event::DownwardMessagesProcessed</span>(<span class="ident">weight_used</span>, <span class="ident">dmq_head</span>.<span class="number">0</span>));
+			<span class="ident"><span class="self">Self</span>::deposit_event</span>(<span class="ident">Event::DownwardMessagesProcessed</span>(<span class="ident">weight_used</span>, <span class="ident">dmq_head</span>.<span class="ident">head</span>()));
 		}
 
 		<span class="comment">// After hashing each message in the message queue chain submitted by the collator, we</span>
@@ -1770,7 +1800,7 @@
 		<span class="comment">//</span>
 		<span class="comment">// A mismatch means that at least some of the submitted messages were altered, omitted or</span>
 		<span class="comment">// added improperly.</span>
-		<span class="macro">assert_eq!</span>(<span class="ident">dmq_head</span>.<span class="number">0</span>, <span class="ident">expected_dmq_mqc_head</span>);
+		<span class="macro">assert_eq!</span>(<span class="ident">dmq_head</span>.<span class="ident">head</span>(), <span class="ident">expected_dmq_mqc_head</span>);
 
 		<span class="ident">ProcessedDownwardMessages</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="ident">dm_count</span>);
 
@@ -1790,7 +1820,7 @@
 		<span class="ident">ingress_channels</span>: <span class="kw-2">&amp;</span>[(<span class="ident">ParaId</span>, <span class="ident">cumulus_primitives_core::AbridgedHrmpChannel</span>)],
 		<span class="ident">horizontal_messages</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">ParaId</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">InboundHrmpMessage</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 		<span class="ident">relay_parent_number</span>: <span class="ident">relay_chain::v1::BlockNumber</span>,
-	) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Weight</span> {
+	) -&gt; <span class="ident">Weight</span> {
 		<span class="comment">// First, check that all submitted messages are sent from channels that exist. The</span>
 		<span class="comment">// channel exists if its MQC head is present in `vfp.hrmp_mqc_heads`.</span>
 		<span class="kw">for</span> <span class="ident">sender</span> <span class="kw">in</span> <span class="ident">horizontal_messages</span>.<span class="ident">keys</span>() {
@@ -1817,8 +1847,8 @@
 		<span class="ident">horizontal_messages</span>.<span class="ident">sort_by</span>(<span class="op">|</span><span class="ident">a</span>, <span class="ident">b</span><span class="op">|</span> {
 			<span class="comment">// first sort by sent-at and then by the para id</span>
 			<span class="kw">match</span> <span class="ident">a</span>.<span class="number">1</span>.<span class="ident">sent_at</span>.<span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="number">1</span>.<span class="ident">sent_at</span>) {
-				<span class="ident">cmp::Ordering::Equal</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">a</span>.<span class="number">0</span>.<span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="number">0</span>),
-				<span class="ident">ord</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ord</span>,
+				<span class="ident">cmp::Ordering::Equal</span> =&gt; <span class="ident">a</span>.<span class="number">0</span>.<span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="number">0</span>),
+				<span class="ident">ord</span> =&gt; <span class="ident">ord</span>,
 			}
 		});
 
@@ -1860,7 +1890,7 @@
 				.<span class="ident">head</span>();
 			<span class="kw">let</span> <span class="ident">target_head</span> <span class="op">=</span> <span class="ident">channel</span>.<span class="ident">mqc_head</span>.<span class="ident">unwrap_or_default</span>();
 
-			<span class="macro">assert!</span>(<span class="ident">cur_head</span> <span class="op">=</span><span class="op">=</span> <span class="ident">target_head</span>);
+			<span class="macro">assert!</span>(<span class="ident">cur_head</span> <span class="op">==</span> <span class="ident">target_head</span>);
 		}
 
 		<span class="op">&lt;</span><span class="ident">LastHrmpMqcHeads</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="ident">running_mqc_heads</span>);
@@ -1889,12 +1919,12 @@
 	<span class="doccomment">/// The maximum code size permitted, in bytes.</span>
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// Returns `None` if the relay chain parachain host configuration hasn&#39;t been submitted yet.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_code_size</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_code_size</span>() -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
 		<span class="op">&lt;</span><span class="ident">HostConfiguration</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::get</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">cfg</span><span class="op">|</span> <span class="ident">cfg</span>.<span class="ident">max_code_size</span>)
 	}
 
 	<span class="doccomment">/// The implementation of the runtime upgrade functionality for parachains.</span>
-	<span class="kw">fn</span> <span class="ident">set_code_impl</span>(<span class="ident">validation_function</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatchResult</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">schedule_code_upgrade</span>(<span class="ident">validation_function</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="ident">DispatchResult</span> {
 		<span class="comment">// Ensure that `ValidationData` exists. We do not care about the validation data per se,</span>
 		<span class="comment">// but we do care about the [`UpgradeRestrictionSignal`] which arrives with the same inherent.</span>
 		<span class="macro">ensure!</span>(<span class="op">&lt;</span><span class="ident">ValidationData</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::exists</span>(), <span class="ident">Error</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::ValidationDataNotAvailable</span>,);
@@ -1920,66 +1950,52 @@
 
 	<span class="doccomment">/// Returns the [`CollationInfo`] of the current active block.</span>
 	<span class="doccomment">///</span>
+	<span class="doccomment">/// The given `header` is the header of the built block we are collecting the collation info for.</span>
+	<span class="doccomment">///</span>
 	<span class="doccomment">/// This is expected to be used by the</span>
 	<span class="doccomment">/// [`CollectCollationInfo`](cumulus_primitives_core::CollectCollationInfo) runtime api.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">collect_collation_info</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CollationInfo</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">collect_collation_info</span>(<span class="ident">header</span>: <span class="kw-2">&amp;</span><span class="ident">T::Header</span>) -&gt; <span class="ident">CollationInfo</span> {
 		<span class="ident">CollationInfo</span> {
 			<span class="ident">hrmp_watermark</span>: <span class="ident">HrmpWatermark</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::get</span>(),
 			<span class="ident">horizontal_messages</span>: <span class="ident">HrmpOutboundMessages</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::get</span>(),
 			<span class="ident">upward_messages</span>: <span class="ident">UpwardMessages</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::get</span>(),
 			<span class="ident">processed_downward_messages</span>: <span class="ident">ProcessedDownwardMessages</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::get</span>(),
 			<span class="ident">new_validation_code</span>: <span class="ident">NewValidationCode</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::get</span>().<span class="ident">map</span>(<span class="ident">Into::into</span>),
+			<span class="comment">// Check if there is a custom header that will also be returned by the validation phase.</span>
+			<span class="comment">// If so, we need to also return it here.</span>
+			<span class="ident">head_data</span>: <span class="ident">CustomValidationHeadData</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::get</span>()
+				.<span class="ident">map_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">header</span>.<span class="ident">encode</span>(), <span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>)
+				.<span class="ident">into</span>(),
 		}
+	}
+
+	<span class="doccomment">/// Set a custom head data that should be returned as result of `validate_block`.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// This will overwrite the head data that is returned as result of `validate_block` while</span>
+	<span class="doccomment">/// validating a `PoV` on the relay chain. Normally the head data that is being returned</span>
+	<span class="doccomment">/// by `validate_block` is the header of the block that is validated, thus it can be</span>
+	<span class="doccomment">/// enacted as the new best block. However, for features like forking it can be useful</span>
+	<span class="doccomment">/// to overwrite the head data with a custom header.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// # Attention</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// This should only be used when you are sure what you are doing as this can brick</span>
+	<span class="doccomment">/// your Parachain.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_custom_validation_head_data</span>(<span class="ident">head_data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) {
+		<span class="ident">CustomValidationHeadData</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="ident">head_data</span>);
 	}
 }
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParachainSetCode</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">sp_std::marker::PhantomData</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>);
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">frame_system::SetCode</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ParachainSetCode</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-	<span class="kw">fn</span> <span class="ident">set_code</span>(<span class="ident">code</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatchResult</span> {
-		<span class="ident">Pallet</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::set_code_impl</span>(<span class="ident">code</span>)
-	}
-}
-
-<span class="doccomment">/// This struct provides ability to extend a message queue chain (MQC) and compute a new head.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// MQC is an instance of a [hash chain] applied to a message queue. Using a hash chain it&#39;s</span>
-<span class="doccomment">/// possible to represent a sequence of messages using only a single hash.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// A head for an empty chain is agreed to be a zero hash.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [hash chain]: https://en.wikipedia.org/wiki/Hash_chain</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">codec::Encode</span>, <span class="ident">codec::Decode</span>, <span class="ident">scale_info::TypeInfo</span>)]</span>
-<span class="kw">struct</span> <span class="ident">MessageQueueChain</span>(<span class="ident">relay_chain::Hash</span>);
-
-<span class="kw">impl</span> <span class="ident">MessageQueueChain</span> {
-	<span class="kw">fn</span> <span class="ident">extend_hrmp</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">horizontal_message</span>: <span class="kw-2">&amp;</span><span class="ident">InboundHrmpMessage</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
-		<span class="kw">let</span> <span class="ident">prev_head</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>;
-		<span class="self">self</span>.<span class="number">0</span> <span class="op">=</span> <span class="ident">BlakeTwo256::hash_of</span>(<span class="kw-2">&amp;</span>(
-			<span class="ident">prev_head</span>,
-			<span class="ident">horizontal_message</span>.<span class="ident">sent_at</span>,
-			<span class="ident">BlakeTwo256::hash_of</span>(<span class="kw-2">&amp;</span><span class="ident">horizontal_message</span>.<span class="ident">data</span>),
-		));
-		<span class="self">self</span>
-	}
-
-	<span class="kw">fn</span> <span class="ident">extend_downward</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">downward_message</span>: <span class="kw-2">&amp;</span><span class="ident">InboundDownwardMessage</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
-		<span class="kw">let</span> <span class="ident">prev_head</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>;
-		<span class="self">self</span>.<span class="number">0</span> <span class="op">=</span> <span class="ident">BlakeTwo256::hash_of</span>(<span class="kw-2">&amp;</span>(
-			<span class="ident">prev_head</span>,
-			<span class="ident">downward_message</span>.<span class="ident">sent_at</span>,
-			<span class="ident">BlakeTwo256::hash_of</span>(<span class="kw-2">&amp;</span><span class="ident">downward_message</span>.<span class="ident">msg</span>),
-		));
-		<span class="self">self</span>
-	}
-
-	<span class="kw">fn</span> <span class="ident">head</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">relay_chain::Hash</span> {
-		<span class="self">self</span>.<span class="number">0</span>
+	<span class="kw">fn</span> <span class="ident">set_code</span>(<span class="ident">code</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="ident">DispatchResult</span> {
+		<span class="ident">Pallet</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::schedule_code_upgrade</span>(<span class="ident">code</span>)
 	}
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send_upward_message</span>(<span class="ident">message</span>: <span class="ident">UpwardMessage</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">MessageSendError</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send_upward_message</span>(<span class="ident">message</span>: <span class="ident">UpwardMessage</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">MessageSendError</span><span class="op">&gt;</span> {
 		<span class="comment">// Check if the message fits into the relay-chain constraints.</span>
 		<span class="comment">//</span>
 		<span class="comment">// Note, that we are using `host_configuration` here which may be from the previous</span>
@@ -1993,11 +2009,11 @@
 		<span class="comment">//</span>
 		<span class="comment">// However, changing this setting is expected to be rare.</span>
 		<span class="kw">match</span> <span class="ident"><span class="self">Self</span>::host_configuration</span>() {
-			<span class="prelude-val">Some</span>(<span class="ident">cfg</span>) <span class="op">=</span><span class="op">&gt;</span>
+			<span class="prelude-val">Some</span>(<span class="ident">cfg</span>) =&gt;
 				<span class="kw">if</span> <span class="ident">message</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="ident">cfg</span>.<span class="ident">max_upward_message_size</span> <span class="kw">as</span> <span class="ident">usize</span> {
 					<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">MessageSendError::TooBig</span>)
 				},
-			<span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+			<span class="prelude-val">None</span> =&gt; {
 				<span class="comment">// This storage field should carry over from the previous block. So if it&#39;s None</span>
 				<span class="comment">// then it must be that this is an edge-case where a message is attempted to be</span>
 				<span class="comment">// sent at the first block.</span>
@@ -2015,7 +2031,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">UpwardMessageSender</span> <span class="kw">for</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-	<span class="kw">fn</span> <span class="ident">send_upward_message</span>(<span class="ident">message</span>: <span class="ident">UpwardMessage</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">MessageSendError</span><span class="op">&gt;</span> {
+	<span class="kw">fn</span> <span class="ident">send_upward_message</span>(<span class="ident">message</span>: <span class="ident">UpwardMessage</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">MessageSendError</span><span class="op">&gt;</span> {
 		<span class="ident"><span class="self">Self</span>::send_upward_message</span>(<span class="ident">message</span>)
 	}
 }
@@ -2029,7 +2045,22 @@
 	<span class="kw">fn</span> <span class="ident">check_inherents</span>(
 		<span class="ident">block</span>: <span class="kw-2">&amp;</span><span class="ident">Block</span>,
 		<span class="ident">validation_data</span>: <span class="kw-2">&amp;</span><span class="ident">RelayChainStateProof</span>,
-	) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">frame_support::inherent::CheckInherentsResult</span>;
+	) -&gt; <span class="ident">frame_support::inherent::CheckInherentsResult</span>;
+}
+
+<span class="doccomment">/// Something that should be informed about system related events.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This includes events like [`on_validation_data`](Self::on_validation_data) that is being</span>
+<span class="doccomment">/// called when the parachain inherent is executed that contains the validation data.</span>
+<span class="doccomment">/// Or like [`on_validation_code_applied`](Self::on_validation_code_applied) that is called</span>
+<span class="doccomment">/// when the new validation is written to the state. This means that</span>
+<span class="doccomment">/// from the next block the runtime is being using this new code.</span>
+<span class="attribute">#[<span class="ident">impl_trait_for_tuples::impl_for_tuples</span>(<span class="number">30</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">OnSystemEvent</span> {
+	<span class="doccomment">/// Called in each blocks once when the validation data is set by the inherent.</span>
+	<span class="kw">fn</span> <span class="ident">on_validation_data</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="ident">PersistedValidationData</span>);
+	<span class="doccomment">/// Called when the validation code is being applied, aka from the next block on this is the new runtime.</span>
+	<span class="kw">fn</span> <span class="ident">on_validation_code_applied</span>();
 }
 
 <span class="doccomment">/// Implements [`BlockNumberProvider`] that returns relay chain block number fetched from</span>
@@ -2040,7 +2071,7 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">BlockNumberProvider</span> <span class="kw">for</span> <span class="ident">RelaychainBlockNumberProvider</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
 	<span class="kw">type</span> <span class="ident">BlockNumber</span> <span class="op">=</span> <span class="ident">relay_chain::BlockNumber</span>;
 
-	<span class="kw">fn</span> <span class="ident">current_block_number</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">relay_chain::BlockNumber</span> {
+	<span class="kw">fn</span> <span class="ident">current_block_number</span>() -&gt; <span class="ident">relay_chain::BlockNumber</span> {
 		<span class="ident">Pallet</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::validation_data</span>()
 			.<span class="ident">map</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">relay_parent_number</span>)
 			.<span class="ident">unwrap_or_default</span>()
@@ -2048,5 +2079,4 @@
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="cumulus_pallet_parachain_system" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
 </body></html>
