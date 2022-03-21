@@ -14,34 +14,34 @@ codec = { package = "parity-scale-codec", version = "2.3.0", features = ["derive
 scale-info = { version = "1.0.0", default-features = false, features = ["derive"] }
 
 # Substrate dependencies
-sp-consensus-aura = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.17", default-features = false }
-sp-std = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.17", default-features = false }
-sp-io = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.17", default-features = false }
-frame-executive = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.17", default-features = false }
-frame-support = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.17", default-features = false }
-frame-system = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.17", default-features = false }
-pallet-asset-tx-payment = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.17", default-features = false }
-pallet-assets = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.17", default-features = false }
-pallet-authorship = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.17", default-features = false }
-pallet-balances = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.17", default-features = false }
-sp-runtime = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.17", default-features = false }
-sp-core = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.17", default-features = false }
+sp-consensus-aura = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.17", default-features = false }
+sp-std = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.17", default-features = false }
+sp-io = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.17", default-features = false }
+frame-executive = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.17", default-features = false }
+frame-support = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.17", default-features = false }
+frame-system = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.17", default-features = false }
+pallet-asset-tx-payment = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.17", default-features = false }
+pallet-assets = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.17", default-features = false }
+pallet-authorship = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.17", default-features = false }
+pallet-balances = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.17", default-features = false }
+sp-runtime = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.17", default-features = false }
+sp-core = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.17", default-features = false }
 
 # Polkadot dependencies
-polkadot-runtime-common = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "moonbeam-polkadot-v0.9.17" }
-polkadot-primitives = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "moonbeam-polkadot-v0.9.17" }
-xcm = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "moonbeam-polkadot-v0.9.17" }
-xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "moonbeam-polkadot-v0.9.17" }
+polkadot-runtime-common = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "jsonrpsee-moonbeam-polkadot-v0.9.17" }
+polkadot-primitives = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "jsonrpsee-moonbeam-polkadot-v0.9.17" }
+xcm = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "jsonrpsee-moonbeam-polkadot-v0.9.17" }
+xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false , branch = "jsonrpsee-moonbeam-polkadot-v0.9.17" }
 
 # Local dependencies
 pallet-collator-selection = { path = "../../pallets/collator-selection", default-features = false }
 
 [dev-dependencies]
-sp-io = { git = "https://github.com/purestake/substrate", default-features = false , branch = "moonbeam-polkadot-v0.9.17" }
-pallet-authorship = { git = "https://github.com/purestake/substrate", default-features = false , branch = "moonbeam-polkadot-v0.9.17" }
+sp-io = { git = "https://github.com/purestake/substrate", default-features = false , branch = "jsonrpsee-moonbeam-polkadot-v0.9.17" }
+pallet-authorship = { git = "https://github.com/purestake/substrate", default-features = false , branch = "jsonrpsee-moonbeam-polkadot-v0.9.17" }
 
 [build-dependencies]
-substrate-wasm-builder = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.17" }
+substrate-wasm-builder = { git = "https://github.com/purestake/substrate", branch = "jsonrpsee-moonbeam-polkadot-v0.9.17" }
 
 [features]
 default = ["std"]
