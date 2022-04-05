@@ -577,7 +577,8 @@ pub fn run() -> Result<()> {
 					.map(|r| r.0)
 					.map_err(Into::into)
 				} else if config.chain_spec.is_canvas_kusama() {
-					crate::service::start_canvas_kusama_node(
+					unimplemented!()
+					/*crate::service::start_canvas_kusama_node(
 						config,
 						polkadot_config,
 						collator_options,
@@ -585,7 +586,7 @@ pub fn run() -> Result<()> {
 					)
 					.await
 					.map(|r| r.0)
-					.map_err(Into::into)
+					.map_err(Into::into)*/
 				} else {
 					crate::service::start_rococo_parachain_node(
 						config,

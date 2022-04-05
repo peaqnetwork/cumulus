@@ -337,7 +337,7 @@ where
 	sc_client_api::StateBackendFor<TFullBackend<Block>, Block>: sp_api::StateBackend<BlakeTwo256>,
 	RB: Fn(
 			Arc<TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>>,
-		) -> Result<jsonrpc_core::IoHandler<sc_rpc::Metadata>, sc_service::Error>
+		) -> Result<crate::rpc::RpcExtension, sc_service::Error>
 		+ Send
 		+ 'static,
 	BIQ: FnOnce(
@@ -417,10 +417,10 @@ where
 		})?;
 
 	let rpc_client = client.clone();
-	let rpc_extensions_builder = Box::new(move |_, _| rpc_ext_builder(rpc_client.clone()));
+	let rpc_builder = Box::new(move |_, _| rpc_ext_builder(rpc_client.clone()));
 
 	sc_service::spawn_tasks(sc_service::SpawnTasksParams {
-		rpc_extensions_builder,
+		rpc_builder,
 		client: client.clone(),
 		transaction_pool: transaction_pool.clone(),
 		task_manager: &mut task_manager,
@@ -524,7 +524,7 @@ where
 	sc_client_api::StateBackendFor<TFullBackend<Block>, Block>: sp_api::StateBackend<BlakeTwo256>,
 	RB: Fn(
 			Arc<TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>>,
-		) -> Result<jsonrpc_core::IoHandler<sc_rpc::Metadata>, sc_service::Error>
+		) -> Result<crate::rpc::RpcExtension, sc_service::Error>
 		+ Send
 		+ 'static,
 	BIQ: FnOnce(
@@ -602,7 +602,7 @@ where
 			warp_sync: None,
 		})?;
 
-	let rpc_extensions_builder = {
+	let rpc_builder = {
 		let client = client.clone();
 		let transaction_pool = transaction_pool.clone();
 
@@ -613,12 +613,12 @@ where
 				deny_unsafe,
 			};
 
-			Ok(rpc::create_full(deps))
+			rpc::create_full(deps).map_err(Into::into)
 		})
 	};
 
 	sc_service::spawn_tasks(sc_service::SpawnTasksParams {
-		rpc_extensions_builder,
+		rpc_builder,
 		client: client.clone(),
 		transaction_pool: transaction_pool.clone(),
 		task_manager: &mut task_manager,
@@ -749,7 +749,7 @@ pub async fn start_rococo_parachain_node(
 		polkadot_config,
 		collator_options,
 		id,
-		|_| Ok(Default::default()),
+		|_| Ok(jsonrpsee::RpcModule::new(())),
 		rococo_parachain_build_import_queue,
 		|client,
 		 prometheus_registry,
@@ -890,7 +890,7 @@ where
 		polkadot_config,
 		collator_options,
 		id,
-		|_| Ok(Default::default()),
+		|_| Ok(jsonrpsee::RpcModule::new(())),
 		shell_build_import_queue,
 		|client,
 		 prometheus_registry,
@@ -1163,7 +1163,7 @@ where
 		polkadot_config,
 		collator_options,
 		id,
-		|_| Ok(Default::default()),
+		|_| Ok(jsonrpsee::RpcModule::new(())),
 		statemint_build_import_queue::<_, AuraId>,
 		|client,
 		 prometheus_registry,
@@ -1293,7 +1293,7 @@ where
 	.await
 }
 
-#[sc_tracing::logging::prefix_logs_with("Parachain")]
+/*#[sc_tracing::logging::prefix_logs_with("Parachain")]
 async fn start_canvas_kusama_node_impl<RuntimeApi, RB, BIQ, BIC>(
 	parachain_config: Configuration,
 	polkadot_config: Configuration,
@@ -1326,7 +1326,7 @@ where
 	sc_client_api::StateBackendFor<TFullBackend<Block>, Block>: sp_api::StateBackend<BlakeTwo256>,
 	RB: Fn(
 			Arc<TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>>,
-		) -> Result<jsonrpc_core::IoHandler<sc_rpc::Metadata>, sc_service::Error>
+		) -> Result<crate::rpc::RpcExtension, sc_service::Error>
 		+ Send
 		+ 'static,
 	BIQ: FnOnce(
@@ -1487,7 +1487,7 @@ where
 	start_network.start_network();
 
 	Ok((task_manager, client))
-}
+}*/
 
 #[allow(clippy::type_complexity)]
 pub fn canvas_kusama_build_import_queue(
@@ -1534,7 +1534,7 @@ pub fn canvas_kusama_build_import_queue(
 	.map_err(Into::into)
 }
 
-/// Start a parachain node.
+/*/// Start a parachain node.
 pub async fn start_canvas_kusama_node(
 	parachain_config: Configuration,
 	polkadot_config: Configuration,
@@ -1549,7 +1549,7 @@ pub async fn start_canvas_kusama_node(
 		polkadot_config,
 		collator_options,
 		id,
-		|_| Ok(Default::default()),
+		|_| Ok(jsonrpsee::RpcModule::new(())),
 		canvas_kusama_build_import_queue,
 		|client,
 		 prometheus_registry,
@@ -1619,3 +1619,4 @@ pub async fn start_canvas_kusama_node(
 	)
 	.await
 }
+*/

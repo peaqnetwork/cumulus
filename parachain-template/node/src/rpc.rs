@@ -8,7 +8,7 @@
 use std::sync::Arc;
 
 use parachain_template_runtime::{opaque::Block, AccountId, Balance, Index as Nonce};
-
+use jsonrpsee::RpcModule;
 use sc_client_api::AuxStore;
 pub use sc_rpc::{DenyUnsafe, SubscriptionTaskExecutor};
 use sc_transaction_pool_api::TransactionPool;
@@ -17,7 +17,7 @@ use sp_block_builder::BlockBuilder;
 use sp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};
 
 /// A type representing all RPC extensions.
-pub type RpcExtension = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
+pub type RpcExtension = RpcModule<()>;
 
 /// Full client dependencies
 pub struct FullDeps<C, P> {
