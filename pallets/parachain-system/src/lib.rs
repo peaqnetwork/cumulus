@@ -1052,7 +1052,9 @@ impl<T: Config> BlockNumberProvider for RelaychainBlockNumberProvider<T> {
 		let mut validation_data = Pallet::<T>::validation_data().unwrap_or(
 			PersistedValidationData {
 				parent_head: vec![].into(),
-				..Default::default()
+				relay_parent_number: Default::default(),
+				max_pov_size: Default::default(),
+				relay_parent_storage_root: Default::default(),
 			}
 		);
 		validation_data.relay_parent_number = block;
