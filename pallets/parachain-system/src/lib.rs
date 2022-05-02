@@ -422,6 +422,8 @@ pub mod pallet {
 		/// Downward messages were processed using the given weight.
 		/// \[ weight_used, result_mqc_head \]
 		DownwardMessagesProcessed(Weight, relay_chain::Hash),
+		/// An Upward message was sent to the parent.
+		UpwardMessageSent(Option<T::Hash>),
 	}
 
 	#[pallet::error]
@@ -996,6 +998,8 @@ impl<T: Config> Pallet<T> {
 				// Thus fall through here.
 			},
 		};
+		let hash = T::Hashing::hash_of(&message);
+		Self::deposit_event(Event::UpwardMessageSent(Some(hash)));
 		<PendingUpwardMessages<T>>::append(message);
 		Ok(0)
 	}
