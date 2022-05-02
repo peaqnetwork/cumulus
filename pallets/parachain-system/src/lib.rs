@@ -423,7 +423,7 @@ pub mod pallet {
 		/// \[ weight_used, result_mqc_head \]
 		DownwardMessagesProcessed(Weight, relay_chain::Hash),
 		/// An Upward message was sent to the parent.
-		UpwardMessageSent(Option<T::Hash>),
+		UpwardMessageSent(Option<[u8;32]>),
 	}
 
 	#[pallet::error]
