@@ -998,7 +998,7 @@ impl<T: Config> Pallet<T> {
 				// Thus fall through here.
 			},
 		};
-		let hash = sp_io::hashing::blake2_256(message);
+		let hash = sp_io::hashing::blake2_256(&message);
 		Self::deposit_event(Event::UpwardMessageSent(Some(hash)));
 		<PendingUpwardMessages<T>>::append(message);
 		Ok(0)
