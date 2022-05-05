@@ -10,22 +10,22 @@ log = { version = "0.4.16", default-features = false }
 scale-info = { version = "2.1.1", default-features = false, features = ["derive"] }
 
 # Substrate
-frame-support = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.19" }
-frame-system = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.19" }
-sp-io = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.19" }
-sp-runtime = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.19" }
-sp-std = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.19" }
+frame-support = { git = "https://github.com/peaqnetwork/substrate", default-features = false, branch = "peaq-polkadot-v0.9.19" }
+frame-system = { git = "https://github.com/peaqnetwork/substrate", default-features = false, branch = "peaq-polkadot-v0.9.19" }
+sp-io = { git = "https://github.com/peaqnetwork/substrate", default-features = false, branch = "peaq-polkadot-v0.9.19" }
+sp-runtime = { git = "https://github.com/peaqnetwork/substrate", default-features = false, branch = "peaq-polkadot-v0.9.19" }
+sp-std = { git = "https://github.com/peaqnetwork/substrate", default-features = false, branch = "peaq-polkadot-v0.9.19" }
 
 # Polkadot
-xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.19" }
-xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.19" }
+xcm = { git = "https://github.com/peaqnetwork/polkadot", default-features = false, branch = "peaq-polkadot-v0.9.19" }
+xcm-executor = { git = "https://github.com/peaqnetwork/polkadot", default-features = false, branch = "peaq-polkadot-v0.9.19" }
 
 # Cumulus
 cumulus-primitives-core = { path = "../../primitives/core", default-features = false }
 
 [dev-dependencies]
-sp-core = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.19" }
-sp-version = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.19" }
+sp-core = { git = "https://github.com/peaqnetwork/substrate", default-features = false, branch = "peaq-polkadot-v0.9.19" }
+sp-version = { git = "https://github.com/peaqnetwork/substrate", default-features = false, branch = "peaq-polkadot-v0.9.19" }
 
 [features]
 default = [ "std" ]
