@@ -11,24 +11,24 @@ futures-timer = "3.0.2"
 tracing = "0.1.36"
 
 # Substrate
-sc-cli = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
-sc-client-api = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
-sc-consensus-babe = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
-sc-network = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
-sc-telemetry = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
-sc-tracing = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
-sc-sysinfo = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
-sp-api = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
-sp-blockchain = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
-sp-consensus = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
-sp-core = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
-sp-runtime = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
-sp-state-machine = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
+sc-cli = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
+sc-client-api = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
+sc-consensus-babe = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
+sc-network = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
+sc-telemetry = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
+sc-tracing = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
+sc-sysinfo = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
+sp-api = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
+sp-blockchain = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
+sp-consensus = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
+sp-core = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
+sp-runtime = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
+sp-state-machine = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
 
 # Polkadot
-polkadot-cli = { git = "https://github.com/purestake/polkadot", default-features = false, features = ["cli"] , branch = "moonbeam-polkadot-v0.9.29" }
-polkadot-client = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.29" }
-polkadot-service = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.29" }
+polkadot-cli = { git = "https://github.com/peaqnetwork/polkadot", default-features = false, features = ["cli"] , branch = "peaq-polkadot-v0.9.29" }
+polkadot-client = { git = "https://github.com/peaqnetwork/polkadot", branch = "peaq-polkadot-v0.9.29" }
+polkadot-service = { git = "https://github.com/peaqnetwork/polkadot", branch = "peaq-polkadot-v0.9.29" }
 
 # Cumulus
 cumulus-primitives-core = { path = "../../primitives/core" }
@@ -37,11 +37,11 @@ cumulus-relay-chain-interface = { path = "../relay-chain-interface" }
 [dev-dependencies]
 
 # Substrate
-sp-keyring = { git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.29" }
+sp-keyring = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.29" }
 
 # Polkadot
-polkadot-primitives = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.29" }
-polkadot-test-client = { git = "https://github.com/purestake/polkadot", branch = "moonbeam-polkadot-v0.9.29" }
+polkadot-primitives = { git = "https://github.com/peaqnetwork/polkadot", branch = "peaq-polkadot-v0.9.29" }
+polkadot-test-client = { git = "https://github.com/peaqnetwork/polkadot", branch = "peaq-polkadot-v0.9.29" }
 
 # Cumulus
 cumulus-test-service = { path = "../../test/service" }

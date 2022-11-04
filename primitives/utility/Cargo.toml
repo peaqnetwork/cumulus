@@ -9,18 +9,18 @@ codec = { package = "parity-scale-codec", version = "3.0.0", default-features = 
 log = { version = "0.4.17", default-features = false }
 
 # Substrate
-frame-support = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.29" }
-sp-runtime = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.29" }
-sp-std = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.29" }
-sp-trie = { git = "https://github.com/purestake/substrate", default-features = false, branch = "moonbeam-polkadot-v0.9.29" }
+frame-support = { git = "https://github.com/peaqnetwork/substrate", default-features = false, branch = "peaq-polkadot-v0.9.29" }
+sp-runtime = { git = "https://github.com/peaqnetwork/substrate", default-features = false, branch = "peaq-polkadot-v0.9.29" }
+sp-std = { git = "https://github.com/peaqnetwork/substrate", default-features = false, branch = "peaq-polkadot-v0.9.29" }
+sp-trie = { git = "https://github.com/peaqnetwork/substrate", default-features = false, branch = "peaq-polkadot-v0.9.29" }
 
 # Polkadot
-polkadot-core-primitives = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.29" }
-polkadot-parachain = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.29" }
-polkadot-primitives = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.29" }
-xcm = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.29" }
-xcm-executor = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.29" }
-xcm-builder = { git = "https://github.com/purestake/polkadot", default-features = false, branch = "moonbeam-polkadot-v0.9.29" }
+polkadot-core-primitives = { git = "https://github.com/peaqnetwork/polkadot", default-features = false, branch = "peaq-polkadot-v0.9.29" }
+polkadot-parachain = { git = "https://github.com/peaqnetwork/polkadot", default-features = false, branch = "peaq-polkadot-v0.9.29" }
+polkadot-primitives = { git = "https://github.com/peaqnetwork/polkadot", default-features = false, branch = "peaq-polkadot-v0.9.29" }
+xcm = { git = "https://github.com/peaqnetwork/polkadot", default-features = false, branch = "peaq-polkadot-v0.9.29" }
+xcm-executor = { git = "https://github.com/peaqnetwork/polkadot", default-features = false, branch = "peaq-polkadot-v0.9.29" }
+xcm-builder = { git = "https://github.com/peaqnetwork/polkadot", default-features = false, branch = "peaq-polkadot-v0.9.29" }
 
 
 # Cumulus

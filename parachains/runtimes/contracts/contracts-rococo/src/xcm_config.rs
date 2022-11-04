@@ -136,6 +136,7 @@ pub type Barrier = DenyThenTry<
 pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
 	type Call = Call;
+	type CallDispatcher = Call;
 	type XcmSender = XcmRouter;
 	type AssetTransactor = CurrencyTransactor;
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;

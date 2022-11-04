@@ -53,6 +53,7 @@ parameter_types! {
 pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
 	type Call = Call;
+	type CallDispatcher = Call;
 	type XcmSender = (); // sending XCM not supported
 	type AssetTransactor = (); // balances not supported
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;

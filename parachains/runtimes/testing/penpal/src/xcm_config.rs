@@ -321,6 +321,7 @@ pub type Reserves = (NativeAsset, AssetsFrom<CommonGoodAssetsLocation>);
 pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
 	type Call = Call;
+	type CallDispatcher = Call;
 	type XcmSender = XcmRouter;
 	// How to withdraw and deposit an asset.
 	type AssetTransactor = AssetTransactors;
