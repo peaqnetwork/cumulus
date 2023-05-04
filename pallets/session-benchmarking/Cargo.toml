@@ -14,12 +14,12 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 parity-scale-codec = { version = "3.2.1", default-features = false }
-sp-std = { default-features = false, git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.38" }
-sp-runtime = { default-features = false, git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.38" }
-frame-support = { default-features = false, git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.38" }
-frame-system = { default-features = false, git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.38" }
-frame-benchmarking = { default-features = false, optional = true, git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.38" }
-pallet-session = { default-features = false, git = "https://github.com/purestake/substrate", branch = "moonbeam-polkadot-v0.9.38" }
+sp-std = { default-features = false, git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.38" }
+sp-runtime = { default-features = false, git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.38" }
+frame-support = { default-features = false, git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.38" }
+frame-system = { default-features = false, git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.38" }
+frame-benchmarking = { default-features = false, optional = true, git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.38" }
+pallet-session = { default-features = false, git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.38" }
 
 [features]
 default = ["std"]
