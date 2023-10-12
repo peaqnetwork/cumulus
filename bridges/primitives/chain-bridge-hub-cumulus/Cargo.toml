@@ -15,13 +15,13 @@ bp-runtime = { path = "../../primitives/runtime", default-features = false }
 
 # Substrate Based Dependencies
 
-frame-system = { git = "https://github.com/moonbeam-foundation/substrate", default-features = false , branch = "moonbeam-polkadot-v0.9.43" }
-frame-support = { git = "https://github.com/moonbeam-foundation/substrate", default-features = false , branch = "moonbeam-polkadot-v0.9.43" }
-sp-api = { git = "https://github.com/moonbeam-foundation/substrate", default-features = false , branch = "moonbeam-polkadot-v0.9.43" }
-sp-std = { git = "https://github.com/moonbeam-foundation/substrate", default-features = false , branch = "moonbeam-polkadot-v0.9.43" }
+frame-system = { git = "https://github.com/peaqnetwork/substrate", default-features = false , branch = "peaq-polkadot-v0.9.43" }
+frame-support = { git = "https://github.com/peaqnetwork/substrate", default-features = false , branch = "peaq-polkadot-v0.9.43" }
+sp-api = { git = "https://github.com/peaqnetwork/substrate", default-features = false , branch = "peaq-polkadot-v0.9.43" }
+sp-std = { git = "https://github.com/peaqnetwork/substrate", default-features = false , branch = "peaq-polkadot-v0.9.43" }
 
 # Polkadot Dependencies
-polkadot-primitives = { git = "https://github.com/moonbeam-foundation/polkadot", default-features = false , branch = "moonbeam-polkadot-v0.9.43" }
+polkadot-primitives = { git = "https://github.com/peaqnetwork/polkadot", default-features = false , branch = "peaq-polkadot-v0.9.43" }
 
 [features]
 default = ["std"]
