@@ -20,18 +20,18 @@ pallet-bridge-grandpa = { path = "../grandpa", default-features = false }
 
 # Substrate Dependencies
 
-frame-benchmarking = { git = "https://github.com/moonbeam-foundation/substrate", default-features = false, optional = true , branch = "moonbeam-polkadot-v0.9.43" }
-frame-support = { git = "https://github.com/moonbeam-foundation/substrate", default-features = false , branch = "moonbeam-polkadot-v0.9.43" }
-frame-system = { git = "https://github.com/moonbeam-foundation/substrate", default-features = false , branch = "moonbeam-polkadot-v0.9.43" }
-sp-runtime = { git = "https://github.com/moonbeam-foundation/substrate", default-features = false , branch = "moonbeam-polkadot-v0.9.43" }
-sp-std = { git = "https://github.com/moonbeam-foundation/substrate", default-features = false , branch = "moonbeam-polkadot-v0.9.43" }
-sp-trie = { git = "https://github.com/moonbeam-foundation/substrate", default-features = false , branch = "moonbeam-polkadot-v0.9.43" }
+frame-benchmarking = { git = "https://github.com/peaqnetwork/substrate", default-features = false, optional = true , branch = "peaq-polkadot-v0.9.43" }
+frame-support = { git = "https://github.com/peaqnetwork/substrate", default-features = false , branch = "peaq-polkadot-v0.9.43" }
+frame-system = { git = "https://github.com/peaqnetwork/substrate", default-features = false , branch = "peaq-polkadot-v0.9.43" }
+sp-runtime = { git = "https://github.com/peaqnetwork/substrate", default-features = false , branch = "peaq-polkadot-v0.9.43" }
+sp-std = { git = "https://github.com/peaqnetwork/substrate", default-features = false , branch = "peaq-polkadot-v0.9.43" }
+sp-trie = { git = "https://github.com/peaqnetwork/substrate", default-features = false , branch = "peaq-polkadot-v0.9.43" }
 
 [dev-dependencies]
 bp-header-chain = { path = "../../primitives/header-chain" }
 bp-test-utils = { path = "../../primitives/test-utils" }
-sp-core = { git = "https://github.com/moonbeam-foundation/substrate", branch = "moonbeam-polkadot-v0.9.43" }
-sp-io = { git = "https://github.com/moonbeam-foundation/substrate", branch = "moonbeam-polkadot-v0.9.43" }
+sp-core = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.43" }
+sp-io = { git = "https://github.com/peaqnetwork/substrate", branch = "peaq-polkadot-v0.9.43" }
 
 [features]
 default = ["std"]
